@@ -19,13 +19,26 @@ const [numberOfApples, setNumberOfApples] = useState(0)
   function DecreaseApple() {
     setNumberOfApples((curentvalue) => curentvalue-1);
   }
+  function TooManyDisplay(){
+    if (numberOfApples > 10){
+      return <h1>Jhon has too many apples</h1>
+    }
+    else {
+      return ''
+    }
+
+  }
   return (
     <>
       <div>
         <h1>{AppleDisplay(numberOfApples)}</h1>
       </div>
       <button onClick={IncreaseApple} className="add-btn">Increase</button>
-      <button onClick={DecreaseApple} className="decrease-btn">Decrease</button>
+      <button style={{display: numberOfApples<=0 ? "None" : ""}} onClick={DecreaseApple} className="decrease-btn">
+        Decrease
+      </button>
+      {/* {TooManyDisplay()} */}
+      {numberOfApples > 10 ? <h1>Jhon has too many apples</h1> : ""}
     </>
   )
 }
