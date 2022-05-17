@@ -13,10 +13,20 @@ const [numberOfApples, setNumberOfApples] = useState(0)
       return `Jhon owes us ${numberOfApples} apples`
     }
   }
+  function IncreaseApple() {
+    setNumberOfApples((curentvalue) => curentvalue+1);
+  }
+  function DecreaseApple() {
+    setNumberOfApples((curentvalue) => curentvalue-1);
+  }
   return (
-    <div>
-      <h1>{AppleDisplay(numberOfApples)}</h1>
-    </div>
+    <>
+      <div>
+        <h1>{AppleDisplay(numberOfApples)}</h1>
+      </div>
+      <button onClick={IncreaseApple} className="add-btn">Increase</button>
+      <button onClick={DecreaseApple} className="decrease-btn">Decrease</button>
+    </>
   )
 }
 
