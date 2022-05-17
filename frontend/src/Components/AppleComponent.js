@@ -1,18 +1,21 @@
-import React from 'react'
+import React, {useState} from "react";
 
 function AppleComponent() {
-  function AppleDisplay(n) {
-    if (n === 0 || n === 1){
-      return `Jhon has ${n} apple`
-    } else if (n > 1) {
-      return `Jhon has ${n} apples`
+
+const [numberOfApples, setNumberOfApples] = useState(0)
+
+  function AppleDisplay(numberOfApples) {
+    if (numberOfApples === 0 || numberOfApples === 1){
+      return `Jhon has ${numberOfApples} apple`
+    } else if (numberOfApples > 1) {
+      return `Jhon has ${numberOfApples} apples`
     } else {
-      return `Jhon owes us ${n} apples`
+      return `Jhon owes us ${numberOfApples} apples`
     }
   }
   return (
     <div>
-      <h1>{AppleDisplay(5)}</h1>
+      <h1>{AppleDisplay(numberOfApples)}</h1>
     </div>
   )
 }

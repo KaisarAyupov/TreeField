@@ -16,11 +16,7 @@ const   theFruits = [
 function App() {  
   return (
     <>
-    {/* <Fruit color="yelow" name="banana" />
-    <Fruit color="red" name="aple" /> */}
-    {theFruits.map((fruit)=>{
-      return <Fruit key={fruit.id} color={fruit.color} name={fruit.name} />
-    })}
+    <AppleComponent/>
     </>
   )
 }
