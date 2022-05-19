@@ -1,20 +1,40 @@
 import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
-import { Button, Typography, Grid } from '@mui/material';
+import { Button, Typography, Grid, AppBar, Toolbar } from '@mui/material';
 import {makeStyles} from '@mui/styles';
 import CustomCard from './CustomCard';
 import CssBaseline from '@mui/material/CssBaseline';
 
 const useStyles = makeStyles ({
-  divStyle: {
-    width: '50%', 
-    border: "2px solid red", 
-    margin: "15px"
+  lefNav: {
+    marginRight: "auto",
   },
-  btnStyle: {
-    background: "yellow",
-
+  
+  rightNav: {
+    marginLeft: "auto",
+    marginRight: "10rem",
+  },
+  propertyBtn: {
+    backgroundColor: "green",
+    color: "white",
+    width: "15rem",
+    fontSize: "1.1rem",
+    marginRight: "1rem",
+    '&:hover': {
+      backgroundColor: "blue"
+    }
+  },
+  loginBtn: {
+    backgroundColor: "white",
+    color: "black",
+    width: "15rem",
+    fontSize: "1.1rem",
+    marginLeft: "1rem",
+    '&:hover': {
+      backgroundColor: "green"
+    }
   }
+
 });
 
 function Home() {
@@ -23,24 +43,25 @@ function Home() {
   return (
     <>
       <CssBaseline />
-      <Grid 
-      direction="column"
-      justifyContent="space-evenly"
-      alignItems="flex-start"
-      container 
-      style={{height: "100vh", backgroundColor: "grey"}}>
-        <Grid item container>
-          <Grid item xs={5}>
-            <CustomCard />
-          </Grid>
-        </Grid>
-        
-        <Grid item container>
-          <Grid item xs={5}>
-            <CustomCard />
-          </Grid>
-        </Grid>
-      </Grid>
+      <AppBar position="static" style={{backgroundColor: "black"}}>
+        <Toolbar>
+          <div className={classes.lefNav}>
+            <Button color="inherit"> <Typography variant='h4'>TreeUI</Typography></Button>
+          </div>
+          <div>
+            <Button color="inherit" style={{marginRight: '2rem'}}>
+              <Typography variant='h6'>Listings</Typography>
+            </Button>
+            <Button color="inherit" style={{marginLeft: '2rem'}}>
+              <Typography variant='h6'>Agencies</Typography>
+            </Button>
+          </div>
+          <div className={classes.rightNav}>
+            <Button className={classes.propertyBtn}>Add Property</Button>
+            <Button className={classes.loginBtn}>Login</Button>
+          </div>
+        </Toolbar>
+      </AppBar>
     </>
     
   )  
