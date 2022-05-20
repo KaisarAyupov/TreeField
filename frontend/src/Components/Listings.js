@@ -3,12 +3,16 @@ import React from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
-import { Grid, AppBar, Typography } from '@mui/material';
+import { Grid, AppBar, Typography, Button } from '@mui/material';
 
 // Map icons
 import houseIconpng from './Assets/Mapicons/house.png';
 import apartmentIconpng from './Assets/Mapicons/apartment.png';
 import officeIconpng from './Assets/Mapicons/office.png';
+
+// Assets
+import img1 from './Assets/img1.jpg';
+import { height } from '@mui/system';
 
 
 function Listings() {
@@ -46,9 +50,16 @@ function Listings() {
               <Marker
               icon={houseIcon}
               position={[51.505, -0.09]}>
-                {/* <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup> */}
+                {<Popup>
+                  <Typography variant='h5'>
+                    A title
+                  </Typography>
+                  <img src={img1} style={{height: '14rem', width: "18rem"}} />
+                  <Typography variant='body1'>
+                    Thi is som text
+                  </Typography>
+                  <Button variant='contained' fullWidth>A link</Button>
+                </Popup>}
               </Marker>
             </MapContainer>
           </div>
