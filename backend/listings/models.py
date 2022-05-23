@@ -1,6 +1,7 @@
 from random import choices
-from django.db import models
+from django.contrib.gis.db import models
 from django.utils import timezone
+from django.contrib.gis.geos import Point
 
 class Listing(models.Model):
     title = models.CharField(max_length=150)
@@ -37,6 +38,7 @@ class Listing(models.Model):
     cctv = models.BooleanField(default=False)
     parking = models.BooleanField(default=False)
     data_posted = models.DateTimeField(default=timezone.now)
+    location = models.PointField(blank=True, null=True, SRID=4326)
 
 
 
