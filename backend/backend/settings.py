@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 from decouple import config
-
+import os
 if os.name == 'nt':
     VENV_BASE = os.environ['VIRTUAL_ENV']
     os.environ['PATH'] = os.path.join(
@@ -46,7 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-],
+    'django.contrib.gis',
+
+    'listings.apps.ListingsConfig',
+    'users.apps.UsersConfig',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,3 +142,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
