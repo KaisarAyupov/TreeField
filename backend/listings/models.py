@@ -40,3 +40,6 @@ class Listing(models.Model):
     parking = models.BooleanField(default=False)
     data_posted = models.DateTimeField(default=timezone.now)
     location = models.PointField(blank=True, null=True, srid=4326)
+
+    def __str__(self):
+        return self.title
