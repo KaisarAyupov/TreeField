@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import Axios from "axios";
 // react-leaflet
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet';
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
 });
 
 function Listings() {
-  fetch('http://127.0.0.1:8000/api/listings/').then(response=> response.json()).then(data=>console.log(data))
+  //fetch('http://127.0.0.1:8000/api/listings/').then(response=> response.json()).then(data=>console.log(data))
   const classes = useStyles();
   const houseIcon = new Icon({
     iconUrl: houseIconpng,
@@ -65,12 +66,24 @@ function Listings() {
   function Gocenter() {
     setLatitude(43.2611);
     setLongitude(76.8822);
-  }
+  };
+  const [AllListings, setAllListings] = useState([])
 
+  useEffect(() => {
+    async function GetAllListings(){
+      const response = await Axios.get('http://127.0.0.1:8000/api/listings/');
+      // console.log(response.data)
+      setAllListings(response.data)
+    }
+    GetAllListings();
+  }, [])
+
+  console.log(AllListings)
+    
   return (
     <Grid container>
       <Grid item xs={4} style={{marginTop: "0.5rem"}}>
-        {myListings.map((listing) => {
+        {AllListings.map((listing) => {
           return (
             <Card key={listing.id} className={classes.cardStyle}>
               <CardHeader
@@ -123,12 +136,12 @@ function Listings() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {myListings.map((listing) => {
+              {AllListings.map((listing) => {
                 function IconDisplay() {
                   if (listing.listing_type === 'House') {
                     return houseIcon;
                   }
-                  else if (listing.listing_type === 'Apartment') {
+                  else if (listing.listing_type === 'Apatment') {
                     return apartmentIcon;
                   }
                   else if (listing.listing_type === 'Office') {
