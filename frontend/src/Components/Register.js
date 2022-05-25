@@ -1,12 +1,8 @@
 import React from 'react'
-import Axios from "axios";
-// react-leaflet
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Icon } from 'leaflet';
+import { useNavigate } from 'react-router-dom';
 // MUI
 import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { border, padding } from '@mui/system';
 
 
 const useStyles = makeStyles({
@@ -32,6 +28,7 @@ const useStyles = makeStyles({
 
 function Register() {
     const classes = useStyles();
+    const navigate = useNavigate();
   return (
     <div className={classes.formConteiner}>
         <form>
@@ -54,7 +51,11 @@ function Register() {
             <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN UP</Button>
             </Grid>
             <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
-            <Typography variant='small' style={{ marginTop: '1rem'}}>Already have an account! <span style={{ cursor: 'pointer', color: 'green'}}>SIGN IN</span></Typography>
+                  <Typography variant='small' style={{ marginTop: '1rem' }}>Already have an account!
+                      <span
+                          onClick={() => navigate("/login")} style={{ cursor: 'pointer', color: 'green' }}>SIGN IN
+                      </span>
+                  </Typography>
             </Grid>  
         </form>
     </div>
