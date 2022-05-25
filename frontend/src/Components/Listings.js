@@ -4,7 +4,7 @@ import Axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 // Map icons
@@ -68,18 +68,41 @@ function Listings() {
     setLongitude(76.8822);
   };
   const [AllListings, setAllListings] = useState([])
+  const [dataIsLoading, setDataIsLoading] = useState(true)
 
   useEffect(() => {
+    const source =Axios.CancelToken.source();
     async function GetAllListings(){
-      const response = await Axios.get('http://127.0.0.1:8000/api/listings/');
+      try {
+        const response = await Axios.get('http://127.0.0.1:8000/api/listings/', {cancelToken: source.token});
       // console.log(response.data)
       setAllListings(response.data)
+      setDataIsLoading(false)
+      } catch(error){
+        console.log(error)
+      }
     }
     GetAllListings();
+    return ()=>{
+      source.cancel();
+    }
   }, [])
 
-  console.log(AllListings)
-    
+  if (dataIsLoading === false) {
+    console.log(AllListings[0].location)
+  }
+  if (dataIsLoading === true) {
+    return (
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        style={{ height: '100vh' }}
+      >
+        <CircularProgress />
+      </Grid>
+    );    
+  }
   return (
     <Grid container>
       <Grid item xs={4} style={{marginTop: "0.5rem"}}>
