@@ -176,8 +176,8 @@ function Listings() {
                     key={listing.id}
                     icon={IconDisplay()}
                     position={[
-                      listing.location.coordinates[0],
                       listing.location.coordinates[1],
+                      listing.location.coordinates[0],
                     ]}>
                     {<Popup>
                       <Typography variant='h5'>
