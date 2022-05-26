@@ -1,30 +1,37 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useReducer} from 'react';
+import {useImmerReducer} from 'use-immer';
 
 function Testing() {
-    const [count, setCount] = useState(1);
-    
-    /* useEffect(()=>{
-        console.log("This is useEFFect!")
-    }, []) */
+    const initialState = {
+        appleCount: 1,
+        bananaCount: 10,
+        masage: "Hello",
+        happy: false,
+    };
+    function ReduserFunction(draft, action){
+        switch(action.type){
+            case 'addApple':
+                draft.appleCount = draft.appleCount + 1;
+                break;
+            case 'changeEverything':   
+                draft.bananaCount = draft.bananaCount +10;
+                draft.masage = action.customMasage;
+                draft.happy = true;
+                break;            
+        }
 
-    useEffect(()=>{
-        console.log(`The curent count is : ${count}`)
-    }, [count])
-
-    function IncreaseCount() {
-        setCount((current) => current + 1);
     }
-
-    function DecreaseCount() {
-        setCount((current) => current - 1);
-    } 
+    const [state, dispatch] =useImmerReducer(ReduserFunction, initialState)
     return (
       <>
-          <h1>The current count is : {count}</h1>
-          <br />
-          <button onClick={IncreaseCount}>Increase</button>
-          <br />
-          <button onClick={DecreaseCount}>Decrease</button>
+         <div>Righ now the coun of apple is {state.appleCount}</div>
+         <div>Righ now the coun of bananas is {state.bananaCount}</div>
+         <div>Righ now the masage {state.masage}</div>
+         {state.happy ? (<h1>Thank for being happy</h1>) : (<h1>TThera now happines</h1>)}
+         <br />
+         <button onClick={()=>dispatch({type: "addApple"})}>Add apple</button>
+         <br />
+         <button onClick={()=>dispatch({type: "changeEverything", customMasage: 'The masage is now coming dispatch '})}>Ghange everything</button>
       </>
     )
 }
