@@ -31,7 +31,12 @@ function Register() {
     const classes = useStyles();
     const navigate = useNavigate();
     const [sendRequest, setSendRequest] = useState(false);
+    const [usernameValue, setUsernameValue] = useState('');
+    const [emailValue, setEmailValue] = useState('');
+    const [passwordValue, setpasswordValue] = useState('');
+    const [password2Value, setpassword2Value] = useState('');
 
+  
     function FormSubmit(e){
       e.preventDefault();
       console.log("Test");
@@ -46,10 +51,10 @@ function Register() {
             const response = await Axios.post(
               "http://localhost:8000/api-auth-djoser/users/",
               {
-                username: "testinguser",
-                email: "testinguser@gmail.com",
-                password: "mypass123",
-                re_password: "mypass123",
+                username: usernameValue,
+                email: emailValue,
+                password: passwordValue,
+                re_password: password2Value,
               },
               {
                 cancelToken: source.token
@@ -73,16 +78,46 @@ function Register() {
             <Typography variant='h4'>CREATE AN ACCOUNT</Typography>
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
-            <TextField id="username" label="Username" variant="outlined" fullWidth/>
+            <TextField 
+              id="username" 
+              label="Username" 
+              variant="outlined" 
+              fullWidth
+              value={usernameValue} 
+              onChange = {(e)=>setUsernameValue(e.target.value)}
+            />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
-            <TextField id="email" label="Email" variant="outlined" fullWidth/>
+            <TextField 
+              id="email"
+              label="Email"
+              variant="outlined"
+              fullWidth
+              value={emailValue} 
+              onChange = {(e)=>setEmailValue(e.target.value)}              
+            />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
-            <TextField id="password" label="Password" variant="outlined" fullWidth type="password"/>
+            <TextField 
+              id="password" 
+              label="Password" 
+              variant="outlined" 
+              fullWidth 
+              type="password"
+              value={passwordValue} 
+              onChange = {(e)=>setpasswordValue(e.target.value)}   
+            />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
-            <TextField id="password2" label="Confirm Password" variant="outlined" fullWidth type="password"/>
+            <TextField 
+              id="password2" 
+              label="Confirm Password" 
+              variant="outlined" 
+              fullWidth 
+              type="password"
+              value={password2Value} 
+              onChange = {(e)=>setpassword2Value(e.target.value)} 
+            />
             </Grid>  
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
             <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN UP</Button>
