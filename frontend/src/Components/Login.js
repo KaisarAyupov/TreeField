@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useContext} from 'react'
 import Axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import {useImmerReducer} from 'use-immer';
@@ -7,6 +7,9 @@ import {useImmerReducer} from 'use-immer';
 import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
+// Contexts
+import DispatchContext from '../Contexts/DispatchContext';
+import StateContext from '../Contexts/StateContext';
 
 const useStyles = makeStyles({
     formConteiner: {
@@ -29,9 +32,14 @@ const useStyles = makeStyles({
       
   });
 
+
+
 function Login() {
     const classes = useStyles();
     const navigate = useNavigate();
+
+    const GlobalDispatch = useContext(DispatchContext)
+    const GlobalState = useContext(StateContext)
 
     const initialState = {
       usernameValue: '',
@@ -80,7 +88,14 @@ function Login() {
               }
             );
             console.log(response)
-            dispatch({type: 'catchToken', tokenValue: response.data.auth_token})
+            dispatch({
+              type: 'catchToken', 
+              tokenValue: response.data.auth_token
+            });
+            GlobalDispatch({
+              type: 'catchToken', 
+              tokenValue: response.data.auth_token
+            });
             //navigate('/')          
           } catch (error) {
             console.log(error);
@@ -102,14 +117,19 @@ function Login() {
             const response = await Axios.get(
               "http://localhost:8000/api-auth-djoser/users/me/",
               {
-                headers: {Authorization : 'Token '.concat(state.token)}
+                headers: {Authorization : "Token ".concat(state.token)}
               },
               {
                 cancelToken: source.token
               }
             );
             console.log(response)
-            //navigate('/')          
+            GlobalDispatch({ 
+              type: "userSignsIn", 
+              usernameInfo: response.data.username, 
+              emailInfo:  response.data.email,  
+              idInfo:  response.data.id })
+            navigate('/')          
           } catch (error) {
             console.log(error);
           }
@@ -151,11 +171,12 @@ function Login() {
             </Grid>
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
             <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN IN</Button>
-            </Grid>
-            <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
-            <Typography variant='small'  style={{ marginTop: '1rem'}}>Dont have an account yet? <span onClick={()=> navigate("/register")} style={{ cursor: 'pointer', color: 'green'}}>SIGN UP</span></Typography>
-            </Grid>  
+            </Grid>              
         </form>
+        
+        <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
+          <Typography variant='small'  style={{ marginTop: '1rem'}}>Dont have an account yet? <span onClick={()=> navigate("/register")} style={{ cursor: 'pointer', color: 'green'}}>SIGN UP</span></Typography>
+        </Grid>
     </div>
   )
 }

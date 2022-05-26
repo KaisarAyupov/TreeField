@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 
 // MUI
-import { Button, Typography, Grid, AppBar, Toolbar } from '@mui/material';
+import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
 import {makeStyles} from '@mui/styles';
+
+// Contexts
+import StateContext from '../Contexts/StateContext';
 
 // Components
 import CustomCard from './CustomCard';
@@ -38,13 +41,39 @@ const useStyles = makeStyles ({
     '&:hover': {
       backgroundColor: "green"
     }
-  },  
+  }, 
+  profileBtn: {
+    color: 'black',
+    backgroundColor: "green",
+    width: "15rem",
+    fontWeight: 'bolder',
+    borderRadius: "15px",
+    marginBottom: "0.25rem"
+  },
+  logoutBtn: {
+    color: 'red',
+    backgroundColor: "green",
+    width: "15rem",
+    fontWeight: 'bolder',
+    borderRadius: "15px"
+  },
+
 
 });
 
 function Header() {
     const classes = useStyles();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const GlobalState = useContext(StateContext);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
   return (
     <AppBar position="static" style={{backgroundColor: "black"}}>
         <Toolbar>
@@ -63,7 +92,34 @@ function Header() {
           </div>
           <div className={classes.rightNav}>
             <Button className={classes.propertyBtn}>Add Property</Button>
-            <Button className={classes.loginBtn} onClick={()=>navigate('/login')}>Login</Button>
+            {GlobalState.userIsLogged ? (
+              <Button
+                className={classes.loginBtn}
+                onClick={handleClick}                
+              // onClick={()=>navigate('/login')}
+              >
+                {GlobalState.userUsername}
+              </Button>
+            ) : (
+              <Button
+                className={classes.loginBtn}
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>)}
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem className={classes.profileBtn} onClick={handleClose}>Profile</MenuItem>
+                <MenuItem className={classes.logoutBtn} onClick={handleClose}>Logout</MenuItem>
+              </Menu>
+            
           </div>
         </Toolbar>
       </AppBar>
