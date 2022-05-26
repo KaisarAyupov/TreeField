@@ -117,7 +117,7 @@ function Login() {
             const response = await Axios.get(
               "http://localhost:8000/api-auth-djoser/users/me/",
               {
-                headers: {Authorization : "Token ".concat(state.token)}
+                headers: {Authorization : "Token ".concat(state.token)},
               },
               {
                 cancelToken: source.token

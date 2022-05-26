@@ -36,7 +36,11 @@ function App() {
         draft.userEmail = action.emailInfo;
         draft.userId = action.idInfo;
         draft.userIsLogged = true;
-        break;    
+        break; 
+        
+      case 'logout':
+        draft.userIsLogged = false;
+        break;
     }
 
   }
@@ -48,6 +52,12 @@ function App() {
       localStorage.setItem('theUserEmail', state.userEmail)
       localStorage.setItem('theUserId', state.userId)
       localStorage.setItem('theUserToken', state.userToken)      
+    }
+    else {
+      localStorage.removeItem('theUserUsername')
+      localStorage.removeItem('theUserEmail')
+      localStorage.removeItem('theUserId')
+      localStorage.removeItem('theUserToken')
     }
   }, [state.userIsLogged])
   return (
