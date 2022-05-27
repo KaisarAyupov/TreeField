@@ -28,6 +28,21 @@ const useStyles = makeStyles({
       
   });
 
+  const areaOptions = [
+    {
+        value: '',
+        label: '',
+      },
+      {
+        value: 'Inner Almaty',
+        label: 'Inner Almaty',
+      },
+      {
+        value: 'Outer Almaty',
+        label: 'Outer Almaty',
+      },
+  ]
+
 function AddProperty() {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -303,36 +318,49 @@ function AddProperty() {
                         label="Parking"
                     />
                 </Grid>
-                <Grid item container style={{ marginTop: '1rem' }}>
-                    <TextField
-                        id="area"
-                        label="Area"
-                        variant="standard"
-                        fullWidth
-                        value={state.areaValue}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'catchAreaChange',
-                                titleChosen: e.target.value
-                            })
-                        }
-                    />
+                <Grid item container justifyContent="space-between">
+                    <Grid item xs={5} style={{ marginTop: '1rem' }}>
+                        <TextField
+                            id="area"
+                            label="Area"
+                            variant="standard"
+                            fullWidth
+                            value={state.areaValue}
+                            onChange={(e) =>
+                                dispatch({
+                                    type: 'catchAreaChange',
+                                    titleChosen: e.target.value
+                                })
+                            }
+                            select
+                            SelectProps={{
+                                native: true,
+                            }}
+                            >
+                            {areaOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={5} style={{ marginTop: '1rem' }}>
+                        <TextField
+                            id="borough"
+                            label="Borough"
+                            variant="standard"
+                            fullWidth
+                            value={state.boroughValue}
+                            onChange={(e) =>
+                                dispatch({
+                                    type: 'catchBoroughChange',
+                                    titleChosen: e.target.value
+                                })
+                            }
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item container style={{ marginTop: '1rem' }}>
-                    <TextField
-                        id="borough"
-                        label="Borough"
-                        variant="standard"
-                        fullWidth
-                        value={state.boroughValue}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'catchBoroughChange',
-                                titleChosen: e.target.value
-                            })
-                        }
-                    />
-                </Grid>
+                
 
 
 
