@@ -148,14 +148,14 @@ function Register() {
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
             <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN UP</Button>
             </Grid>
+          </form>
             <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
                   <Typography variant='small' style={{ marginTop: '1rem' }}>Already have an account!
                       <span
                           onClick={() => navigate("/login")} style={{ cursor: 'pointer', color: 'green' }}>SIGN IN
                       </span>
                   </Typography>
-            </Grid>  
-        </form>
+            </Grid>        
     </div>
   )
 }

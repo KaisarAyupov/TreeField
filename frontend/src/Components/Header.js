@@ -112,7 +112,12 @@ function Header() {
             </Button>
           </div>
           <div className={classes.rightNav}>
-            <Button className={classes.propertyBtn}>Add Property</Button>
+            <Button 
+            className={classes.propertyBtn}
+            onClick={() => navigate('/addproperty')}
+            >
+              Add Property
+            </Button>
             {GlobalState.userIsLogged ? (
               <Button
                 className={classes.loginBtn}
