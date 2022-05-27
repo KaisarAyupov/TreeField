@@ -39,7 +39,7 @@ import Richmond from "./Assets/Boroughs/Richmond";
 import Sutton from "./Assets/Boroughs/Sutton";
 import Waltham from "./Assets/Boroughs/Waltham";
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Input } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -54,6 +54,13 @@ const useStyles = makeStyles({
     },
     registerBtn: {
         backgroundColor: "orange",
+        color: "white",
+        fontSize: "0.8rem",
+        border: "1px solid black",
+        marginLeft: "1rem",
+      },
+      picturesBtn: {
+        backgroundColor: "blue",
         color: "white",
         fontSize: "1.1rem",
         marginLeft: "1rem",
@@ -252,7 +259,8 @@ function AddProperty() {
         markerPosition: {
             lat: '51.505',
             lng: '-0.09',
-        }
+        },
+        uploadedPictures: [],
       };
 
     function ReduserFunction(draft, action) {
@@ -329,6 +337,10 @@ function AddProperty() {
                 draft.latitudeValue = '';
                 draft.longitudeValue = '';
                 break;
+            case 'catchUploadedPictures':
+                draft.uploadedPictures = action.picturesChosen;
+                break;
+
 
         }
 
@@ -665,11 +677,54 @@ function BoroughDisplay() {
             },
         }),
         [],
-    )
-    useEffect(()=>{
-        console.log(state.latitudeValue, state.longitudeValue)
+    );
 
-    }, [state.latitudeValue, state.longitudeValue])
+    // Catching picture filds
+    useEffect(()=>{
+        if (state.uploadedPictures[0]){
+            dispatch({
+                type: 'catchPicture1Change', 
+                picture1Chosen: state.uploadedPictures[0],
+            })
+        }
+
+    }, [state.uploadedPictures[0]])
+    useEffect(()=>{
+        if (state.uploadedPictures[1]){
+            dispatch({
+                type: 'catchPicture2Change', 
+                picture2Chosen: state.uploadedPictures[1],
+            })
+        }
+
+    }, [state.uploadedPictures[1]])
+    useEffect(()=>{
+        if (state.uploadedPictures[2]){
+            dispatch({
+                type: 'catchPicture3Change', 
+                picture3Chosen: state.uploadedPictures[2],
+            })
+        }
+
+    }, [state.uploadedPictures[2]])
+    useEffect(()=>{
+        if (state.uploadedPictures[3]){
+            dispatch({
+                type: 'catchPicture4Change', 
+                picture4Chosen: state.uploadedPictures[3],
+            })
+        }
+
+    }, [state.uploadedPictures[3]])
+    useEffect(()=>{
+        if (state.uploadedPictures[4]){
+            dispatch({
+                type: 'catchPicture5Change', 
+                picture5Chosen: state.uploadedPictures[4],
+            })
+        }
+
+    }, [state.uploadedPictures[4]])
 
     function FormSubmit(e){
         e.preventDefault();
@@ -930,13 +985,46 @@ function BoroughDisplay() {
                 </Grid>
                 
 
+                
 
+                <Grid 
+                    item 
+                    container 
+                    xs={6} 
+                    style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}
+                >
+                    <Button 
+                        variant="contained"
+                        component="label" 
+                        fullWidth 
+                        className={classes.picturesBtn}                         
+                    >
+                        Upload image
+                        <Input 
+                            type="file"
+                            multiple                             
+                            accept="image/png, image/gif, image/jpeg"
+                            hidden
+                            onChange={(e)=>dispatch({type: "catchUploadedPictures", picturesChosen: e.target.files,})}                                                         
+                        />
+                    </Button>
+                </Grid>
+                <Grid item container>
+                    <ul>
+                        {state.picture1Value ? <li>{state.picture1Value.name}</li> : "" }
+                        {state.picture2Value ? <li>{state.picture2Value.name}</li> : "" }
+                        {state.picture3Value ? <li>{state.picture3Value.name}</li> : "" }
+                        {state.picture4Value ? <li>{state.picture4Value.name}</li> : "" }
+                        {state.picture5Value ? <li>{state.picture5Value.name}</li> : "" }
+                    </ul>
+                    
+                </Grid>
 
                 <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}>
                     <Button variant="contained" fullWidth type="submit" className={classes.registerBtn} >Submit</Button>
                 </Grid>
             </form> 
-            <Button onClick={()=>state.mapInstance.setView()}>Testbtn</Button>           
+            <Button onClick={()=>console.log(state.uploadedPictures)} >Testbtn</Button>           
         </div>
     )
 }
