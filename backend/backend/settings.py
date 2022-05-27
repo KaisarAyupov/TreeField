@@ -100,7 +100,7 @@ DATABASES = {
         'NAME': 'treefield_db',
         'USER': USER,
         'PASSWORD': PASSWORD,
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }

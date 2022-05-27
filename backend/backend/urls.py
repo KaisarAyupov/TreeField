@@ -21,6 +21,10 @@ from listings.api import views as listing_api_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Suppress broken pipe errors
+from django.core.servers.basehttp import WSGIServer
+WSGIServer.handle_error = lambda *args, **kwargs: None
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/listings/', listing_api_views.ListingList.as_view()),

@@ -1,4 +1,4 @@
-from django import forms
+""" from django import forms
 from .models import Listing
 from django.contrib.gis.geos import Point
 
@@ -22,4 +22,4 @@ class ListingsForm(forms.ModelForm):
         location = self.initial.get('location')
         if isinstance(location, Point):
             self.initial['latitude'] = location[0]
-            self.initial['longitude'] = location[1]
+            self.initial['longitude'] = location[1] """
