@@ -28,21 +28,165 @@ const useStyles = makeStyles({
       
   });
 
-  const areaOptions = [
+const areaOptions = [
     {
-        value: '',
-        label: '',
-      },
-      {
-        value: 'Inner Almaty',
-        label: 'Inner Almaty',
-      },
-      {
-        value: 'Outer Almaty',
-        label: 'Outer Almaty',
-      },
-  ]
+        value: "",
+        label: "",
+    },
+    {
+        value: "Inner Almaty",
+        label: "Inner Almaty",
+    },
+    {
+        value: "Outer Almaty",
+        label: "Outer Almaty",
+    },
+];
+const innerAlmatyOptions = [
+    {
+        value: "",
+        label: "",
+    },
+    {
+        value: "Camden",
+        label: "Camden",
+    },
+    {
+        value: "Greenwich",
+        label: "Greenwich",
+    },
+    {
+        value: "Hackney",
+        label: "Hackney",
+    },
+    {
+        value: "Hammersmith and Fulham",
+        label: "Hammersmith and Fulham",
+    },
+    {
+        value: "Islington",
+        label: "Islington",
+    },
+    {
+        value: "Kensington and Chelsea",
+        label: "Kensington and Chelsea",
+    },
+    {
+        value: "Lambeth",
+        label: "Lambeth",
+    },
+    {
+        value: "Lewisham",
+        label: "Lewisham",
+    },
+    {
+        value: "Southwark",
+        label: "Southwark",
+    },
+    {
+        value: "Tower Hamlets",
+        label: "Tower Hamlets",
+    },
+    {
+        value: "Wandsworth",
+        label: "Wandsworth",
+    },
+    {
+        value: "Westminster",
+        label: "Westminster",
+    },
+    {
+        value: "City of London",
+        label: "City of London",
+    },
+];
 
+const outerAlmatyOptions = [
+    {
+        value: "",
+        label: "",
+    },
+    {
+        value: "Barking and Dangenham",
+        label: "Barking and Dangenham",
+    },
+    {
+        value: "Barnet",
+        label: "Barnet",
+    },
+    {
+        value: "Bexley",
+        label: "Bexley",
+    },
+    {
+        value: "Brent",
+        label: "Brent",
+    },
+    {
+        value: "Bromley",
+        label: "Bromley",
+    },
+    {
+        value: "Croydon",
+        label: "Croydon",
+    },
+    {
+        value: "Ealing",
+        label: "Ealing",
+    },
+    {
+        value: "Enfield",
+        label: "Enfield",
+    },
+    {
+        value: "Haringey",
+        label: "Haringey",
+    },
+    {
+        value: "Harrow",
+        label: "Harrow",
+    },
+    {
+        value: "Havering",
+        label: "Havering",
+    },
+    {
+        value: "Hillingdon",
+        label: "Hillingdon",
+    },
+    {
+        value: "Hounslow",
+        label: "Hounslow",
+    },
+    {
+        value: "Kingston upon Thames",
+        label: "Kingston upon Thames",
+    },
+    {
+        value: "Merton",
+        label: "Merton",
+    },
+    {
+        value: "Newham",
+        label: "Newham",
+    },
+    {
+        value: "Redbridge",
+        label: "Redbridge",
+    },
+    {
+        value: "Richmond upon Thames",
+        label: "Richmond upon Thames",
+    },
+    {
+        value: "Sutton",
+        label: "Sutton",
+    },
+    {
+        value: "Waltham Forest",
+        label: "Waltham Forest",
+    },
+];
 function AddProperty() {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -329,7 +473,7 @@ function AddProperty() {
                             onChange={(e) =>
                                 dispatch({
                                     type: 'catchAreaChange',
-                                    titleChosen: e.target.value
+                                    areaChosen: e.target.value
                                 })
                             }
                             select
@@ -354,10 +498,29 @@ function AddProperty() {
                             onChange={(e) =>
                                 dispatch({
                                     type: 'catchBoroughChange',
-                                    titleChosen: e.target.value
+                                    boroughChosen: e.target.value
                                 })
                             }
-                        />
+                            select
+                            SelectProps={{
+                                native: true,
+                            }}
+                        >
+                            {state.areaValue === 'Inner Almaty'
+                                ? innerAlmatyOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))
+                                : ""}
+                            {state.areaValue === 'Outer Almaty'
+                                ? outerAlmatyOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))
+                                : ""}
+                        </TextField>
                     </Grid>
                 </Grid>
                 
