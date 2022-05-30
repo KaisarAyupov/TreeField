@@ -28,6 +28,9 @@ WSGIServer.handle_error = lambda *args, **kwargs: None
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/listings/', listing_api_views.ListingList.as_view()),
+    path('api/listings/create/', listing_api_views.ListingCreate.as_view()),
+
+
     path('api-auth-djoser/', include('djoser.urls')),
     path('api-auth-djoser/', include('djoser.urls.authtoken')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

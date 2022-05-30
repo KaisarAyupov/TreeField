@@ -19,14 +19,13 @@ class Listing(models.Model):
     borough = models.CharField(max_length=50, blank=True, null=True) # borough
     choices_listing_type = (
         ('House', 'House'),
-        ('Apatment', 'Apatment'),
+        ('Apartment', 'Apartment'),
         ('Office', 'Office'),
     )
     listing_type = models.CharField(max_length=200, choices=choices_listing_type)    
     choices_property_status = (
-        ('Critically Endangered', 'Critically Endangered'),
-        ('Endangered', 'Endangered'),
-        ('Vulnerable', 'Vulnerable'),
+        ('Sale', 'Sale'),
+        ('Rent', 'Rent'),
     )
     property_status = models.CharField(max_length=200, blank=True, choices=choices_property_status)
     price = models.DecimalField(max_digits=50, decimal_places=0 )

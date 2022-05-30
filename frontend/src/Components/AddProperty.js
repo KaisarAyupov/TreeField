@@ -814,10 +814,10 @@ function BoroughDisplay() {
                 formData.append('picture3', state.picture3Value)
                 formData.append('picture4', state.picture4Value)
                 formData.append('picture5', state.picture5Value)
-                formData.append('seller', state.GlobalState.userId)
+                formData.append('seller', GlobalState.userId)
 
                 try {
-                    const response = await Axios.post(URL, formData);
+                    const response = await Axios.post("http://localhost:8000/api/listings/create/", formData);
                     console.log(response);
                 } catch(e){
                     console.log(e.response);
