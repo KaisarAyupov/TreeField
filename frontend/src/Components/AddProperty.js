@@ -1,9 +1,11 @@
-import React, {useEffect, useState, useRef, useMemo} from 'react'
+import React, {useEffect, useState, useRef, useMemo, useContext} from 'react'
 import { useNavigate } from 'react-router-dom';
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 // react-leaflet
 import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon } from 'react-leaflet'
+// Context
+import StateContext from '../Contexts/StateContext';
 // Assets
 import Camden from "./Assets/Boroughs/Camden";
 import Greenwich from "./Assets/Boroughs/Greenwich";
@@ -283,6 +285,7 @@ const rentalFrequencyOptions = [
 function AddProperty() {
     const classes = useStyles();
     const navigate = useNavigate();
+    const GlobalState = useContext(StateContext)
     const initialState = {
         titleValue: "",
         listingTypeValue: "",
@@ -391,9 +394,9 @@ function AddProperty() {
             case 'catchUploadedPictures':
                 draft.uploadedPictures = action.picturesChosen;
                 break;
-                case 'changeSendRequest':
-          draft.sendRequest = draft.sendRequest +1;
-          break;
+            case 'changeSendRequest':
+                draft.sendRequest = draft.sendRequest +1;
+                break;
 
         }
 
@@ -782,9 +785,48 @@ function BoroughDisplay() {
     function FormSubmit(e){
         e.preventDefault();
         console.log("Test");
-        //dispatch({type: 'changeSendRequest'})
+        dispatch({type: 'changeSendRequest'})
         
       }
+
+    useEffect(()=>{
+        if (state.sendRequest){
+            async function AddProperty(){
+                const formData = new FormData()
+                formData.append('title', state.titleValue)
+                formData.append('description', state.descriptionValue)
+                formData.append('area', state.areaValue)
+                formData.append('borough', state.boroughValue)
+                formData.append('listing_type', state.listingTypeValue)
+                formData.append('property_status', state.propertyStatusValue)
+                formData.append('price', state.priceValue)
+                formData.append('rental_frequency', state.rentalFrequencyValue)
+                formData.append('rooms', state.roomsValue)
+                formData.append('finished', state.furnishedValue)
+                formData.append('pool', state.poolValue)
+                formData.append('elevator', state.elevatorValue)
+                formData.append('cctv', state.cctvValue)
+                formData.append('parking', state.parkingValue)
+                formData.append('lat', state.latitudeValue)
+                formData.append('lng', state.longitudeValue)
+                formData.append('picture1', state.picture1Value)
+                formData.append('picture2', state.picture2Value)
+                formData.append('picture3', state.picture3Value)
+                formData.append('picture4', state.picture4Value)
+                formData.append('picture5', state.picture5Value)
+                formData.append('seller', state.GlobalState.userId)
+
+                try {
+                    const response = await Axios.post(URL, formData);
+                    console.log(response);
+                } catch(e){
+                    console.log(e.response);
+                }
+            }
+            AddProperty()
+        }
+
+    }, [state.sendRequest])
 
     function PriceDisplay(){
         if (state.propertyStatusValue === 'Rent' && state.rentalFrequencyValue ==='Day'){
