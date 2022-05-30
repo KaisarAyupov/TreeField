@@ -36,7 +36,7 @@ class Listing(models.Model):
     )
     rental_frequency = models.CharField(max_length=200, null=True, choices=choices_rental_frequency)
     rooms = models.IntegerField(blank=True)
-    finished = models.BooleanField(default=False)
+    furnished = models.BooleanField(default=False)
     pool = models.BooleanField(default=False)
     elevator = models.BooleanField(default=False)
     cctv = models.BooleanField(default=False)

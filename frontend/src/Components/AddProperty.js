@@ -320,7 +320,7 @@ function AddProperty() {
     function ReduserFunction(draft, action) {
         switch (action.type) {
             case 'catchTitleChange':
-                draft.listingTypeValue = action.titleChosen;
+                draft.titleValue = action.titleChosen;
                 break;
             case 'catchListingTypeChange':
                 draft.listingTypeValue = action.listingTypeChosen;
@@ -854,7 +854,7 @@ function BoroughDisplay() {
                         label="Title*"
                         variant="standard"
                         fullWidth
-                        value={state.tittleValue}
+                        value={state.titleValue}
                         onChange={(e) =>
                             dispatch({
                                 type: 'catchTitleChange',
