@@ -818,7 +818,8 @@ function BoroughDisplay() {
 
                 try {
                     const response = await Axios.post("http://localhost:8000/api/listings/create/", formData);
-                    console.log(response);
+                    console.log(response.data);
+                    navigate('/listings')
                 } catch(e){
                     console.log(e.response);
                 }
