@@ -4,8 +4,9 @@ import Axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress, IconButton} from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import RoomIcon from '@mui/icons-material/Room';
 
 // Map icons
 import houseIconpng from './Assets/Mapicons/house.png';
@@ -110,11 +111,11 @@ function Listings() {
           return (
             <Card key={listing.id} className={classes.cardStyle}>
               <CardHeader
-                /* action={
+                action={
                   <IconButton aria-label="settings">
-                    <MoreVertIcon />
+                    <RoomIcon />
                   </IconButton>
-                } */
+                }
                 title={listing.title}
               />
               <CardMedia
