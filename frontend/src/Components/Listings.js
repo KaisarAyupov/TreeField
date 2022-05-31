@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Axios from "axios";
+import {useImmerReducer} from 'use-immer';
 // react-leaflet
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Icon } from 'leaflet';
@@ -60,6 +61,27 @@ function Listings() {
   const [lattude, setLatitude] = useState(43.2611)
   const [longitude, setLongitude] = useState(76.8822)
 
+  const initialState = {
+    mapInstance: null,
+  };
+
+function ReduserFunction(draft, action) {
+    switch (action.type) {
+        case 'getMap':
+            draft.mapInstance = action.mapData;
+            break;
+
+    }
+
+}
+const [state, dispatch] = useImmerReducer(ReduserFunction, initialState)
+
+function TheMapComponent() {
+    const map = useMap();
+    dispatch({ type: "getMap", mapData: map });
+    return null;
+}
+
   function GoEast() {
     setLatitude(43.2399);
     setLongitude(76.8853);
@@ -112,7 +134,7 @@ function Listings() {
             <Card key={listing.id} className={classes.cardStyle}>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings">
+                  <IconButton aria-label="settings" onClick={()=>state.mapInstance.flyTo}>
                     <RoomIcon />
                   </IconButton>
                 }
@@ -160,6 +182,7 @@ function Listings() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+              <TheMapComponent />
               {AllListings.map((listing) => {
                 function IconDisplay() {
                   if (listing.listing_type === 'House') {
