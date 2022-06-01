@@ -1142,10 +1142,7 @@ function BoroughDisplay() {
                         
                     </MapContainer>
                     
-                </Grid>
-                
-
-                
+                </Grid> 
 
                 <Grid 
                     item 

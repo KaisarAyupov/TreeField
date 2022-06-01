@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 // react-leaflet
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress, IconButton} from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress, IconButton, CardActions} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import RoomIcon from '@mui/icons-material/Room';
 
@@ -134,7 +134,15 @@ function TheMapComponent() {
             <Card key={listing.id} className={classes.cardStyle}>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings" onClick={()=>state.mapInstance.flyTo}>
+                  <IconButton
+                    aria-label="settings"
+                    onClick={() =>
+                      state.mapInstance.flyTo(
+                        [listing.lat, listing.lng],
+                        16
+                      )
+                    }
+                  >
                     <RoomIcon />
                   </IconButton>
                 }
@@ -162,14 +170,11 @@ function TheMapComponent() {
               </Typography>
               )}
               
-              {/* <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-          </CardActions> */}
+              <CardActions disableSpacing>
+                <IconButton aria-label="add to favorites">
+                  {listing.seller_username}
+                </IconButton>
+              </CardActions>
             </Card>
           )
         })}
