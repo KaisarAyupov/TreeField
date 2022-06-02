@@ -4,7 +4,7 @@ from rest_framework import generics
 
 
 class ListingList(generics.ListAPIView):
-    queryset =Listing.objects.all().order_by('-date_posted')
+    queryset =Listing.objects.all().order_by('-data_posted')
     serializer_class = ListingSerializer
 
 
