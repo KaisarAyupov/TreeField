@@ -315,6 +315,10 @@ function AddProperty() {
         },
         uploadedPictures: [],
         sendRequest: 0,
+        userProfile: {
+            agencyName: "",
+            phoneNumber: "",
+        },
       };
 
     function ReduserFunction(draft, action) {
@@ -396,6 +400,10 @@ function AddProperty() {
                 break;
             case 'changeSendRequest':
                 draft.sendRequest = draft.sendRequest +1;
+                break;
+            case 'catchUserProfileInfo':
+                draft.userProfile.agencyName = action.prfileObject.agency_name
+                draft.userProfile.phoneNumber = action.prfileObject.phone_number
                 break;
 
         }
@@ -782,6 +790,26 @@ function BoroughDisplay() {
 
     }, [state.uploadedPictures[4]])
 
+
+    // reques to get frofile info
+    useEffect(()=>{
+        async function GetProfileInfo() {
+            try {
+                const response = await Axios.get(
+                    `http://127.0.0.1:8000/api/profiles/${GlobalState.userId}/`
+                );
+                console.log(response.data)
+                dispatch({type: 'catchUserProfileInfo', prfileObject: response.data})
+
+            } catch (e) {
+                console.log(e.response)
+            }
+
+        }
+        GetProfileInfo();
+
+    }, [])
+
     function FormSubmit(e){
         e.preventDefault();
         console.log("Test");
@@ -842,6 +870,31 @@ function BoroughDisplay() {
         else {
             return 'Price*'
         }
+    }
+    function SubmitButtonDisplay(){
+        if (GlobalState.userIsLogged && state.userProfile.agencyName !==null && state.userProfile.agencyName !== '' && 
+        state.userProfile.phoneNumber !== null && state.userProfile.phoneNumber !== ''){
+            return (
+                <Button variant="contained" fullWidth type="submit" className={classes.registerBtn} >Submit</Button>
+            )
+        }
+        else if (
+            GlobalState.userIsLogged && 
+            (state.userProfile.agencyName === null || 
+            state.userProfile.agencyName === '' || 
+            state.userProfile.phoneNumber === null ||
+            state.userProfile.phoneNumber === '')
+            )  {
+            return (
+                <Button variant="outlined" fullWidth onClick={()=> navigate("/profile")} className={classes.registerBtn} >Complete your profile to add a property!</Button>
+            )
+        }
+        else if (!GlobalState.userIsLogged){
+            return (
+                <Button variant="outlined" fullWidth onClick={()=> navigate("/login")} className={classes.registerBtn} >Sign in to ad a property!</Button>
+            )
+        }
+
     }
     return (
         <div className={classes.formConteiner}>
@@ -1178,7 +1231,7 @@ function BoroughDisplay() {
                 </Grid>
 
                 <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}>
-                    <Button variant="contained" fullWidth type="submit" className={classes.registerBtn} >Submit</Button>
+                   {SubmitButtonDisplay()} 
                 </Grid>
             </form> 
             <Button onClick={()=>console.log(state.uploadedPictures)} >Testbtn</Button>           
