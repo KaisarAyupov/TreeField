@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useMemo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
-
 // Contexts
 import StateContext from "../Contexts/StateContext";
 
@@ -98,7 +97,7 @@ function Profile() {
 		async function GetProfileInfo() {
 			try {
 				const response = await Axios.get(
-					`https://www.lbrepcourseapi.com/api/profiles/${GlobalState.userId}/`
+					`http://localhost:8000/api/profiles/${GlobalState.userId}/`
 				);
 
 				dispatch({

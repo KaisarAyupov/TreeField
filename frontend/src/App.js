@@ -14,6 +14,9 @@ import CssBaseline from '@mui/material/CssBaseline';
  import Testing from './Components/Testing';
  import Register from './Components/Register';
  import AddProperty from './Components/AddProperty';
+ import Profile from './Components/Profile';
+ import Agencies from './Components/Agencies';
+
 
  // Contexts
  import DispatchContext from './Contexts/DispatchContext';
@@ -73,6 +76,8 @@ function App() {
               <Route path='/login' element={<Login />}/>
               <Route path='/register' element={<Register />}/>
               <Route path='/addproperty' element={<AddProperty />}/>
+              <Route path='/profile' element={<Profile />}/>
+              <Route path='/agencies' element={<Agencies />}/>
               <Route path='/listings' element={<Listings />}/>
               <Route path='/testing' element={<Testing />}/>              
             </Routes>    

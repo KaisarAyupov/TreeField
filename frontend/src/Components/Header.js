@@ -76,6 +76,10 @@ function Header() {
     const handleClose = () => {
       setAnchorEl(null);
     };
+    function HandleProfile(){
+      setAnchorEl(null);
+      navigate("/profile")
+    }
     async function HandleLogout() {
       setAnchorEl(null);
       const confirmLogout = window.confirm("Are you sure you want to leave?")
@@ -107,7 +111,8 @@ function Header() {
             <Button color="inherit" onClick={()=>navigate('/listings')} style={{marginRight: '2rem'}}>
               <Typography variant='h6'>Listings</Typography>
             </Button>
-            <Button color="inherit" style={{marginLeft: '2rem'}}>
+            <Button color="inherit" style={{marginLeft: '2rem'}} onClick={()=>navigate('/agencies')}>
+              {" "}
               <Typography variant='h6'>Agencies</Typography>
             </Button>
           </div>
@@ -142,7 +147,7 @@ function Header() {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem className={classes.profileBtn} onClick={handleClose}>Profile</MenuItem>
+                <MenuItem className={classes.profileBtn} onClick={HandleProfile}>Profile</MenuItem>
                 <MenuItem className={classes.logoutBtn} onClick={HandleLogout}>Logout</MenuItem>
               </Menu>
             

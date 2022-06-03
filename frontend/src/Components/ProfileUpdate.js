@@ -144,7 +144,7 @@ function ProfileUpdate(props) {
 
 				try {
 					const response = await Axios.patch(
-						`https://www.lbrepcourseapi.com/api/profiles/${GlobalState.userId}/update/`,
+						`http://localhost:8000/api/profiles/${GlobalState.userId}/update/`,
 						formData
 					);
 

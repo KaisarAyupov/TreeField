@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/listings/create/', listing_api_views.ListingCreate.as_view()),
     path('api/profiles/', users_api_views.ProfileList.as_view()),
     path('api/profiles/<int:seller>/', users_api_views.ProfileDetail.as_view()),
+    path('api/profiles/<int:seller>/update/', users_api_views.ProfileUpdate.as_view()),
 
 
     path('api-auth-djoser/', include('djoser.urls')),
