@@ -21,9 +21,14 @@ import {
 	FormControlLabel,
 	Checkbox,
 	Snackbar,
+  CardActions
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
+import { defaultListboxReducer } from "@mui/base";
+
+// Assets
+import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
 const useStyles = makeStyles({
 	
@@ -83,35 +88,40 @@ function Agencies() {
   }
 
   return (
-    <div 
+    <Grid container justifyContent="flex-start" spacing={2} style={{ padding: "10px"}}>
       {state.agenciesList.map((agency) => {
-        if (agency.agency_name && agency.phone_number)
-          return (
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
-                alt="green iguana"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000
-                  species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-          );
-      })}>
-    </div>
-  )
+          if (agency.agecy_name && agency.phone_number)
+            return (
+              <Grid 
+                key={agency.id} 
+                item 
+                style={{marginTop: '1rem', maxWidth: "20rem"}}
+              >
+                <Card>
+                  <CardMedia
+                    component="img"
+                    alt="profile picture"
+                    height="140"
+                    image={agency.profile_picture ? agency.profile_picture : defaultProfilePicture}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {agency.agecy_name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {agency.bio.substring(0, 100)}...
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small">X Properties</Button>
+                  </CardActions>
+                </Card>
+              </Grid>              
+            );
+        })}
+    </Grid>
+    
+  );
 }
 
 export default Agencies
