@@ -99,9 +99,9 @@ function Agencies() {
           if(agency.seller_listings.length === 0){
             return <Button disabled size="small">No Property</Button>
           } else if (agency.seller_listings.length === 1){
-            return <Button size="small">One Property Listed</Button>;
+            return <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>One Property Listed</Button>;
           } else {
-            return <Button size="small">{agency.seller_listings.length} Properties</Button>;
+            return <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>{agency.seller_listings.length} Properties</Button>;
           }
         }
           if (agency.agency_name && agency.phone_number)
