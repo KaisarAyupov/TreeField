@@ -88,13 +88,27 @@ function Agencies() {
   }
 
   return (
-    <Grid container justifyContent="flex-start" spacing={2} style={{ padding: "10px"}}>
+    <Grid 
+      container 
+      justifyContent="flex-start" 
+      spacing={2} 
+      style={{ padding: "10px"}}
+    >
       {state.agenciesList.map((agency) => {
-          if (agency.agecy_name && agency.phone_number)
+        function PropertiesDisplay(){
+          if(agency.seller_listings.length === 0){
+            return <Button disabled size="small">No Property</Button>
+          } else if (agency.seller_listings.length === 1){
+            return <Button size="small">One Property Listed</Button>;
+          } else {
+            return <Button size="small">{agency.seller_listings.length} Properties</Button>;
+          }
+        }
+          if (agency.agency_name && agency.phone_number)
             return (
               <Grid 
                 key={agency.id} 
-                item 
+                item
                 style={{marginTop: '1rem', maxWidth: "20rem"}}
               >
                 <Card>
@@ -113,7 +127,7 @@ function Agencies() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">X Properties</Button>
+                    {PropertiesDisplay()}                   
                   </CardActions>
                 </Card>
               </Grid>              
