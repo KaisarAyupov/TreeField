@@ -17,6 +17,7 @@ import CssBaseline from '@mui/material/CssBaseline';
  import Profile from './Components/Profile';
  import Agencies from './Components/Agencies';
  import AgencyDetail from './Components/AgencyDetail';
+ import ListingDetail from './Components/ListingDetail';
 
 
  // Contexts
@@ -81,6 +82,7 @@ function App() {
               <Route path='/agencies' element={<Agencies />}/>
               <Route path='/agencies/:id' element={<AgencyDetail />}/>
               <Route path='/listings' element={<Listings />}/>
+              <Route path='/listings/:id' element={<ListingDetail />}/>
               <Route path='/testing' element={<Testing />}/>              
             </Routes>    
           </BrowserRouter>

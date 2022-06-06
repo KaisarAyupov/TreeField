@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
+import { useNavigate } from 'react-router-dom';
 // react-leaflet
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { Icon } from 'leaflet';
@@ -29,6 +30,7 @@ const useStyles = makeStyles({
     paddingLeft: "1rem",
     height: "20rem",
     width: "30rem",
+    cursor: 'pointer',
   },
   priceOverlay: {
     position: "absolute",
@@ -44,6 +46,7 @@ const useStyles = makeStyles({
 
 function Listings() {
   //fetch('http://127.0.0.1:8000/api/listings/').then(response=> response.json()).then(data=>console.log(data))
+  const navigate = useNavigate();
   const classes = useStyles();
   const houseIcon = new Icon({
     iconUrl: houseIconpng,
@@ -153,6 +156,7 @@ function TheMapComponent() {
                 component="img" height="194"
                 image={listing.picture1}
                 alt={listing.title}
+                onClick={()=>navigate(`/listings/${listing.id}`)}
               />
               <CardContent>
                 <Typography variant="body2">
@@ -212,11 +216,15 @@ function TheMapComponent() {
                       <Typography variant='h5'>
                         {listing.title}
                       </Typography>
-                      <img src={listing.picture1} style={{ height: '14rem', width: "18rem" }} />
+                      <img 
+                        src={listing.picture1} 
+                        style={{ height: '14rem', width: "18rem", cursor: "pointer" }} 
+                        onClick={()=>navigate(`/listings/${listing.id}`)}
+                      />
                       <Typography variant='body1'>
                         {listing.description.substring(0, 150)}
                       </Typography>
-                      <Button variant='contained' fullWidth>
+                      <Button variant='contained' fullWidth onClick={()=>navigate(`/listings/${listing.id}`)}>
                         Deteils
                       </Button>
                     </Popup>}

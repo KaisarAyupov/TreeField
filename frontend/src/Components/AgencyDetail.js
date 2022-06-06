@@ -176,6 +176,8 @@ function AgencyDetail() {
                                     alt="Listing picture"
                                     height="140"
                                     image={`http://localhost:8000${listing.picture1}` ? `http://localhost:8000${listing.picture1}` : defaultProfilePicture}
+                                    onClick={()=>navigate(`/listings/${listing.id}`)}
+                                    style={{cursor: "pointer"}}
                                 />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="div">
