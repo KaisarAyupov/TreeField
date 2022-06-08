@@ -76,6 +76,7 @@ function ListingDetail() {
 	const initialState = {
 		dataIsLoading: true,
     listingInfo: "",
+    sellerProfileInfo: "",
 	};
 
 	function ReducerFuction(draft, action) {
@@ -83,9 +84,11 @@ function ListingDetail() {
       case "catchListingInfo":
         draft.listingInfo = action.listingObject;
         break;
-
       case "loadingDone":
         draft.dataIsLoading = false;
+        break;
+      case "catchSellerProfileInfo":
+        draft.sellerProfileInfo = action.profileObject;
         break;
     }
   }
@@ -99,16 +102,40 @@ function ListingDetail() {
         const response = await Axios.get(
           `http://localhost:8000/api/listings/${params.id}/`
         );
-
+        console.log(response.data);
         dispatch({
           type: "catchListingInfo",
           listingObject: response.data,
         });
-        dispatch({ type: "loadingDone" });
-      } catch (e) { }
+      } catch (e) { 
+        console.log(e.response);
+      }
     }
     GetListingInfo();
   }, []);
+
+  // request to get profile info
+	useEffect(() => {
+    if (state.listingInfo) {
+      async function GetProfileInfo() {
+        try {
+          const response = await Axios.get(
+            `http://localhost:8000/api/profiles/${state.listingInfo.seller}/`
+          );
+          console.log(response.data);  
+          dispatch({
+            type: "catchSellerProfileInfo",
+            profileObject: response.data,
+          });
+          dispatch({ type: "loadingDone" });
+        } catch (e) {
+          console.log(e.response);
+        }
+        
+      }
+      GetProfileInfo();      
+    }		
+	}, [state.listingInfo]);
 
   const listingPictures = [
     state.listingInfo.picture1,
@@ -250,6 +277,59 @@ function ListingDetail() {
       </Grid>
       ) : (''
       )}
+
+      {/* seller Info */}
+      <Grid
+        container
+        style={{
+          width: "50%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          border: "5px solid black",
+          marginTop: "1rem",
+          padding: "5px",
+        }}
+      >
+        <Grid item xs={6}>
+          <img
+            style={{ height: "10rem", width: "15rem" }}
+            src={
+              state.sellerProfileInfo.profile_picture !== null
+                ? state.sellerProfileInfo.profile_picture
+                : defaultProfilePicture
+            }
+            onClick={()=>navigate(`/agencies/${state.sellerProfileInfo.seller}`)}
+          />
+        </Grid>
+        <Grid
+          item
+          container
+          direction="column"
+          justifyContent="center"
+          xs={6}
+        >
+          <Grid item>
+            <Typography
+              variant="h5"
+              style={{ textAlign: "center", marginTop: "1rem" }}
+            >
+              <span style={{ color: "green", fontWeight: "bolder" }}>
+                {state.sellerProfileInfo.agency_name}
+              </span>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h5"
+              style={{ textAlign: "center", marginTop: "1rem" }}
+            >
+              <IconButton>
+                <LocalPhoneIcon /> {state.sellerProfileInfo.phone_number}
+              </IconButton>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
         
     </div>
   );
