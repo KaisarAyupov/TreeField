@@ -292,7 +292,7 @@ function ListingDetail() {
       >
         <Grid item xs={6}>
           <img
-            style={{ height: "10rem", width: "15rem" }}
+            style={{ height: "10rem", width: "15rem", cursor: "pointer"}}
             src={
               state.sellerProfileInfo.profile_picture !== null
                 ? state.sellerProfileInfo.profile_picture
