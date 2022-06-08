@@ -33,6 +33,8 @@ import {
 
 import { makeStyles } from "@mui/styles";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import RoomIcon from '@mui/icons-material/Room';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const useStyles = makeStyles({
   SliderContainer: {
@@ -132,7 +134,9 @@ function ListingDetail() {
       return setCurrentPicture(currentPicture - 1);
     } 
   }
-
+  
+  const date = new Date(state.listingInfo.data_posted)
+  const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
 
   if (state.dataIsLoading === true) {
     return (
@@ -181,7 +185,72 @@ function ListingDetail() {
           <ArrowCircleLeftIcon onClick={PreviousPicture} className={classes.leftArrow}/>
           <ArrowCircleRightIcon onClick={NextPicture} className={classes.rightArraw}/>
         </Grid>
-      ) : ("")}
+      ) : (
+        ""
+      )}
+      {/* More Information */}
+      <Grid item container style={{padding: "1rem", border: "1px solid black", marginTop: "1rem"}}>
+        <Grid item container xs={7} direction='column' spacing={1}>
+          <Grid item>
+            <Typography variant="h5">{state.listingInfo.title}</Typography>
+          </Grid>
+          <Grid item>
+            <RoomIcon/>{" "}
+            <Typography variant="h6">{state.listingInfo.borough}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle1">{formattedDate}</Typography>
+          </Grid>
+          <Grid item container xs={5} alignItems="center">
+            <Typography variant="h6" style={{fontWeight: "bolder", color:"green"}}>
+              {state.listingInfo.listing_type} | {state.listingInfo.property_status === 'Sale' ? state.listingInfo.price : `${state.
+              listingInfo.price}/${state.listingInfo.rental_frequency}`}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item container justifyContent="flex-start" style={{padding: "1rem", border: "1px solid black", marginTop: "1rem"}}>
+        {state.listingInfo.rooms ? (
+          <Grid item xs={2} style={{ display: "flex" }}>
+            <Typography variant="h6">{state.listingInfo.rooms} Rooms</Typography>
+          </Grid>
+        ) : ('')}
+        {state.listingInfo.furnished ? (
+          <Grid item xs={2}  style={{ display: "flex" }}>
+            <CheckBoxIcon style={{ color: "green", fontSize: "2rem" }} /> <Typography variant="h6">Furnished</Typography>
+          </Grid>
+        ) : ('')}
+        {state.listingInfo.pool ? (
+          <Grid item xs={2}  style={{ display: "flex" }}>
+            <CheckBoxIcon style={{ color: "green", fontSize: "2rem" }} /> <Typography variant="h6">Pool</Typography>
+          </Grid>
+        ) : ('')}
+        {state.listingInfo.elevator ? (
+          <Grid item xs={2}  style={{ display: "flex" }}>
+            <CheckBoxIcon style={{ color: "green", fontSize: "2rem" }} /> <Typography variant="h6">Elevator</Typography>
+          </Grid>
+        ) : ('')}
+
+        {state.listingInfo.cctv ? (
+          <Grid item xs={2}  style={{ display: "flex" }}>
+            <CheckBoxIcon style={{ color: "green", fontSize: "2rem" }} /> <Typography variant="h6">Cctv</Typography>
+          </Grid>
+        ) : ('')}
+        {state.listingInfo.parking ? (
+          <Grid item xs={2} style={{ display: "flex" }}>
+            <CheckBoxIcon style={{ color: "green", fontSize: "2rem" }} /> <Typography variant="h6">Parking</Typography>
+          </Grid>
+        ) : ('')}
+      </Grid>
+      {/* Description */}
+      {state.listingInfo.description ? (
+        <Grid item style={{padding: "1rem", border: "1px solid black", marginTop: "1rem"}}>
+        <Typography variant="h5">Description</Typography>
+        <Typography variant="h6">{state.listingInfo.description}</Typography>
+      </Grid>
+      ) : (''
+      )}
+        
     </div>
   );
 }
