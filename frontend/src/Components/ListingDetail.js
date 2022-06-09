@@ -2,13 +2,19 @@ import React, { useEffect, useState, useRef, useMemo, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
+// react-leaflet
+import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon } from 'react-leaflet'
+import { Icon } from "leaflet";
 // Contexts
 import StateContext from "../Contexts/StateContext";
 
 // Assets
 import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import stadiumIconPng from "./Assets/Mapicons/stadium.png";
+import hospitalIconPng from "./Assets/Mapicons/hospital.png";
+import universityIconPng from "./Assets/Mapicons/university.png";
+
+
 
 
 // MUI
@@ -35,6 +41,9 @@ import { makeStyles } from "@mui/styles";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import RoomIcon from '@mui/icons-material/Room';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { border } from "@mui/system";
 
 const useStyles = makeStyles({
   SliderContainer: {
@@ -71,7 +80,20 @@ function ListingDetail() {
 	const navigate = useNavigate();
 	const GlobalState = useContext(StateContext);
 
-    const params = useParams();
+  const params = useParams();
+
+  const stadiumIcon = new Icon({
+    iconUrl: stadiumIconPng,
+    iconSize: [40,40],
+  });
+  const hospitalIcon = new Icon({
+    iconUrl: hospitalIconPng,
+    iconSize: [40,40],
+  });
+  const universityIcon = new Icon({
+    iconUrl: universityIconPng,
+    iconSize: [40,40],
+  });
 
 	const initialState = {
 		dataIsLoading: true,
@@ -329,6 +351,68 @@ function ListingDetail() {
             </Typography>
           </Grid>
         </Grid>
+      </Grid>
+      {/* Map */}
+      <Grid item container style={{marginTop: "1rem"}} spacing={1} justifyContent="space-between">
+        <Grid item xs={3} style={{overflow: "auto", height: "35rem"}}>
+          {state.listingInfo.listing_pois_within_10km.map(poi => {
+            
+            return (
+              <div key={poi.id} style={{marginBottom: "0.5rem", border: "1px solid black"}}>
+                <Typography variant="h6">{poi.name}</Typography>
+                <Typography variant="subtitle">{poi.type} | X km</Typography>
+              </div>
+            );
+          })}
+        </Grid>
+        <Grid item xs={9} style={{height: "35rem"}}>
+          <MapContainer 
+            center={[state.listingInfo.lat, state.listingInfo.lng]} 
+            zoom={14} 
+            scrollWheelZoom={true}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker            
+              position={[
+                state.listingInfo.lat, 
+                state.listingInfo.lng,
+              ]}
+            >
+              <Popup>{state.listingInfo.title}</Popup>
+            </Marker>
+            {state.listingInfo.listing_pois_within_10km.map(poi=>{
+              function PoiIcon(){
+                if (poi.type === 'Stadium'){
+                  return stadiumIcon
+                }
+                else if (poi.type === 'Hospital'){
+                  return hospitalIcon
+                }
+                else if (poi.type === 'University'){
+                  return universityIcon
+                }
+              }
+              return (
+                <Marker 
+                  key={poi.id}
+                  position={[
+                    poi.location.coordinates[0], 
+                    poi.location.coordinates[1],
+                  ]}
+                  icon={PoiIcon()}
+                >
+                  
+                  <Popup>
+                    {poi.name}
+                  </Popup>
+                </Marker>                
+              );
+            })}
+          </MapContainer>
+        </Grid>
+
       </Grid>
         
     </div>
