@@ -14,8 +14,8 @@ import stadiumIconPng from "./Assets/Mapicons/stadium.png";
 import hospitalIconPng from "./Assets/Mapicons/hospital.png";
 import universityIconPng from "./Assets/Mapicons/university.png";
 
-
-
+// Components
+import ListingUpdate from "./ListingUpdate";
 
 // MUI
 import {
@@ -35,6 +35,7 @@ import {
   CardActions,
   Breadcrumbs,
   Link,
+  Dialog,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -198,7 +199,17 @@ function ListingDetail() {
       }
   
     }
-  }
+  };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   if (state.dataIsLoading === true) {
     return (
@@ -366,8 +377,16 @@ function ListingDetail() {
         </Grid>
         {GlobalState.userId == state.listingInfo.seller ? (
           <Grid item container justifyContent="space-around">
-            <Button variant="contained" color="primary">Update</Button>
-            <Button variant="contained" color="error" onClick={DeleteHandler}>Delete</Button>
+            <Button variant="contained" color="primary" onClick={handleClickOpen}>Update</Button>
+            <Button variant="contained" color="error" onClick={DeleteHandler}>
+              Delete
+            </Button>
+            <Dialog open={open} onClose={handleClose} fullScreen>
+              <ListingUpdate 
+                listingData={state.listingInfo} 
+                closeDialog={handleClose}
+                />
+            </Dialog>
           </Grid>
         ) : (
           ""
