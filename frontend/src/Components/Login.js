@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {useImmerReducer} from 'use-immer';
 
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 // Contexts
@@ -42,10 +42,12 @@ function Login() {
     const GlobalState = useContext(StateContext)
 
     const initialState = {
-      usernameValue: '',
-      passwordValue: '',
+      usernameValue: "",
+      passwordValue: "",
       sendRequest: 0,
-      token: ''
+      token: "",
+      openSnack: false,
+      disabledBtn: false,
       
     };
     function ReduserFunction(draft, action) {
@@ -62,6 +64,15 @@ function Login() {
         case 'catchToken':
           draft.token = action.tokenValue
           break;
+        case 'openTheSnack':
+          draft.openSnack = true;
+          break;
+        case 'disableTheButton':
+          draft.disabledBtn = true;
+          break;
+        case 'allowTheButton':
+          draft.disabled = false;
+          break;
       }
 
     }
@@ -70,7 +81,8 @@ function Login() {
     function FormSubmit(e){
       e.preventDefault();
       console.log("Test");
-      dispatch({type: 'changeSendRequest'});      
+      dispatch({type: 'changeSendRequest'});
+      dispatch({type: 'disableTheButton'})      
     }
     useEffect(() => {
       if (state.sendRequest) {
@@ -99,6 +111,7 @@ function Login() {
             //navigate('/')          
           } catch (error) {
             console.log(error);
+            dispatch({type: 'allowTheButton'})
           }
         }
         SignIn();
@@ -109,38 +122,46 @@ function Login() {
     }, [state.sendRequest])   
     
     // get User info
-    useEffect(() => {
-      if (state.token !== '') {
-        const source = Axios.CancelToken.source();
-        async function GetUserInfo() {
-          try {
-            const response = await Axios.get(
-              "http://localhost:8000/api-auth-djoser/users/me/",
-              {
-                headers: {Authorization : "Token ".concat(state.token)},
-              },
-              {
-                cancelToken: source.token
-              }
-            );
-            console.log(response)
-            GlobalDispatch({ 
-              type: "userSignsIn", 
-              usernameInfo: response.data.username, 
-              emailInfo:  response.data.email,  
-              idInfo:  response.data.id })
-            navigate('/')          
-          } catch (error) {
-            console.log(error);
-          }
+  useEffect(() => {
+    if (state.token !== '') {
+      const source = Axios.CancelToken.source();
+      async function GetUserInfo() {
+        try {
+          const response = await Axios.get(
+            "http://localhost:8000/api-auth-djoser/users/me/",
+            {
+              headers: { Authorization: "Token ".concat(state.token) },
+            },
+            {
+              cancelToken: source.token
+            }
+          );
+          console.log(response)
+          GlobalDispatch({
+            type: "userSignsIn",
+            usernameInfo: response.data.username,
+            emailInfo: response.data.email,
+            idInfo: response.data.id
+          })
+          dispatch({ type: "openTheSnack" });
+        } catch (error) {
+          console.log(error);
         }
-        GetUserInfo();
-        return () => {
-          source.cancel();
-        };
       }
-    }, [state.token])      
+      GetUserInfo();
+      return () => {
+        source.cancel();
+      };
+    }
+  }, [state.token])
 
+  useEffect(()=>{
+    if (state.openSnack){
+      setTimeout(()=>{
+        navigate("/")
+      }, 1500)
+    }
+  }, [state.openSnack])
 
   return (
     <div className={classes.formConteiner}>
@@ -170,13 +191,28 @@ function Login() {
             />
             </Grid>
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
-            <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN IN</Button>
+            <Button  
+              variant="contained" 
+              fullWidth type="submit" 
+              className={classes.registerBtn}
+              disabled= {state.disabledBtn}
+            >
+              SIGN IN
+            </Button>
             </Grid>              
         </form>
         
         <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
           <Typography variant='small'  style={{ marginTop: '1rem'}}>Dont have an account yet? <span onClick={()=> navigate("/register")} style={{ cursor: 'pointer', color: 'green'}}>SIGN UP</span></Typography>
         </Grid>
+        <Snackbar
+          open={state.openSnack}
+          message="You hav successfully logged in!"
+          anchorOrigin = {{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        />
     </div>
   )
 }
