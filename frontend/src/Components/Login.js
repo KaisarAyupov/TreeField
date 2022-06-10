@@ -82,7 +82,7 @@ function Login() {
       e.preventDefault();
       console.log("Test");
       dispatch({type: 'changeSendRequest'});
-      dispatch({type: 'disableTheButton'})      
+      dispatch({type: 'disableTheButton'});   
     }
     useEffect(() => {
       if (state.sendRequest) {
@@ -111,7 +111,7 @@ function Login() {
             //navigate('/')          
           } catch (error) {
             console.log(error);
-            dispatch({type: 'allowTheButton'})
+            dispatch({type: 'allowTheButton'});
           }
         }
         SignIn();
@@ -207,7 +207,7 @@ function Login() {
         </Grid>
         <Snackbar
           open={state.openSnack}
-          message="You hav successfully logged in!"
+          message="You have successfully logged in!"
           anchorOrigin = {{
             vertical: 'bottom',
             horizontal: 'center',

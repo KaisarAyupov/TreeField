@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -29,74 +29,93 @@ const useStyles = makeStyles({
   });
 
 function Register() {
-    const classes = useStyles();
-    const navigate = useNavigate();
+  const classes = useStyles();
+  const navigate = useNavigate();
 
-    const initialState = {
-      usernameValue: '',
-      emailValue: '',
-      passwordValue: '',
-      password2Value: '',
-      sendRequest: 0
-      
-    };
-    function ReduserFunction(draft, action) {
-      switch (action.type) {
-        case 'catchUsernameChange':
-          draft.usernameValue = action.usernameChosen;
-          break;
-        case 'catchEmailChange':
-          draft.emailValue = action.emailChosen;
-          break;
-        case 'catchPasswordChange':
-          draft.passwordValue = action.passwordChosen;
-          break;
-        case 'catchPassword2Change':
-          draft.password2Value = action.password2Chosen;
-          break;
-        case 'changeSendRequest':
-          draft.sendRequest = draft.sendRequest +1;
-          break;
-      }
+  const initialState = {
+    usernameValue: '',
+    emailValue: '',
+    passwordValue: '',
+    password2Value: '',
+    sendRequest: 0,
+    openSnack: false,
+    disabledBtn: false,
 
+  };
+  function ReduserFunction(draft, action) {
+    switch (action.type) {
+      case 'catchUsernameChange':
+        draft.usernameValue = action.usernameChosen;
+        break;
+      case 'catchEmailChange':
+        draft.emailValue = action.emailChosen;
+        break;
+      case 'catchPasswordChange':
+        draft.passwordValue = action.passwordChosen;
+        break;
+      case 'catchPassword2Change':
+        draft.password2Value = action.password2Chosen;
+        break;
+      case 'changeSendRequest':
+        draft.sendRequest = draft.sendRequest + 1;
+        break;
+      case 'openTheSnack':
+        draft.openSnack = true;
+        break;
+      case 'disableTheButton':
+        draft.disabledBtn = true;
+        break;
+      case 'allowTheButton':
+        draft.disabled = false;
+        break;
     }
-    const [state, dispatch] = useImmerReducer(ReduserFunction, initialState)
-  
-    function FormSubmit(e){
-      e.preventDefault();
-      console.log("Test");
-      dispatch({type: 'changeSendRequest'})
-      
-    }
-    useEffect(() => {
-      if (state.sendRequest) {
-        const source = Axios.CancelToken.source();
-        async function SignUp() {
-          try {
-            const response = await Axios.post(
-              "http://localhost:8000/api-auth-djoser/users/",
-              {
-                username: state.usernameValue,
-                email: state.emailValue,
-                password: state.passwordValue,
-                re_password: state.password2Value,
-              },
-              {
-                cancelToken: source.token
-              }
-            );
-            console.log(response)
-            navigate('/')          
-          } catch (error) {
-            console.log(error);
-          }
+
+  }
+  const [state, dispatch] = useImmerReducer(ReduserFunction, initialState)
+
+  function FormSubmit(e) {
+    e.preventDefault();
+    console.log("Test");
+    dispatch({ type: 'changeSendRequest' });
+    dispatch({type: 'disableTheButton'});
+  }
+  useEffect(() => {
+    if (state.sendRequest) {
+      const source = Axios.CancelToken.source();
+      async function SignUp() {
+        try {
+          const response = await Axios.post(
+            "http://localhost:8000/api-auth-djoser/users/",
+            {
+              username: state.usernameValue,
+              email: state.emailValue,
+              password: state.passwordValue,
+              re_password: state.password2Value,
+            },
+            {
+              cancelToken: source.token
+            }
+          );
+          console.log(response)
+          dispatch({ type: "openTheSnack" });
+        } catch (error) {
+          dispatch({type: 'allowTheButton'})
+          console.log(error);
         }
-        SignUp();
-        return () => {
-          source.cancel();
-        };
       }
-    }, [state.sendRequest])
+      SignUp();
+      return () => {
+        source.cancel();
+      };
+    }
+  }, [state.sendRequest])
+  useEffect(()=>{
+    if (state.openSnack){
+      setTimeout(()=>{
+        navigate("/")
+      }, 1500)
+    }
+  }, [state.openSnack])
   return (
     <div className={classes.formConteiner}>
         <form onSubmit={FormSubmit}>
@@ -146,16 +165,31 @@ function Register() {
             />
             </Grid>  
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
-            <Button  variant="contained" fullWidth type="submit" className={classes.registerBtn} >SIGN UP</Button>
+            <Button  
+              variant="contained" 
+              fullWidth type="submit" 
+              className={classes.registerBtn} 
+              disabled= {state.disabledBtn}
+            >
+              SIGN UP
+            </Button>
             </Grid>
           </form>
-            <Grid item container justifyContent="center" style={{ marginTop: '1rem'}}>
-                  <Typography variant='small' style={{ marginTop: '1rem' }}>Already have an account!
-                      <span
-                          onClick={() => navigate("/login")} style={{ cursor: 'pointer', color: 'green' }}>SIGN IN
-                      </span>
-                  </Typography>
-            </Grid>        
+          <Grid item container justifyContent="center" style={{ marginTop: '1rem' }}>
+            <Typography variant='small' style={{ marginTop: '1rem' }}>Already have an account!
+              <span
+                onClick={() => navigate("/login")} style={{ cursor: 'pointer', color: 'green' }}>SIGN IN
+              </span>
+            </Typography>
+          </Grid>
+          <Snackbar
+            open={state.openSnack}
+            message="You have successfully created accaunt!"
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+          />       
     </div>
   )
 }
