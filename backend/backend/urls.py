@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/listings/', listing_api_views.ListingList.as_view()),
     path('api/listings/create/', listing_api_views.ListingCreate.as_view()),
     path('api/listings/<int:pk>/', listing_api_views.ListingDetail.as_view()),
+    path('api/listings/<int:pk>/delete/', listing_api_views.ListingDelete.as_view()),
     path('api/profiles/', users_api_views.ProfileList.as_view()),
     path('api/profiles/<int:seller>/', users_api_views.ProfileDetail.as_view()),
     path('api/profiles/<int:seller>/update/', users_api_views.ProfileUpdate.as_view()),

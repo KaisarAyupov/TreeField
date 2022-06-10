@@ -116,7 +116,7 @@ function ListingDetail() {
 
   const [state, dispatch] = useImmerReducer(ReducerFuction, initialState);
 
-  // request to get profile info
+  // request to get listing info
   useEffect(() => {
     async function GetListingInfo() {
       try {
@@ -190,7 +190,7 @@ function ListingDetail() {
     const confirmDelete = window.confirm('Are you sure you want to delete this listing?')
     if (confirmDelete) {
       try {
-        const response = await Axios.delete(URL)
+        const response = await Axios.delete(`http://localhost:8000/api/listings/${params.id}/delete/`)
         console.log(response.data)
         navigate('/listings')
       } catch(e){
