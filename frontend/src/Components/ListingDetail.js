@@ -43,7 +43,6 @@ import RoomIcon from '@mui/icons-material/Room';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { border } from "@mui/system";
 
 const useStyles = makeStyles({
   SliderContainer: {
@@ -186,6 +185,20 @@ function ListingDetail() {
   
   const date = new Date(state.listingInfo.data_posted)
   const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+
+  async function DeleteHandler(){
+    const confirmDelete = window.confirm('Are you sure you want to delete this listing?')
+    if (confirmDelete) {
+      try {
+        const response = await Axios.delete(URL)
+        console.log(response.data)
+        navigate('/listings')
+      } catch(e){
+        console.log(e.response.data)
+      }
+  
+    }
+  }
 
   if (state.dataIsLoading === true) {
     return (
@@ -351,16 +364,55 @@ function ListingDetail() {
             </Typography>
           </Grid>
         </Grid>
+        {GlobalState.userId == state.listingInfo.seller ? (
+          <Grid item container justifyContent="space-around">
+            <Button variant="contained" color="primary">Update</Button>
+            <Button variant="contained" color="error" onClick={DeleteHandler}>Delete</Button>
+          </Grid>
+        ) : (
+          ""
+        )}
       </Grid>
       {/* Map */}
       <Grid item container style={{marginTop: "1rem"}} spacing={1} justifyContent="space-between">
         <Grid item xs={3} style={{overflow: "auto", height: "35rem"}}>
           {state.listingInfo.listing_pois_within_10km.map(poi => {
-            
+            function DegreeToRadian(coordinate){
+              return coordinate*Math.PI/180
+            };
+            function CalculateDistance() {
+              const latitude1 = DegreeToRadian(state.listingInfo.lat)
+              const longitude1 = DegreeToRadian(state.listingInfo.lng)
+              const latitude2 = DegreeToRadian(poi.location.coordinates[0])
+              const longitude2 = DegreeToRadian(poi.location.coordinates[1])
+              // The formula
+              const latDiff = latitude2 - latitude1;
+              const lonDiff = longitude2 - longitude1;
+              const R = 6371000 / 1000;
+
+              const a =
+                Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+                Math.cos(latitude1) *
+                Math.cos(latitude2) *
+                Math.sin(lonDiff / 2) *
+                Math.sin(lonDiff / 2);
+              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+              const d = R * c;
+
+              const dist =
+                Math.acos(
+                  Math.sin(latitude1) * Math.sin(latitude2) +
+                  Math.cos(latitude1) *
+                  Math.cos(latitude2) *
+                  Math.cos(lonDiff)
+                ) * R;
+              return dist.toFixed(2);
+            }
             return (
               <div key={poi.id} style={{marginBottom: "0.5rem", border: "1px solid black"}}>
                 <Typography variant="h6">{poi.name}</Typography>
-                <Typography variant="subtitle">{poi.type} | X km</Typography>
+                <Typography variant="subtitle">{poi.type} | <span style={{fontWeight: "bolder", color: "green"}}>{CalculateDistance()} Kilometers</span></Typography>
               </div>
             );
           })}
