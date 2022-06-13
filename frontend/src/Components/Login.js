@@ -96,17 +96,17 @@ function Login() {
                 password: state.passwordValue,
               },
               {
-                cancelToken: source.token
+                cancelToken: source.token,
               }
             );
             console.log(response)
             dispatch({
               type: 'catchToken', 
-              tokenValue: response.data.auth_token
+              tokenValue: response.data.auth_token,
             });
             GlobalDispatch({
               type: 'catchToken', 
-              tokenValue: response.data.auth_token
+              tokenValue: response.data.auth_token,
             });
             //navigate('/')          
           } catch (error) {
@@ -119,7 +119,7 @@ function Login() {
           source.cancel();
         };
       }
-    }, [state.sendRequest])   
+    }, [state.sendRequest]);   
     
     // get User info
   useEffect(() => {
@@ -162,7 +162,7 @@ function Login() {
       }, 1500)
     }
   }, [state.openSnack]);
-  
+
   return (
     <div className={classes.formConteiner}>
         <form onSubmit={FormSubmit}>

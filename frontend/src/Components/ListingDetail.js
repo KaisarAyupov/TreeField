@@ -36,6 +36,7 @@ import {
   Breadcrumbs,
   Link,
   Dialog,
+  Snackbar,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -99,6 +100,8 @@ function ListingDetail() {
 		dataIsLoading: true,
     listingInfo: "",
     sellerProfileInfo: "",
+    openSnack: false,
+    disabledBtn: false,
 	};
 
 	function ReducerFuction(draft, action) {
@@ -111,6 +114,15 @@ function ListingDetail() {
         break;
       case "catchSellerProfileInfo":
         draft.sellerProfileInfo = action.profileObject;
+        break;
+      case 'openTheSnack':
+        draft.openSnack = true;
+        break;
+      case 'disableTheButton':
+        draft.disabledBtn = true;
+        break;
+      case 'allowTheButton':
+        draft.disabled = false;
         break;
     }
   }
@@ -192,14 +204,24 @@ function ListingDetail() {
     if (confirmDelete) {
       try {
         const response = await Axios.delete(`http://localhost:8000/api/listings/${params.id}/delete/`)
-        console.log(response.data)
-        navigate('/listings')
+        console.log(response.data);
+        dispatch({ type: "openTheSnack" });
+        dispatch({type: 'disableTheButton'});
       } catch(e){
-        console.log(e.response.data)
+        dispatch({type: 'allowTheButton'});
+        console.log(e.response.data);
       }
   
     }
   };
+
+  useEffect(()=>{
+    if (state.openSnack){
+      setTimeout(()=>{
+        navigate("/listings")
+      }, 1500)
+    }
+  }, [state.openSnack]);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -378,7 +400,12 @@ function ListingDetail() {
         {GlobalState.userId == state.listingInfo.seller ? (
           <Grid item container justifyContent="space-around">
             <Button variant="contained" color="primary" onClick={handleClickOpen}>Update</Button>
-            <Button variant="contained" color="error" onClick={DeleteHandler}>
+            <Button 
+              variant="contained" 
+              color="error" 
+              onClick={DeleteHandler}
+              disabled= {state.disabledBtn}
+            >
               Delete
             </Button>
             <Dialog open={open} onClose={handleClose} fullScreen>
@@ -483,9 +510,15 @@ function ListingDetail() {
             })}
           </MapContainer>
         </Grid>
-
       </Grid>
-        
+      <Snackbar
+          open={state.openSnack}
+          message="You have successfully deleted!"
+          anchorOrigin = {{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        />        
     </div>
   );
 }

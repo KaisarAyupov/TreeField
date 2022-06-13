@@ -7,7 +7,7 @@ import StateContext from '../Contexts/StateContext';
 // Assets
 import Waltham from "./Assets/Boroughs/Waltham";
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Input } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -107,6 +107,8 @@ function ListingUpdate(props) {
         cctvValue: props.listingData.cctv,
         parkingValue: props.listingData.parking,
         sendRequest: 0,
+        openSnack: false,
+        disabledBtn: false,
       };
 
     function ReduserFunction(draft, action) {
@@ -148,7 +150,16 @@ function ListingUpdate(props) {
                 draft.parkingValue = action.parkingChosen;
                 break;
             case 'changeSendRequest':
-                draft.sendRequest = draft.sendRequest +1;
+                draft.sendRequest = draft.sendRequest + 1;
+                break;
+            case 'openTheSnack':
+                draft.openSnack = true;
+                break;
+            case 'disableTheButton':
+                draft.disabledBtn = true;
+                break;
+            case 'allowTheButton':
+                draft.disabled = false;
                 break;
         }
 
@@ -157,9 +168,9 @@ function ListingUpdate(props) {
    
     function FormSubmit(e){
         e.preventDefault();
-        console.log("Test");
-        dispatch({type: 'changeSendRequest'})
-        
+        console.log("Test form");
+        dispatch({type: 'changeSendRequest'});
+        dispatch({type: 'disableTheButton'});          
       }
 
     useEffect(()=>{
@@ -174,7 +185,7 @@ function ListingUpdate(props) {
                     formData.append('price', state.priceValue)
                     formData.append('rental_frequency', state.rentalFrequencyValue)
                     formData.append('rooms', 0)
-                    formData.append('finished', state.furnishedValue)
+                    formData.append('furnished', state.furnishedValue)
                     formData.append('pool', state.poolValue)
                     formData.append('elevator', state.elevatorValue)
                     formData.append('cctv', state.cctvValue)
@@ -188,7 +199,7 @@ function ListingUpdate(props) {
                     formData.append('price', state.priceValue)
                     formData.append('rental_frequency', state.rentalFrequencyValue)
                     formData.append('rooms', state.roomsValue)
-                    formData.append('finished', state.furnishedValue)
+                    formData.append('furnished', state.furnishedValue)
                     formData.append('pool', state.poolValue)
                     formData.append('elevator', state.elevatorValue)
                     formData.append('cctv', state.cctvValue)
@@ -199,15 +210,24 @@ function ListingUpdate(props) {
                 try {
                     const response = await Axios.patch(`http://localhost:8000/api/listings/${props.listingData.id}/update/`, formData);
                     console.log(response.data);
-                    navigate(0)
+                    dispatch({ type: "openTheSnack" });
                 } catch(e){
                     console.log(e.response);
+                    dispatch({type: 'allowTheButton'});
                 }
             }
-            UpdateProperty()
+            UpdateProperty();
         }
 
-    }, [state.sendRequest])
+    }, [state.sendRequest]);
+
+    useEffect(()=>{
+        if (state.openSnack){
+          setTimeout(()=>{
+            navigate(0)
+          }, 1500)
+        }
+      }, [state.openSnack]);
 
     function PriceDisplay(){
         if (state.propertyStatusValue === 'Rent' && state.rentalFrequencyValue ==='Day'){
@@ -444,10 +464,26 @@ function ListingUpdate(props) {
                     </Grid>
                 </Grid>
                 <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}>
-                    <Button variant="contained" fullWidth type="submit" className={classes.registerBtn} >Update</Button>
+                    <Button 
+                        variant="contained" 
+                        fullWidth 
+                        type="submit" 
+                        className={classes.registerBtn}
+                        disabled= {state.disabledBtn}
+                    >
+                        Update
+                    </Button>
                 </Grid>
             </form> 
-            <Button variant='contained' onClick={props.closeDialog}>Cancel</Button>           
+            <Button variant='contained' onClick={props.closeDialog}>Cancel</Button> 
+            <Snackbar
+                open={state.openSnack}
+                message="You have successfully updated this listing!"
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+            />         
         </div>
     )
 }
