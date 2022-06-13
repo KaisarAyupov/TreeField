@@ -140,7 +140,7 @@ function ListingUpdate(props) {
             case 'catchPoolChange':
                 draft.poolValue = action.poolChosen;
                 break;
-            case 'catchelEvatorChange':
+            case 'catchElevatorChange':
                 draft.elevatorValue = action.elevatorChosen;
                 break;
             case 'catchCctvChange':
@@ -419,7 +419,7 @@ function ListingUpdate(props) {
                             control={<Checkbox checked={state.poolValue} 
                             onChange={(e) =>
                                 dispatch({
-                                    type: 'catchPoolhange',
+                                    type: 'catchPoolChange',
                                     poolChosen: e.target.checked
                                 })
                             } />}
