@@ -33,19 +33,25 @@ function Register() {
   const navigate = useNavigate();
 
   const initialState = {
-    usernameValue: '',
-    emailValue: '',
-    passwordValue: '',
-    password2Value: '',
+    usernameValue: "",
+    emailValue: "",
+    passwordValue: "",
+    password2Value: "",
     sendRequest: 0,
     openSnack: false,
     disabledBtn: false,
+    usernameErrors: {
+      hasErrors: false,
+      errorMessage: "",
+    },
 
   };
   function ReduserFunction(draft, action) {
     switch (action.type) {
       case 'catchUsernameChange':
         draft.usernameValue = action.usernameChosen;
+        draft.usernameErrors.hasErrors = false;
+        draft.usernameErrors.errorMessage = "";
         break;
       case 'catchEmailChange':
         draft.emailValue = action.emailChosen;
@@ -67,6 +73,20 @@ function Register() {
         break;
       case 'allowTheButton':
         draft.disabled = false;
+        break;
+      case 'catchUsernameErrors':
+        if (action.usernameChosen.length === 0){
+          draft.usernameErrors.hasErrors = true
+          draft.usernameErrors.errorMessage = "This field must not to be emty!"
+        }
+        else if (action.usernameChosen.length < 5) {
+          draft.usernameErrors.hasErrors = true
+          draft.usernameErrors.errorMessage = "The user name must have at least mpore than five characters!"
+        }
+        else if (!/^([a-zA-Z0-9]+)$/.test(action.usernameChosen)){
+          draft.usernameErrors.hasErrors = true
+          draft.usernameErrors.errorMessage = "This field must not have special characters!"
+        }
         break;
     }
 
@@ -129,7 +149,20 @@ function Register() {
               variant="outlined" 
               fullWidth
               value={state.usernameValue} 
-              onChange = {(e)=>dispatch({type: 'catchUsernameChange', usernameChosen: e.target.value})}
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchUsernameChange', 
+                  usernameChosen: e.target.value,
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchUsernameErrors', 
+                  usernameChosen: e.target.value,
+                })
+              }
+              error = {state.usernameErrors.hasErrors ? true : false}
+              helperText = {state.usernameErrors.errorMessage}
             />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
