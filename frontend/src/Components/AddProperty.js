@@ -41,7 +41,7 @@ import Richmond from "./Assets/Boroughs/Richmond";
 import Sutton from "./Assets/Boroughs/Sutton";
 import Waltham from "./Assets/Boroughs/Waltham";
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Input } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -319,6 +319,8 @@ function AddProperty() {
             agencyName: "",
             phoneNumber: "",
         },
+        openSnack: false,
+        disabledBtn: false,
       };
 
     function ReduserFunction(draft, action) {
@@ -362,7 +364,7 @@ function AddProperty() {
             case 'catchPoolChange':
                 draft.poolValue = action.poolChosen;
                 break;
-            case 'catchelEvatorChange':
+            case 'catchElevatorChange':
                 draft.elevatorValue = action.elevatorChosen;
                 break;
             case 'catchCctvChange':
@@ -404,6 +406,15 @@ function AddProperty() {
             case 'catchUserProfileInfo':
                 draft.userProfile.agencyName = action.prfileObject.agency_name
                 draft.userProfile.phoneNumber = action.prfileObject.phone_number
+                break;
+            case 'openTheSnack':
+                draft.openSnack = true;
+                break;
+            case 'disableTheButton':
+                draft.disabledBtn = true;
+                break;
+            case 'allowTheButton':
+                draft.disabled = false;
                 break;
 
         }
@@ -813,8 +824,8 @@ function BoroughDisplay() {
     function FormSubmit(e){
         e.preventDefault();
         console.log("Test");
-        dispatch({type: 'changeSendRequest'})
-        
+        dispatch({type: 'changeSendRequest'});
+        dispatch({type: 'disableTheButton'});           
       }
 
     useEffect(()=>{
@@ -830,7 +841,7 @@ function BoroughDisplay() {
                 formData.append('price', state.priceValue)
                 formData.append('rental_frequency', state.rentalFrequencyValue)
                 formData.append('rooms', state.roomsValue)
-                formData.append('finished', state.furnishedValue)
+                formData.append('furnished', state.furnishedValue)
                 formData.append('pool', state.poolValue)
                 formData.append('elevator', state.elevatorValue)
                 formData.append('cctv', state.cctvValue)
@@ -847,8 +858,9 @@ function BoroughDisplay() {
                 try {
                     const response = await Axios.post("http://localhost:8000/api/listings/create/", formData);
                     console.log(response.data);
-                    navigate('/listings')
+                    dispatch({ type: "openTheSnack" });                    
                 } catch(e){
+                    dispatch({type: 'allowTheButton'});
                     console.log(e.response);
                 }
             }
@@ -875,7 +887,15 @@ function BoroughDisplay() {
         if (GlobalState.userIsLogged && state.userProfile.agencyName !==null && state.userProfile.agencyName !== '' && 
         state.userProfile.phoneNumber !== null && state.userProfile.phoneNumber !== ''){
             return (
-                <Button variant="contained" fullWidth type="submit" className={classes.registerBtn} >Submit</Button>
+                <Button 
+                    variant="contained" 
+                    fullWidth 
+                    type="submit" 
+                    className={classes.registerBtn}
+                    disabled= {state.disabledBtn}
+                >
+                    Submit
+                </Button>
             )
         }
         else if (
@@ -896,6 +916,14 @@ function BoroughDisplay() {
         }
 
     }
+    useEffect(()=>{
+        if (state.openSnack){
+          setTimeout(()=>{
+            navigate("/listings")
+          }, 1500)
+        }
+      }, [state.openSnack])
+
     return (
         <div className={classes.formConteiner}>
             <form onSubmit={FormSubmit}>
@@ -1071,11 +1099,11 @@ function BoroughDisplay() {
                             control={<Checkbox checked={state.poolValue} 
                             onChange={(e) =>
                                 dispatch({
-                                    type: 'catchPoolhange',
+                                    type: 'catchPoolChange',
                                     poolChosen: e.target.checked
                                 })
                             } />}
-                            label="Poll"
+                            label="Pool"
                         />
                     </Grid>
                     <Grid item xs={2} style={{ marginTop: '1rem' }}>
@@ -1234,7 +1262,14 @@ function BoroughDisplay() {
                    {SubmitButtonDisplay()} 
                 </Grid>
             </form> 
-            <Button onClick={()=>console.log(state.uploadedPictures)} >Testbtn</Button>           
+            <Snackbar
+                open={state.openSnack}
+                message="You have successfully added your property!"
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+            />          
         </div>
     )
 }

@@ -197,7 +197,7 @@ function TheMapComponent() {
                   if (listing.listing_type === 'House') {
                     return houseIcon;
                   }
-                  else if (listing.listing_type === 'Apatment') {
+                  else if (listing.listing_type === 'Apartment') {
                     return apartmentIcon;
                   }
                   else if (listing.listing_type === 'Office') {
