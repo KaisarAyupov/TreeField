@@ -58,7 +58,7 @@ function Login() {
         break;
       case 'catchPasswordChange':
         draft.passwordValue = action.passwordChosen;
-        draft.serverError = true;
+        draft.serverError = false;
         break;
       case 'changeSendRequest':
         draft.sendRequest = draft.sendRequest + 1;
@@ -189,7 +189,7 @@ function Login() {
             onChange={(e) => 
               dispatch({ 
                 type: 'catchUsernameChange', 
-                usernameChosen: e.target.value 
+                usernameChosen: e.target.value,
               })
             }
             error = {state.serverError ? true : false}
@@ -212,11 +212,17 @@ function Login() {
             error = {state.serverError ? true : false}
           />
         </Grid>
-        <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}>
+        <Grid
+          item
+          container
+          xs={8}
+          style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}
+        >
           <Button
             variant="contained"
-            fullWidth type="submit"
-            className={classes.registerBtn}
+            fullWidth
+            type="submit"
+            className={classes.loginBtn}
             disabled={state.disabledBtn}
           >
             SIGN IN
@@ -224,8 +230,20 @@ function Login() {
         </Grid>
       </form>
 
-      <Grid item container justifyContent="center" style={{ marginTop: '1rem' }}>
-        <Typography variant='small' style={{ marginTop: '1rem' }}>Dont have an account yet? <span onClick={() => navigate("/register")} style={{ cursor: 'pointer', color: 'green' }}>SIGN UP</span></Typography>
+      <Grid 
+        item 
+        container 
+        justifyContent="center" 
+        style={{ marginTop: '1rem'}}
+      >
+        <Typography variant='small'> Dont have an account yet? {""}
+          <span
+            onClick={() => navigate("/register")}
+            style={{ cursor: 'pointer', color: 'green' }}
+          >
+            SIGN UP
+          </span>
+        </Typography>
       </Grid>
       <Snackbar
         open={state.openSnack}
