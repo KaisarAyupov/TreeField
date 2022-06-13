@@ -66,6 +66,8 @@ function ProfileUpdate(props) {
 		sendRequest: 0,
 		openSnack: false,
 		disabledBtn: false,
+		openSnack: false,
+      	disabledBtn: false,
 	};
 
 	function ReducerFuction(draft, action) {
@@ -104,6 +106,15 @@ function ProfileUpdate(props) {
 
 			case "allowTheButton":
 				draft.disabledBtn = false;
+				break;
+			case 'openTheSnack':
+				draft.openSnack = true;
+				break;
+			case 'disableTheButton':
+				draft.disabledBtn = true;
+				break;
+			case 'allowTheButton':
+				draft.disabled = false;
 				break;
 		}
 	}
@@ -147,7 +158,6 @@ function ProfileUpdate(props) {
 						`http://localhost:8000/api/profiles/${GlobalState.userId}/update/`,
 						formData
 					);
-
 					dispatch({ type: "openTheSnack" });
 				} catch (e) {
 					dispatch({ type: "allowTheButton" });

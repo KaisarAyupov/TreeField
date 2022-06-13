@@ -136,13 +136,13 @@ function Login() {
               cancelToken: source.token
             }
           );
-          console.log(response)
+          console.log(response);
           GlobalDispatch({
             type: "userSignsIn",
             usernameInfo: response.data.username,
             emailInfo: response.data.email,
-            idInfo: response.data.id
-          })
+            idInfo: response.data.id,
+          });
           dispatch({ type: "openTheSnack" });
         } catch (error) {
           console.log(error);
@@ -161,8 +161,8 @@ function Login() {
         navigate("/")
       }, 1500)
     }
-  }, [state.openSnack])
-
+  }, [state.openSnack]);
+  
   return (
     <div className={classes.formConteiner}>
         <form onSubmit={FormSubmit}>
