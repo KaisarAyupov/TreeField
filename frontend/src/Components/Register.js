@@ -55,6 +55,9 @@ function Register() {
     password2HelperText: "",
     serverMessageUsername: "",
     serverMessageEmail: "",
+    serverMessageSimilarPassword: "",
+    serverMessageCommonPassword: "",
+    serverMessageNumericPassword: "",
   };
   function ReduserFunction(draft, action) {
     switch (action.type) {
@@ -74,11 +77,14 @@ function Register() {
         draft.passwordValue = action.passwordChosen;
         draft.passwordErrors.hasErrors = false;
         draft.passwordErrors.errorMessage = "";
+        draft.serverMessageSimilarPassword ="";
+        draft.serverMessageCommonPassword ="";
+        draft.serverMessageNumericPassword ="";
         break;
       case 'catchPassword2Change':
         draft.password2Value = action.password2Chosen;
         if (action.password2Chosen !== draft.passwordValue){
-          draft.password2HelperText = "The password mast match"
+          draft.password2HelperText = "The password mast match";
         }
         else if (action.password2Chosen === draft.passwordValue){
           draft.password2HelperText = ""
@@ -98,8 +104,8 @@ function Register() {
         break;
       case 'catchUsernameErrors':
         if (action.usernameChosen.length === 0){
-          draft.usernameErrors.hasErrors = true
-          draft.usernameErrors.errorMessage = "This field must not to be emty!"
+          draft.usernameErrors.hasErrors = true;
+          draft.usernameErrors.errorMessage = "This field must not to be emty!";
         }
         else if (action.usernameChosen.length < 5) {
           draft.usernameErrors.hasErrors = true
@@ -112,21 +118,30 @@ function Register() {
         break;
       case 'catchEmailErrors':
         if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(action.emailChosen)){
-          draft.emailErrors.hasErrors = true
-          draft.emailErrors.errorMessage = "Please enter a valid email!"
+          draft.emailErrors.hasErrors = true;
+          draft.emailErrors.errorMessage = "Please enter a valid email!";
         }
         break;
       case 'catchPasswordErrors':
         if (action.passwordChosen.length < 8){
-          draft.passwordErrors.hasErrors = true
-          draft.passwordErrors.errorMessage = "The password must at least have 8 characters!"
+          draft.passwordErrors.hasErrors = true;
+          draft.passwordErrors.errorMessage = "The password must at least have 8 characters!";
         }
         break;
       case 'usernameExists':
-        draft.serverMessageUsername = "This username already exists!"
+        draft.serverMessageUsername = "This username already exists!";
         break;
       case 'emailExists':
-        draft.serverMessageEmail = "This email already exists!"
+        draft.serverMessageEmail = "This email already exists!";
+        break;
+      case 'similarPassword':
+        draft.serverMessageSimilarPassword = "The password is too similar to the username!";
+        break;
+      case 'commonPassword':
+        draft.serverMessageCommonPassword = "This password is too common!";
+        break;
+      case 'numericPassword':
+        draft.serverMessageNumericPassword = "This password is entirely numeric!";
         break;
     }
 
@@ -169,6 +184,15 @@ function Register() {
           }
           else if (error.response.data.email) {
             dispatch({type: 'emailExists'})
+          } 
+          else if (error.response.data.password[0] === 'The password is too similar to the username.'){
+            dispatch({type: 'similarPassword'})
+          }
+          else if (error.response.data.password[0] === 'This password is too common.'){
+            dispatch({type: 'commonPassword'})
+          }
+          else if (error.response.data.password[0] === 'This password is entirely numeric.'){
+            dispatch({type: 'numericPassword'})
           }
         }
       }
@@ -203,7 +227,21 @@ function Register() {
             ) : (
               ""
             )}
-
+            {state.serverMessageSimilarPassword ? (
+              <Alert severity='error'>{state.serverMessageSimilarPassword}</Alert>
+            ) : (
+              ""
+            )}
+            {state.serverMessageCommonPassword ? (
+              <Alert severity='error'>{state.serverMessageCommonPassword}</Alert>
+            ) : (
+              ""
+            )}
+            {state.serverMessageNumericPassword ? (
+              <Alert severity='error'>{state.serverMessageNumericPassword}</Alert>
+            ) : (
+              ""
+            )}
             <Grid item container style={{ marginTop: '1rem'}}>
             <TextField 
               id="username" 
