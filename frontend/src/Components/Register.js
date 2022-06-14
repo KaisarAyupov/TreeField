@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -53,6 +53,8 @@ function Register() {
       errorMessage: "",
     },
     password2HelperText: "",
+    serverMessageUsername: "",
+    serverMessageEmail: "",
   };
   function ReduserFunction(draft, action) {
     switch (action.type) {
@@ -60,11 +62,13 @@ function Register() {
         draft.usernameValue = action.usernameChosen;
         draft.usernameErrors.hasErrors = false;
         draft.usernameErrors.errorMessage = "";
+        draft.serverMessageUsername = "";
         break;
       case 'catchEmailChange':
         draft.emailValue = action.emailChosen;
         draft.emailErrors.hasErrors = false;
         draft.emailErrors.errorMessage = "";
+        draft.serverMessageEmail = "";
         break;
       case 'catchPasswordChange':
         draft.passwordValue = action.passwordChosen;
@@ -118,6 +122,12 @@ function Register() {
           draft.passwordErrors.errorMessage = "The password must at least have 8 characters!"
         }
         break;
+      case 'usernameExists':
+        draft.serverMessageUsername = "This username already exists!"
+        break;
+      case 'emailExists':
+        draft.serverMessageEmail = "This email already exists!"
+        break;
     }
 
   }
@@ -154,6 +164,12 @@ function Register() {
         } catch (error) {
           dispatch({type: 'allowTheButton'})
           console.log(error);
+          if (error.response.data.username){
+            dispatch({type: 'usernameExists'})
+          }
+          else if (error.response.data.email) {
+            dispatch({type: 'emailExists'})
+          }
         }
       }
       SignUp();
@@ -175,6 +191,19 @@ function Register() {
             <Grid item container style={{ marginTop: '1rem'}}>
             <Typography variant='h4'>CREATE AN ACCOUNT</Typography>
             </Grid>
+           
+            {state.serverMessageUsername ? (
+              <Alert severity='error'>{state.serverMessageUsername}</Alert>
+            ) : (
+              ""
+            )}
+
+            {state.serverMessageEmail ? (
+              <Alert severity='error'>{state.serverMessageEmail}</Alert>
+            ) : (
+              ""
+            )}
+
             <Grid item container style={{ marginTop: '1rem'}}>
             <TextField 
               id="username" 
