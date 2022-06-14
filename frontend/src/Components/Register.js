@@ -52,6 +52,7 @@ function Register() {
       hasErrors: false,
       errorMessage: "",
     },
+    password2HelperText: "",
   };
   function ReduserFunction(draft, action) {
     switch (action.type) {
@@ -72,6 +73,12 @@ function Register() {
         break;
       case 'catchPassword2Change':
         draft.password2Value = action.password2Chosen;
+        if (action.password2Chosen !== draft.passwordValue){
+          draft.password2HelperText = "The password mast match"
+        }
+        else if (action.password2Chosen === draft.passwordValue){
+          draft.password2HelperText = ""
+        }
         break;
       case 'changeSendRequest':
         draft.sendRequest = draft.sendRequest + 1;
@@ -119,8 +126,11 @@ function Register() {
   function FormSubmit(e) {
     e.preventDefault();
     console.log("Test");
-    dispatch({ type: 'changeSendRequest' });
-    dispatch({type: 'disableTheButton'});
+    if(!state.usernameErrors.hasErrors && !state.emailErrors.hasErrors && !state.passwordErrors.hasErrors && state.password2HelperText === ''){
+      dispatch({ type: 'changeSendRequest' });
+      dispatch({type: 'disableTheButton'});
+    }
+    
   }
   useEffect(() => {
     if (state.sendRequest) {
@@ -243,7 +253,13 @@ function Register() {
               fullWidth 
               type="password"
               value={state.password2Value} 
-              onChange = {(e)=>dispatch({type: 'catchPassword2Change', password2Chosen: e.target.value})}
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchPassword2Change', 
+                  password2Chosen: e.target.value
+                })
+              }
+              helperText = {state.password2HelperText}
             />
             </Grid>  
             <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
