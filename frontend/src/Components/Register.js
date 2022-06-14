@@ -44,7 +44,14 @@ function Register() {
       hasErrors: false,
       errorMessage: "",
     },
-
+    emailErrors: {
+      hasErrors: false,
+      errorMessage: "",
+    },
+    passwordErrors: {
+      hasErrors: false,
+      errorMessage: "",
+    },
   };
   function ReduserFunction(draft, action) {
     switch (action.type) {
@@ -55,9 +62,13 @@ function Register() {
         break;
       case 'catchEmailChange':
         draft.emailValue = action.emailChosen;
+        draft.emailErrors.hasErrors = false;
+        draft.emailErrors.errorMessage = "";
         break;
       case 'catchPasswordChange':
         draft.passwordValue = action.passwordChosen;
+        draft.passwordErrors.hasErrors = false;
+        draft.passwordErrors.errorMessage = "";
         break;
       case 'catchPassword2Change':
         draft.password2Value = action.password2Chosen;
@@ -86,6 +97,18 @@ function Register() {
         else if (!/^([a-zA-Z0-9]+)$/.test(action.usernameChosen)){
           draft.usernameErrors.hasErrors = true
           draft.usernameErrors.errorMessage = "This field must not have special characters!"
+        }
+        break;
+      case 'catchEmailErrors':
+        if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(action.emailChosen)){
+          draft.emailErrors.hasErrors = true
+          draft.emailErrors.errorMessage = "Please enter a valid email!"
+        }
+        break;
+      case 'catchPasswordErrors':
+        if (action.passwordChosen.length < 8){
+          draft.passwordErrors.hasErrors = true
+          draft.passwordErrors.errorMessage = "The password must at least have 8 characters!"
         }
         break;
     }
@@ -172,7 +195,20 @@ function Register() {
               variant="outlined"
               fullWidth
               value={state.emailValue} 
-              onChange = {(e)=>dispatch({type: 'catchEmailChange', emailChosen: e.target.value})}              
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchEmailChange', 
+                  emailChosen: e.target.value
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchEmailErrors', 
+                  emailChosen: e.target.value
+                })
+              }
+              error = {state.emailErrors.hasErrors ? true : false}
+              helperText = {state.emailErrors.errorMessage}               
             />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
@@ -183,7 +219,20 @@ function Register() {
               fullWidth 
               type="password"
               value={state.passwordValue} 
-              onChange = {(e)=>dispatch({type: 'catchPasswordChange', passwordChosen: e.target.value})}
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchPasswordChange', 
+                  passwordChosen: e.target.value
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchPasswordErrors', 
+                  passwordChosen: e.target.value
+                })
+              }
+              error = {state.passwordErrors.hasErrors ? true : false}
+              helperText = {state.passwordErrors.errorMessage}  
             />
             </Grid>
             <Grid item container style={{ marginTop: '1rem'}}>
