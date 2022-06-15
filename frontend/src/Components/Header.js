@@ -117,6 +117,7 @@ const  Header = () => {
               <Button 
               sx={{ marginLeft: "auto", marginRight: "10px" }} 
               color="success"
+              size="large"
               variant="contained"
               startIcon={<AddLocationAltIcon />}
               onClick={() => navigate('/addproperty')}              
