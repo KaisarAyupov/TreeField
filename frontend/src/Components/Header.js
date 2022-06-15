@@ -2,9 +2,14 @@ import React, { useState, useContext, useEffect } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import Axios from "axios";
 // MUI
-import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem, Snackbar, } from '@mui/material';
+import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem, Snackbar, useTheme, useMediaQuery, Tab, Tabs, Tooltip, IconButton, Avatar} from '@mui/material';
 import {makeStyles} from '@mui/styles';
-
+import AddBusinessRoundedIcon from "@mui/icons-material/AddBusinessRounded";
+import DrawerComp from "./Drawer";
+import MapIcon from '@mui/icons-material/Map';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 // Contexts
 import StateContext from '../Contexts/StateContext';
 import DispatchContext from '../Contexts/DispatchContext';
@@ -62,11 +67,16 @@ const useStyles = makeStyles ({
 
 });
 
-function Header() {
+const  Header = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
+  const [value, setValue] = useState();
+  const theme = useTheme();
+  console.log(theme);
+  const isMatch = useMediaQuery(theme.breakpoints.down("md"));
+  console.log(isMatch);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -110,67 +120,89 @@ function Header() {
     }
   }, [openSnack]);
   return (
-    <AppBar position="static" style={{ backgroundColor: "black" }}>
-      <Toolbar>
-        <div className={classes.lefNav}>
-          <Button color="inherit" onClick={() => navigate('/')}>
-            <Typography variant='h4'>TreeUI</Typography>
-          </Button>
-        </div>
-        <div>
-          <Button color="inherit" onClick={() => navigate('/listings')} style={{ marginRight: '2rem' }}>
-            <Typography variant='h6'>Listings</Typography>
-          </Button>
-          <Button color="inherit" style={{ marginLeft: '2rem' }} onClick={() => navigate('/agencies')}>
-            {" "}
-            <Typography variant='h6'>Agencies</Typography>
-          </Button>
-        </div>
-        <div className={classes.rightNav}>
-          <Button
-            className={classes.propertyBtn}
-            onClick={() => navigate('/addproperty')}
-          >
-            Add Property
-          </Button>
-          {GlobalState.userIsLogged ? (
-            <Button
-              className={classes.loginBtn}
-              onClick={handleClick}
-            // onClick={()=>navigate('/login')}
-            >
-              {GlobalState.userUsername}
-            </Button>
+    <React.Fragment>
+      <AppBar position="static" sx={{ background: "#063970" }}>
+        <Toolbar>
+        <AddBusinessRoundedIcon sx={{ transform: "scale(2)" }} />
+          {isMatch ? (
+            <>
+              <Typography sx={{ fontSize: "2rem", paddingLeft: "10%" }} onClick={() => navigate('/')}>
+                UKO
+              </Typography >
+              <DrawerComp />
+            </>
           ) : (
-            <Button
-              className={classes.loginBtn}
-              onClick={() => navigate('/login')}
+            <>
+              <Tabs
+                style={{ paddingLeft: "5%", marginR: "auto" }}
+                indicatorColor="secondary"
+                textColor="inherit"
+                aria-label="icon label tabs example"
+                value={value}
+                onChange={(e, value) => setValue(value)}
+              >
+                <Tab icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')}/>
+                
+                <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')}/>
+                <Tab icon={<ContactPageIcon />} label="Contact" />
+              </Tabs>
+              <Button 
+              sx={{ marginLeft: "auto" }} 
+              color="success"
+              variant="contained"
+              startIcon={<AddLocationAltIcon />}
+              onClick={() => navigate('/addproperty')}              
+              >
+                Add Property
+              </Button>
+              {GlobalState.userIsLogged ? (
+              
+              <Tooltip title="Open settings">
+              <IconButton onClick={handleClick} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+              
+            ) : (
+              <Button
+                sx={{ marginLeft: "10px" }} 
+                variant="contained"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>)}
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={open}
+              onClose={handleClose}
             >
-              Login
-            </Button>)}
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem className={classes.profileBtn} onClick={HandleProfile}>Profile</MenuItem>
-            <MenuItem className={classes.logoutBtn} onClick={HandleLogout}>Logout</MenuItem>
-          </Menu>
+              <MenuItem onClick={HandleProfile}>Profile</MenuItem>
+              <MenuItem onClick={HandleLogout}>Logout</MenuItem>
+            </Menu>            
+            </>
+          )}
           <Snackbar
-            open={openSnack}
-            message="You have successfully logged iout!"
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-          />
-        </div>
-      </Toolbar>
-    </AppBar>
+              open={openSnack}
+              message="You have successfully logged iout!"
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+            />    
+        </Toolbar>
+      </AppBar>
+    </React.Fragment>
   );
 }
 
