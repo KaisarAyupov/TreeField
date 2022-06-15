@@ -16,7 +16,8 @@ import DispatchContext from '../Contexts/DispatchContext';
 
 // Components
 import CustomCard from './CustomCard';
-
+// Assets
+import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
 
 const useStyles = makeStyles ({
@@ -134,7 +135,7 @@ const  Header = () => {
           ) : (
             <>
               <Tabs
-                style={{ paddingLeft: "5%", marginR: "auto" }}
+                style={{ paddingLeft: "5%", marginRight: "auto" }}
                 indicatorColor="secondary"
                 textColor="inherit"
                 aria-label="icon label tabs example"
@@ -147,7 +148,7 @@ const  Header = () => {
                 <Tab icon={<ContactPageIcon />} label="Contact" />
               </Tabs>
               <Button 
-              sx={{ marginLeft: "auto" }} 
+              sx={{ marginLeft: "auto", marginRight: "10px" }} 
               color="success"
               variant="contained"
               startIcon={<AddLocationAltIcon />}
@@ -158,9 +159,11 @@ const  Header = () => {
               {GlobalState.userIsLogged ? (
               
               <Tooltip title="Open settings">
-              <IconButton onClick={handleClick} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+                    <IconButton onClick={handleClick} sx={{ p: 0 , textTransform: "uppercase"}}>
+                      <Avatar alt="avatar">
+                        {GlobalState.userUsername ? GlobalState.userUsername.charAt(0) : defaultProfilePicture}
+                      </Avatar>
+                    </IconButton>
             </Tooltip>
               
             ) : (
