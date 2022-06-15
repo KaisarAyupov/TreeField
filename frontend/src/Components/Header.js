@@ -2,14 +2,15 @@ import React, { useState, useContext, useEffect } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import Axios from "axios";
 // MUI
-import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem, Snackbar, useTheme, useMediaQuery, Tab, Tabs, Tooltip, IconButton, Avatar} from '@mui/material';
-import {makeStyles} from '@mui/styles';
-import AddBusinessRoundedIcon from "@mui/icons-material/AddBusinessRounded";
+import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem, Snackbar, useTheme, useMediaQuery, Tab, Tabs, Tooltip, IconButton, Avatar, ListItemIcon} from '@mui/material';
+import AdbIcon from '@mui/icons-material/Adb';
 import DrawerComp from "./Drawer";
 import MapIcon from '@mui/icons-material/Map';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
+import Logout from '@mui/icons-material/Logout';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 // Contexts
 import StateContext from '../Contexts/StateContext';
 import DispatchContext from '../Contexts/DispatchContext';
@@ -20,56 +21,8 @@ import CustomCard from './CustomCard';
 import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
 
-const useStyles = makeStyles ({
-  lefNav: {
-    marginRight: "auto",
-  },
-  
-  rightNav: {
-    marginLeft: "auto",
-    marginRight: "10rem",
-  },
-  propertyBtn: {
-    backgroundColor: "green",
-    color: "white",
-    width: "15rem",
-    fontSize: "1.1rem",
-    marginRight: "1rem",
-    '&:hover': {
-      backgroundColor: "blue"
-    }
-  },
-  loginBtn: {
-    backgroundColor: "white",
-    color: "black",
-    width: "15rem",
-    fontSize: "1.1rem",
-    marginLeft: "1rem",
-    '&:hover': {
-      backgroundColor: "green"
-    }
-  }, 
-  profileBtn: {
-    color: 'black',
-    backgroundColor: "green",
-    width: "15rem",
-    fontWeight: 'bolder',
-    borderRadius: "15px",
-    marginBottom: "0.25rem"
-  },
-  logoutBtn: {
-    color: 'red',
-    backgroundColor: "green",
-    width: "15rem",
-    fontWeight: 'bolder',
-    borderRadius: "15px"
-  },
-
-
-});
 
 const  Header = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
@@ -124,12 +77,26 @@ const  Header = () => {
     <React.Fragment>
       <AppBar position="static" sx={{ background: "#063970" }}>
         <Toolbar>
-        <AddBusinessRoundedIcon sx={{ transform: "scale(2)" }} />
+        <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, transform: "scale(1.5)" }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
           {isMatch ? (
-            <>
-              <Typography sx={{ fontSize: "2rem", paddingLeft: "10%" }} onClick={() => navigate('/')}>
-                UKO
-              </Typography >
+            <>              
               <DrawerComp />
             </>
           ) : (
@@ -145,7 +112,7 @@ const  Header = () => {
                 <Tab icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')}/>
                 
                 <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')}/>
-                <Tab icon={<ContactPageIcon />} label="Contact" />
+                <Tab icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contact')}/>
               </Tabs>
               <Button 
               sx={{ marginLeft: "auto", marginRight: "10px" }} 
@@ -155,46 +122,55 @@ const  Header = () => {
               onClick={() => navigate('/addproperty')}              
               >
                 Add Property
-              </Button>
-              {GlobalState.userIsLogged ? (
-              
-              <Tooltip title="Open settings">
-                    <IconButton onClick={handleClick} sx={{ p: 0 , textTransform: "uppercase"}}>
-                      <Avatar alt="avatar">
-                        {GlobalState.userUsername ? GlobalState.userUsername.charAt(0) : defaultProfilePicture}
-                      </Avatar>
-                    </IconButton>
-            </Tooltip>
-              
-            ) : (
-              <Button
-                sx={{ marginLeft: "10px" }} 
-                variant="contained"
-                onClick={() => navigate('/login')}
-              >
-                Login
-              </Button>)}
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={HandleProfile}>Profile</MenuItem>
-              <MenuItem onClick={HandleLogout}>Logout</MenuItem>
-            </Menu>            
+              </Button>                          
             </>
           )}
+          {GlobalState.userIsLogged ? (
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleClick} sx={{ p: 0, textTransform: "uppercase" }}>
+                      <Avatar alt="avatar">
+                        {GlobalState.userUsername.charAt(0)}
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+
+                ) : (
+                  <Button
+                    sx={{ marginLeft: "10px" }}
+                    variant="contained"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login
+                  </Button>)}
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={HandleProfile}>
+                    <ListItemIcon>
+                      <ManageAccountsIcon fontSize="small" />
+                    </ListItemIcon>
+                   My account
+                  </MenuItem>
+                  <MenuItem onClick={HandleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                     </ListItemIcon>
+                    Logout
+                  </MenuItem>
+                </Menu>  
           <Snackbar
               open={openSnack}
               message="You have successfully logged iout!"
