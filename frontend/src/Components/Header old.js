@@ -82,6 +82,7 @@ function Header() {
       navigate("/profile");
   }
 
+  
   const [openSnack, setOpenSnack] = useState(false)
 
   async function HandleLogout() {
