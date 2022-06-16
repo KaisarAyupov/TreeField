@@ -1,10 +1,26 @@
-import React, { useState, useContext, useEffect } from 'react'
-import {Link, useNavigate} from 'react-router-dom'
-import Axios from "axios";
-// MUI
-import { Button, Typography, Grid, AppBar, Toolbar, Menu, MenuItem, Snackbar, useTheme, useMediaQuery, Tab, Tabs, Tooltip, IconButton, Avatar, ListItemIcon} from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import AdbIcon from '@mui/icons-material/Adb';
-import DrawerComp from "./Drawer";
+import Snackbar from '@mui/material/Snackbar';
+import {Link, useNavigate} from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react'
+import Axios from "axios";
+import {makeStyles} from '@mui/styles';
+
+//Icons
 import MapIcon from '@mui/icons-material/Map';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
@@ -15,41 +31,92 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import StateContext from '../Contexts/StateContext';
 import DispatchContext from '../Contexts/DispatchContext';
 
-// Components
-import CustomCard from './CustomCard';
-// Assets
-import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
+const pages = ['Products', 'Pricing', 'Blog'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const useStyles = makeStyles ({
+  lefNav: {
+    marginRight: "auto",
+  },
+  
+  rightNav: {
+    marginLeft: "auto",
+    marginRight: "10rem",
+  },
+  propertyBtn: {
+    backgroundColor: "green",
+    color: "white",
+    width: "15rem",
+    fontSize: "1.1rem",
+    marginRight: "1rem",
+    '&:hover': {
+      backgroundColor: "blue"
+    }
+  },
+  loginBtn: {
+    backgroundColor: "white",
+    color: "black",
+    width: "15rem",
+    fontSize: "1.1rem",
+    marginLeft: "1rem",
+    '&:hover': {
+      backgroundColor: "green"
+    }
+  }, 
+  profileBtn: {
+    color: 'black',
+    backgroundColor: "green",
+    width: "15rem",
+    fontWeight: 'bolder',
+    borderRadius: "15px",
+    marginBottom: "0.25rem"
+  },
+  logoutBtn: {
+    color: 'red',
+    backgroundColor: "green",
+    width: "15rem",
+    fontWeight: 'bolder',
+    borderRadius: "15px"
+  },
 
 
+});
 
-const  Header = () => {
+const Header = () => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
   const [value, setValue] = useState();
-  const theme = useTheme();
-  console.log(theme);
-  const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  console.log(isMatch);
 
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
   };
-  const handleClose = () => {
-      setAnchorEl(null);
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  }; 
 
   function HandleProfile(){
-    setAnchorEl(null);
+    setAnchorElUser(null);
       navigate("/profile");
-  }
+  }  
 
   const [openSnack, setOpenSnack] = useState(false)
 
   async function HandleLogout() {
     setAnchorEl(null);
+    setAnchorElUser(null);
     const confirmLogout = window.confirm("Are you sure you want to leave?");
     if (confirmLogout) {
       try {
@@ -74,10 +141,10 @@ const  Header = () => {
     }
   }, [openSnack]);
   return (
-    <React.Fragment>
-      <AppBar position="static" sx={{ background: "#063970" }}>
-        <Toolbar>
-        <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, transform: "scale(1.5)" }} />
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -95,13 +162,64 @@ const  Header = () => {
           >
             LOGO
           </Typography>
-          {isMatch ? (
-            <>              
-              <DrawerComp />
-            </>
-          ) : (
-            <>
-              <Tabs
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO M
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Tabs
                 style={{ paddingLeft: "5%", marginRight: "auto" }}
                 indicatorColor="secondary"
                 textColor="inherit"
@@ -114,52 +232,43 @@ const  Header = () => {
                 <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')}/>
                 <Tab icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contact')}/>
               </Tabs>
-              <Button 
-              sx={{ marginLeft: "auto", marginRight: "10px" }} 
-              color="success"
-              size="large"
-              variant="contained"
-              startIcon={<AddLocationAltIcon />}
-              onClick={() => navigate('/addproperty')}              
-              >
-                Add Property
-              </Button>                          
-            </>
-          )}
-          {GlobalState.userIsLogged ? (
-                  <Tooltip title="Open settings">
-                    <IconButton onClick={handleClick} sx={{ p: 0, textTransform: "uppercase" }}>
-                      <Avatar alt="avatar">
-                        {GlobalState.userUsername.charAt(0)}
-                      </Avatar>
-                    </IconButton>
-                  </Tooltip>
+          </Box>
 
-                ) : (
-                  <Button
-                    sx={{ marginLeft: "10px" }}
-                    variant="contained"
-                    onClick={() => navigate('/login')}
-                  >
-                    Login
-                  </Button>)}
-                <Menu
-                  sx={{ mt: '45px' }}
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={HandleProfile}>
+          <Box sx={{ flexGrow: 0 }}>
+            {GlobalState.userIsLogged ? (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, textTransform: "uppercase" }}>
+                  <Avatar alt="avatar">
+                    {GlobalState.userUsername.charAt(0)}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Button
+                sx={{ marginLeft: "10px" }}
+                variant="contained"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>)}
+            
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={HandleProfile}>
                     <ListItemIcon>
                       <ManageAccountsIcon fontSize="small" />
                     </ListItemIcon>
@@ -171,19 +280,19 @@ const  Header = () => {
                      </ListItemIcon>
                     Logout
                   </MenuItem>
-                </Menu>  
+            </Menu>
+          </Box>
           <Snackbar
-              open={openSnack}
-              message="You have successfully logged iout!"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-            />    
+            open={openSnack}
+            message="You have successfully logged iout!"
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+          />
         </Toolbar>
-      </AppBar>
-    </React.Fragment>
+      </Container>
+    </AppBar>
   );
-}
-
-export default Header
+};
+export default Header;
