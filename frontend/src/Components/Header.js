@@ -12,6 +12,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import List from '@mui/material/List';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import AdbIcon from '@mui/icons-material/Adb';
 import Snackbar from '@mui/material/Snackbar';
@@ -32,7 +36,6 @@ import StateContext from '../Contexts/StateContext';
 import DispatchContext from '../Contexts/DispatchContext';
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const useStyles = makeStyles ({
   lefNav: {
     marginRight: "auto",
@@ -102,7 +105,18 @@ const Header = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
+  function HandleListings(){
+    setAnchorElNav(null);
+      navigate("/listings");
+  } 
+  function HandleAgencies(){
+    setAnchorElNav(null);
+      navigate("/agencies");
+  } 
+  function HandleContacts(){
+    setAnchorElNav(null);
+      navigate("/contacts");
+  } 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   }; 
@@ -141,10 +155,10 @@ const Header = () => {
     }
   }, [openSnack]);
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ background: "#063970" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, transform: "scale(1.5)" }} />
           <Typography
             variant="h6"
             noWrap
@@ -162,7 +176,6 @@ const Header = () => {
           >
             LOGO
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -192,11 +205,35 @@ const Header = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <List
+                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                subheader={
+                  <ListSubheader component="div" id="nested-list-subheader">
+                    Nested List Items
+                  </ListSubheader>
+                }
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    <MapIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Map" onClick={HandleListings} />
+                </ListItemButton>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <LocalShippingIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Company" onClick={HandleAgencies} />
+                </ListItemButton>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <ContactPageIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Contact" onClick={HandleContacts} />
+                </ListItemButton>
+              </List>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -204,7 +241,7 @@ const Header = () => {
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -216,23 +253,31 @@ const Header = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO M
+            LOGO Mobile
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Tabs
-                style={{ paddingLeft: "5%", marginRight: "auto" }}
-                indicatorColor="secondary"
-                textColor="inherit"
-                aria-label="icon label tabs example"
-                value={value}
-                onChange={(e, value) => setValue(value)}
-              >
-                <Tab icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')}/>
-                
-                <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')}/>
-                <Tab icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contact')}/>
-              </Tabs>
+            <Tabs
+              style={{ paddingLeft: "5%", marginRight: "auto" }}
+              indicatorColor="secondary"
+              textColor="inherit"
+              aria-label="icon label tabs example"
+              value={value}
+              onChange={(e, value) => setValue(value)}
+            >
+              <Tab icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')} />
+              <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')} />
+              <Tab icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contacts')} />
+            </Tabs>
           </Box>
+          <Button
+            sx={{ marginLeft: "auto", marginRight: "10px" }}
+            color="success"
+            variant="contained"
+            startIcon={<AddLocationAltIcon />}
+            onClick={() => navigate('/addproperty')}
+          >
+            Add Property
+          </Button> 
 
           <Box sx={{ flexGrow: 0 }}>
             {GlobalState.userIsLogged ? (
