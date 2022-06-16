@@ -38,7 +38,7 @@ const Header = () => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("1");
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -211,9 +211,9 @@ const Header = () => {
               value={value}
               onChange={(e, value) => setValue(value)}
             >
-              <Tab icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')} />
-              <Tab icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')} />
-              <Tab icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contacts')} />
+              <Tab value="1" icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')} />
+              <Tab value="2" icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')} />
+              <Tab value="3" icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contacts')} />
             </Tabs>
           </Box>
           <Button
