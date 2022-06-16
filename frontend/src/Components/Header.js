@@ -19,10 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import AdbIcon from '@mui/icons-material/Adb';
 import Snackbar from '@mui/material/Snackbar';
-import {Link, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import React, { useState, useContext, useEffect } from 'react'
 import Axios from "axios";
-import {makeStyles} from '@mui/styles';
 
 //Icons
 import MapIcon from '@mui/icons-material/Map';
@@ -35,57 +34,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import StateContext from '../Contexts/StateContext';
 import DispatchContext from '../Contexts/DispatchContext';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const useStyles = makeStyles ({
-  lefNav: {
-    marginRight: "auto",
-  },
-  
-  rightNav: {
-    marginLeft: "auto",
-    marginRight: "10rem",
-  },
-  propertyBtn: {
-    backgroundColor: "green",
-    color: "white",
-    width: "15rem",
-    fontSize: "1.1rem",
-    marginRight: "1rem",
-    '&:hover': {
-      backgroundColor: "blue"
-    }
-  },
-  loginBtn: {
-    backgroundColor: "white",
-    color: "black",
-    width: "15rem",
-    fontSize: "1.1rem",
-    marginLeft: "1rem",
-    '&:hover': {
-      backgroundColor: "green"
-    }
-  }, 
-  profileBtn: {
-    color: 'black',
-    backgroundColor: "green",
-    width: "15rem",
-    fontWeight: 'bolder',
-    borderRadius: "15px",
-    marginBottom: "0.25rem"
-  },
-  logoutBtn: {
-    color: 'red',
-    backgroundColor: "green",
-    width: "15rem",
-    fontWeight: 'bolder',
-    borderRadius: "15px"
-  },
-
-
-});
-
 const Header = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
@@ -93,7 +42,6 @@ const Header = () => {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -129,7 +77,6 @@ const Header = () => {
   const [openSnack, setOpenSnack] = useState(false)
 
   async function HandleLogout() {
-    setAnchorEl(null);
     setAnchorElUser(null);
     const confirmLogout = window.confirm("Are you sure you want to leave?");
     if (confirmLogout) {
@@ -151,16 +98,16 @@ const Header = () => {
     if (openSnack){
       setTimeout(()=>{
         navigate(0)
-      }, 1500)
+      }, 1000)
     }
-  }, [openSnack]);
+  }, [openSnack]);  
   return (
     <AppBar position="static" sx={{ background: "#063970" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, transform: "scale(1.5)" }} />
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="a"
             href="/"
@@ -238,8 +185,8 @@ const Header = () => {
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
-            variant="h5"
-            noWrap
+            variant="h6"
+            
             component="a"
             href="/"
             sx={{
@@ -248,7 +195,7 @@ const Header = () => {
               flexGrow: 1,
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
