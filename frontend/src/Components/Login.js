@@ -269,7 +269,7 @@ function Login() {
           <Snackbar
             severity="success"
             open={state.openSnack}
-            message="You have successfully logged in!"
+            message="Вы успешно вошли в свой аккаунт!"
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',

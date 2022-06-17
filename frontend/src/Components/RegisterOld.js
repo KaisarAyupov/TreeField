@@ -2,26 +2,34 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// MUI
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar, Alert } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 
-const theme = createTheme();
+const useStyles = makeStyles({
+    formConteiner: {
+        width: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: '3rem',
+        border: '5px solid black',
+        padding: '3rem',
+    },
+    registerBtn: {
+        backgroundColor: "orange",
+        color: "white",
+        fontSize: "1.1rem",
+        marginLeft: "1rem",
+        '&:hover': {
+          backgroundColor: "green"
+        }
+      },
+      
+  });
 
 function Register() {
+  const classes = useStyles();
   const navigate = useNavigate();
 
   const initialState = {
@@ -201,27 +209,13 @@ function Register() {
       }, 1500)
     }
   }, [state.openSnack])
-
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={FormSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
+    <div className={classes.formConteiner}>
+        <form onSubmit={FormSubmit}>
+            <Grid item container style={{ marginTop: '1rem'}}>
+            <Typography variant='h4'>CREATE AN ACCOUNT</Typography>
+            </Grid>
+           
             {state.serverMessageUsername ? (
               <Alert severity='error'>{state.serverMessageUsername}</Alert>
             ) : (
@@ -248,121 +242,111 @@ function Register() {
             ) : (
               ""
             )}
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  autoFocus
-                  value={state.usernameValue}
-                  onChange={(e) =>
-                    dispatch({
-                      type: 'catchUsernameChange',
-                      usernameChosen: e.target.value,
-                    })
-                  }
-                  onBlur={(e) =>
-                    dispatch({
-                      type: 'catchUsernameErrors',
-                      usernameChosen: e.target.value,
-                    })
-                  }
-                  error={state.usernameErrors.hasErrors ? true : false}
-                  helperText={state.usernameErrors.errorMessage}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange = {(e)=>
-                    dispatch({
-                      type: 'catchEmailChange', 
-                      emailChosen: e.target.value
-                    })
-                  }
-                  onBlur = {(e)=>
-                    dispatch({
-                      type: 'catchEmailErrors', 
-                      emailChosen: e.target.value
-                    })
-                  }
-                  error = {state.emailErrors.hasErrors ? true : false}
-                  helperText = {state.emailErrors.errorMessage} 
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={state.passwordValue}
-                  onChange={(e) =>
-                    dispatch({
-                      type: 'catchPasswordChange',
-                      passwordChosen: e.target.value
-                    })
-                  }
-                  onBlur={(e) =>
-                    dispatch({
-                      type: 'catchPasswordErrors',
-                      passwordChosen: e.target.value
-                    })
-                  }
-                  error={state.passwordErrors.hasErrors ? true : false}
-                  helperText={state.passwordErrors.errorMessage}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password2"
-                  label="Confirm Password"
-                  type="password"
-                  id="password2"
-                  value={state.password2Value}
-                  onChange={(e) =>
-                    dispatch({
-                      type: 'catchPassword2Change',
-                      password2Chosen: e.target.value
-                    })
-                  }
-                  helperText={state.password2HelperText}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
+            <Grid item container style={{ marginTop: '1rem'}}>
+            <TextField 
+              id="username" 
+              label="Username" 
+              variant="outlined" 
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link 
-                 variant="body2"
-                 onClick={() => navigate("/login")}
-                 style={{ cursor: 'pointer'}}
-                 >
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+              value={state.usernameValue} 
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchUsernameChange', 
+                  usernameChosen: e.target.value,
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchUsernameErrors', 
+                  usernameChosen: e.target.value,
+                })
+              }
+              error = {state.usernameErrors.hasErrors ? true : false}
+              helperText = {state.usernameErrors.errorMessage}
+            />
             </Grid>
-          </Box>
+            <Grid item container style={{ marginTop: '1rem'}}>
+            <TextField 
+              id="email"
+              label="Email"
+              variant="outlined"
+              fullWidth
+              value={state.emailValue} 
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchEmailChange', 
+                  emailChosen: e.target.value
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchEmailErrors', 
+                  emailChosen: e.target.value
+                })
+              }
+              error = {state.emailErrors.hasErrors ? true : false}
+              helperText = {state.emailErrors.errorMessage}               
+            />
+            </Grid>
+            <Grid item container style={{ marginTop: '1rem'}}>
+            <TextField 
+              id="password" 
+              label="Password" 
+              variant="outlined" 
+              fullWidth 
+              type="password"
+              value={state.passwordValue} 
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchPasswordChange', 
+                  passwordChosen: e.target.value
+                })
+              }
+              onBlur = {(e)=>
+                dispatch({
+                  type: 'catchPasswordErrors', 
+                  passwordChosen: e.target.value
+                })
+              }
+              error = {state.passwordErrors.hasErrors ? true : false}
+              helperText = {state.passwordErrors.errorMessage}  
+            />
+            </Grid>
+            <Grid item container style={{ marginTop: '1rem'}}>
+            <TextField 
+              id="password2" 
+              label="Confirm Password" 
+              variant="outlined" 
+              fullWidth 
+              type="password"
+              value={state.password2Value} 
+              onChange = {(e)=>
+                dispatch({
+                  type: 'catchPassword2Change', 
+                  password2Chosen: e.target.value
+                })
+              }
+              helperText = {state.password2HelperText}
+            />
+            </Grid>  
+            <Grid item container xs={8} style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto"}}>
+            <Button  
+              variant="contained" 
+              fullWidth type="submit" 
+              className={classes.registerBtn} 
+              disabled= {state.disabledBtn}
+            >
+              SIGN UP
+            </Button>
+            </Grid>
+          </form>
+          <Grid item container justifyContent="center" style={{ marginTop: '1rem' }}>
+            <Typography variant='small' style={{ marginTop: '1rem' }}>Already have an account!
+              <span
+                onClick={() => navigate("/login")} style={{ cursor: 'pointer', color: 'green' }}>SIGN IN
+              </span>
+            </Typography>
+          </Grid>
           <Snackbar
             open={state.openSnack}
             message="You have successfully created accaunt!"
@@ -370,11 +354,9 @@ function Register() {
               vertical: 'bottom',
               horizontal: 'center',
             }}
-          /> 
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+          />       
+    </div>
+  )
 }
 
 export default Register
