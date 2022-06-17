@@ -177,7 +177,7 @@ function Login() {
     if (state.openSnack) {
       setTimeout(() => {
         navigate("/")
-      }, 1500)
+      }, 2000)
     }
   }, [state.openSnack]);
   
@@ -194,14 +194,14 @@ function Login() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "#063970" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+          Войти в систему
           </Typography>
           {state.serverError ? (
-          <Alert severity="error">Incorrect username or password!</Alert>
+          <Alert severity="error">Неправильное имя пользователя или пароль!</Alert>
         ) : (
           ""
         )}
@@ -211,7 +211,7 @@ function Login() {
               required
               fullWidth
               id="username"
-              label="Username"
+              label="Имя пользователя"
               name="username"
               value={state.usernameValue}
               autoComplete="username"
@@ -229,7 +229,7 @@ function Login() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Пароль"
               type="password"
               id="password"
               value={state.passwordValue}
@@ -244,7 +244,7 @@ function Login() {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Запомнить меня!"
             />
             <Button
               type="submit"
@@ -252,7 +252,7 @@ function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Войти в систему
             </Button>
             <Grid container>
               <Grid item>
@@ -261,12 +261,13 @@ function Login() {
                 variant="body2"
                 sx={{ cursor: 'pointer'}}
                 >
-                  {"Don't have an account? Sign Up"}
+                  {"Еще не регистрировались?"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
           <Snackbar
+            severity="success"
             open={state.openSnack}
             message="You have successfully logged in!"
             anchorOrigin={{
