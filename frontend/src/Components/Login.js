@@ -4,13 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import {useImmerReducer} from 'use-immer';
 
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, Snackbar, Alert} from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 // Contexts
 import DispatchContext from '../Contexts/DispatchContext';
 import StateContext from '../Contexts/StateContext';
-
+import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles({
   formConteiner: {
     width: '50%',
@@ -32,9 +44,10 @@ const useStyles = makeStyles({
 
 });
 
-
+const theme = createTheme();
 
 function Login() {
+
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -167,94 +180,103 @@ function Login() {
       }, 1500)
     }
   }, [state.openSnack]);
+  
 
   return (
-    <div className={classes.formConteiner}>
-      <form onSubmit={FormSubmit}>
-        <Grid item container style={{ marginTop: '1rem' }}>
-          <Typography variant='h4'>SIGN IN</Typography>
-        </Grid>
-        {state.serverError ? (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          {state.serverError ? (
           <Alert severity="error">Incorrect username or password!</Alert>
         ) : (
           ""
         )}
-        <Grid item container style={{ marginTop: '1rem' }}>
-          <TextField
-            id="username"
-            label="Username"
-            variant="outlined"
-            fullWidth
-            value={state.usernameValue}
-            onChange={(e) => 
-              dispatch({ 
-                type: 'catchUsernameChange', 
-                usernameChosen: e.target.value,
-              })
-            }
-            error = {state.serverError ? true : false}
+          <Box component="form" onSubmit={FormSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              value={state.usernameValue}
+              autoComplete="username"
+              autoFocus
+              onChange={(e) => 
+                dispatch({ 
+                  type: 'catchUsernameChange', 
+                  usernameChosen: e.target.value,
+                })
+              }
+              error = {state.serverError ? true : false}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              value={state.passwordValue}
+              onChange={(e) =>
+                dispatch({
+                  type: 'catchPasswordChange',
+                  passwordChosen: e.target.value
+                })
+              }
+              error={state.serverError ? true : false}
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link 
+                onClick={() => navigate("/register")} 
+                variant="body2"
+                sx={{ cursor: 'pointer'}}
+                >
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+          <Snackbar
+            open={state.openSnack}
+            message="You have successfully logged in!"
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
           />
-        </Grid>
-        <Grid item container style={{ marginTop: '1rem' }}>
-          <TextField
-            id="password"
-            label="Password"
-            variant="outlined"
-            fullWidth
-            type="password"
-            value={state.passwordValue}
-            onChange={(e) => 
-              dispatch({ 
-                type: 'catchPasswordChange', 
-                passwordChosen: e.target.value 
-              })
-            }
-            error = {state.serverError ? true : false}
-          />
-        </Grid>
-        <Grid
-          item
-          container
-          xs={8}
-          style={{ marginTop: '1rem', marginLeft: "auto", marginRight: "auto" }}
-        >
-          <Button
-            variant="contained"
-            fullWidth
-            type="submit"
-            className={classes.loginBtn}
-            disabled={state.disabledBtn}
-          >
-            SIGN IN
-          </Button>
-        </Grid>
-      </form>
-
-      <Grid 
-        item 
-        container 
-        justifyContent="center" 
-        style={{ marginTop: '1rem'}}
-      >
-        <Typography variant='small'> Dont have an account yet? {""}
-          <span
-            onClick={() => navigate("/register")}
-            style={{ cursor: 'pointer', color: 'green' }}
-          >
-            SIGN UP
-          </span>
-        </Typography>
-      </Grid>
-      <Snackbar
-        open={state.openSnack}
-        message="You have successfully logged in!"
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-      />
-    </div>
-  )
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }
-
 export default Login
