@@ -21,38 +21,12 @@ import Snackbar from '@mui/material/Snackbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // Contexts
 import DispatchContext from '../Contexts/DispatchContext';
-import StateContext from '../Contexts/StateContext';
-import { makeStyles } from '@mui/styles';
-const useStyles = makeStyles({
-  formConteiner: {
-    width: '50%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '3rem',
-    border: '5px solid black',
-    padding: '3rem',
-  },
-  loginBtn: {
-    backgroundColor: "orange",
-    color: "white",
-    fontSize: "1.1rem",
-    marginLeft: "1rem",
-    '&:hover': {
-      backgroundColor: "green"
-    }
-  },
 
-});
 
 const theme = createTheme();
 function Login() {
-
-  const classes = useStyles();
   const navigate = useNavigate();
-
   const GlobalDispatch = useContext(DispatchContext)
-  const GlobalState = useContext(StateContext)
-
   const initialState = {
     usernameValue: "",
     passwordValue: "",
