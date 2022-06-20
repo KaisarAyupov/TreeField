@@ -41,7 +41,7 @@ import Richmond from "./Assets/Boroughs/Richmond";
 import Sutton from "./Assets/Boroughs/Sutton";
 import Waltham from "./Assets/Boroughs/Waltham";
 // MUI
-import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar } from '@mui/material';
+import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 
@@ -1206,6 +1206,11 @@ function BoroughDisplay() {
                     </Grid>
                 </Grid>
                 {/* Map */}
+                <Grid item style={{marginTop: '1rem'}}>
+                    {state.latitudeValue && state.longitudeValue  ? 
+                    (<Alert severity="info"> You property is located @ {state.latitudeValue}, {state.longitudeValue} </Alert>) : (<Alert severity="warning">Locate your property on the map befor submiting this form</Alert>)}
+
+                </Grid>
                 <Grid item container style={{height: "35rem", marginTop: '1rem'}}>
                     <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
                         <TileLayer
