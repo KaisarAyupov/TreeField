@@ -971,6 +971,12 @@ function BoroughDisplay() {
                                 titleChosen: e.target.value
                             })
                         }
+                        onBlur={(e) =>
+                            dispatch({
+                                type: 'catchTitleErrors',
+                                titleChosen: e.target.value
+                            })
+                        }
                     />
                 </Grid>
                 <Grid item container justifyContent="space-between">
