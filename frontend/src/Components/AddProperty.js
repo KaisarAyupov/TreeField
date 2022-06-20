@@ -321,6 +321,34 @@ function AddProperty() {
         },
         openSnack: false,
         disabledBtn: false,
+        titleErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        listingTypeErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        propertyStatusErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        priceErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        areaErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        boroughErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
+        priceErrors: {
+            hasErrors: false,
+            errorMessage: "",
+        },
       };
 
     function ReduserFunction(draft, action) {
