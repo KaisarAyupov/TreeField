@@ -1241,9 +1241,9 @@ function BoroughDisplay() {
                                     boroughChosen: e.target.value
                                 })
                             }
-                            onChange={(e) =>
+                            onBlur={(e) =>
                                 dispatch({
-                                    type: 'catchBoroughChange',
+                                    type: 'catchBoroughErrors',
                                     boroughChosen: e.target.value
                                 })
                             }
