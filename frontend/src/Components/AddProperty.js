@@ -993,6 +993,12 @@ function BoroughDisplay() {
                                     listingTypeChosen: e.target.value
                                 })
                             }
+                            onBlur={(e) =>
+                                dispatch({
+                                    type: 'catchListingTypeErrors',
+                                    listingTypeChosen: e.target.value
+                                })
+                            }
                             select
                             SelectProps={{
                                 native: true,
@@ -1015,6 +1021,12 @@ function BoroughDisplay() {
                             onChange={(e) =>
                                 dispatch({
                                     type: 'catchPropertyStatusChange',
+                                    propertyStatusChosen: e.target.value
+                                })
+                            }
+                            onBlur={(e) =>
+                                dispatch({
+                                    type: 'catchPropertyStatusErrors',
                                     propertyStatusChosen: e.target.value
                                 })
                             }
@@ -1070,6 +1082,12 @@ function BoroughDisplay() {
                             onChange={(e) =>
                                 dispatch({
                                     type: 'catchPriceChange',
+                                    priceChosen: e.target.value
+                                })
+                            }
+                            onBlur={(e) =>
+                                dispatch({
+                                    type: 'catchPriceErrors',
                                     priceChosen: e.target.value
                                 })
                             }
@@ -1192,6 +1210,12 @@ function BoroughDisplay() {
                                     areaChosen: e.target.value
                                 })
                             }
+                            onBlur={(e) =>
+                                dispatch({
+                                    type: 'catchAreaErrors',
+                                    areaChosen: e.target.value
+                                })
+                            }
                             select
                             SelectProps={{
                                 native: true,
@@ -1211,6 +1235,12 @@ function BoroughDisplay() {
                             variant="standard"
                             fullWidth
                             value={state.boroughValue}
+                            onChange={(e) =>
+                                dispatch({
+                                    type: 'catchBoroughChange',
+                                    boroughChosen: e.target.value
+                                })
+                            }
                             onChange={(e) =>
                                 dispatch({
                                     type: 'catchBoroughChange',
