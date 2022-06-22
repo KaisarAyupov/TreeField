@@ -355,18 +355,26 @@ function AddProperty() {
         switch (action.type) {
             case 'catchTitleChange':
                 draft.titleValue = action.titleChosen;
+                draft.titleErrors.hasErrors = false;
+                draft.titleErrors.errorMessage = "";
                 break;
             case 'catchListingTypeChange':
                 draft.listingTypeValue = action.listingTypeChosen;
+                draft.listingTypeErrors.hasErrors = false;
+                draft.listingTypeErrors.errorMessage = "";
                 break;
             case 'catchDescriptionChange':
                 draft.descriptionValue = action.descriptionChosen;
                 break;
             case 'catchAreaChange':
                 draft.areaValue = action.areaChosen;
+                draft.areaErrors.hasErrors = false;
+                draft.areaErrors.errorMessage = "";
                 break;
             case 'catchBoroughChange':
                 draft.boroughValue = action.boroughChosen;
+                draft.boroughErrors.hasErrors = false;
+                draft.boroughErrors.errorMessage = "";
                 break;
             case 'catchLatitudeChange':
                 draft.latitudeValue = action.latitudeChosen;
@@ -376,9 +384,13 @@ function AddProperty() {
                 break;
             case 'catchPropertyStatusChange':
                 draft.propertyStatusValue = action.propertyStatusChosen;
+                draft.propertyStatusErrors.hasErrors = false;
+                draft.propertyStatusErrors.errorMessage = "";
                 break;
             case 'catchPriceChange':
                 draft.priceValue = action.priceChosen;
+                draft.priceErrors.hasErrors = false;
+                draft.priceErrors.errorMessage = "";
                 break;
             case 'catchRentalFrequencyChange':
                 draft.rentalFrequencyValue = action.rentalFrequencyChosen;
@@ -480,6 +492,31 @@ function AddProperty() {
                     draft.boroughErrors.errorMessage = "This field must not be empty!"
                 }
                 break;
+            case 'emptyTitle':
+                draft.titleErrors.hasErrors = true;
+                draft.titleErrors.errorMessage = 'This field must not be empty!';
+                break;
+            case 'emptyListingType':
+                draft.listingTypeErrors.hasErrors = true;
+                draft.listingTypeErrors.errorMessage = 'This field must not be empty!';
+                break;
+            case 'emptyPropertyStatus':
+                draft.propertyStatusErrors.hasErrors = true;
+                draft.propertyStatusErrors.errorMessage = 'This field must not be empty!';
+                break;
+            case 'emptyPrice':
+                draft.priceErrors.hasErrors = true;
+                draft.priceErrors.errorMessage = 'This field must not be empty!';
+                break;
+            case 'emptyArea':
+                draft.areaErrors.hasErrors = true;
+                draft.areaErrors.errorMessage = 'This field must not be empty!';
+                break;
+            case 'emptyBorough':
+                draft.boroughErrors.hasErrors = true;
+                draft.boroughErrors.errorMessage = 'This field must not be empty!';
+                break;
+
 
         }
 
@@ -888,8 +925,43 @@ function BoroughDisplay() {
     function FormSubmit(e){
         e.preventDefault();
         console.log("Test");
-        dispatch({type: 'changeSendRequest'});
-        dispatch({type: 'disableTheButton'});           
+        if (
+            !state.titleErrors.hasErrors && 
+            !state.listingTypeErrors.hasErrors && 
+            !state.propertyStatusErrors.hasErrors && 
+            !state.priceErrors.hasErrors &&
+            !state.areaErrors.hasErrors &&
+            !state.boroughErrors.hasErrors &&
+            state.latitudeValue && 
+            state.longitudeValue
+        ) {
+            dispatch({type: 'changeSendRequest'});
+            dispatch({type: 'disableTheButton'});
+        } 
+        else if (state.titleValue === ''){
+            dispatch({type: 'emptyTitle'});
+            window.scrollTo(0, 0);
+        }
+        else if (state.listingTypeValue === ''){
+            dispatch({type: 'emptyListingType'});
+            window.scrollTo(0, 0);
+        }
+        else if (state.propertyStatusValue === ''){
+            dispatch({type: 'emptyPropertyStatus'});
+            window.scrollTo(0, 0);
+        }
+        else if (state.priceValue === ''){
+            dispatch({type: 'emptyPrice'});
+            window.scrollTo(0, 0);
+        }
+        else if (state.areaValue === ''){
+            dispatch({type: 'emptyArea'});
+            window.scrollTo(0, 0);
+        }
+        else if (state.boroughValue === ''){
+            dispatch({type: 'emptyBorough'});
+            window.scrollTo(0, 0);
+        }                   
       }
 
     useEffect(()=>{
