@@ -444,6 +444,42 @@ function AddProperty() {
             case 'allowTheButton':
                 draft.disabled = false;
                 break;
+            case 'catchTitleErrors':
+                if (action.titleChosen.length === 0) {
+                    draft.titleErrors.hasErrors = true
+                    draft.titleErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
+            case 'catchListingTypeErrors':
+                if (action.listingTypeChosen.length === 0) {
+                    draft.listingTypeErrors.hasErrors = true
+                    draft.listingTypeErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
+            case 'catchPropertyStatusErrors':
+                if (action.propertyStatusChosen.length === 0) {
+                    draft.propertyStatusErrors.hasErrors = true
+                    draft.propertyStatusErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
+            case 'catchPriceErrors':
+                if (action.priceChosen.length === 0) {
+                    draft.priceErrors.hasErrors = true
+                    draft.priceErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
+            case 'catchAreaErrors':
+                if (action.areaChosen.length === 0) {
+                    draft.areaErrors.hasErrors = true
+                    draft.areaErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
+            case 'catchBoroughErrors':
+                if (action.boroughChosen.length === 0) {
+                    draft.boroughErrors.hasErrors = true
+                    draft.boroughErrors.errorMessage = "This field must not be empty!"
+                }
+                break;
 
         }
 
@@ -977,6 +1013,8 @@ function BoroughDisplay() {
                                 titleChosen: e.target.value
                             })
                         }
+                        error={state.titleErrors.hasErrors ? true : false}
+                        helperText={state.titleErrors.errorMessage}
                     />
                 </Grid>
                 <Grid item container justifyContent="space-between">
@@ -999,6 +1037,8 @@ function BoroughDisplay() {
                                     listingTypeChosen: e.target.value
                                 })
                             }
+                            error={state.listingTypeErrors.hasErrors ? true : false}
+                            helperText={state.listingTypeErrors.errorMessage}
                             select
                             SelectProps={{
                                 native: true,
@@ -1030,6 +1070,8 @@ function BoroughDisplay() {
                                     propertyStatusChosen: e.target.value
                                 })
                             }
+                            error={state.propertyStatusErrors.hasErrors ? true : false}
+                            helperText={state.propertyStatusErrors.errorMessage}
                             select
                             SelectProps={{
                                 native: true,
@@ -1091,6 +1133,8 @@ function BoroughDisplay() {
                                     priceChosen: e.target.value
                                 })
                             }
+                            error={state.priceErrors.hasErrors ? true : false}
+                            helperText={state.priceErrors.errorMessage}
                         />
                     </Grid>  
                 </Grid>
@@ -1216,6 +1260,8 @@ function BoroughDisplay() {
                                     areaChosen: e.target.value
                                 })
                             }
+                            error={state.areaErrors.hasErrors ? true : false}
+                            helperText={state.areaErrors.errorMessage}
                             select
                             SelectProps={{
                                 native: true,
@@ -1247,6 +1293,8 @@ function BoroughDisplay() {
                                     boroughChosen: e.target.value
                                 })
                             }
+                            error={state.boroughErrors.hasErrors ? true : false}
+                            helperText={state.boroughErrors.errorMessage}
                             select
                             SelectProps={{
                                 native: true,
