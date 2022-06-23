@@ -185,8 +185,8 @@ function AddProperty() {
         picture5Value: "",
         mapInstance: null,
         markerPosition: {
-            lat: '51.505',
-            lng: '-0.09',
+            lat: '43.2622',
+            lng: '76.8823',
         },
         uploadedPictures: [],
         sendRequest: 0,
@@ -1053,7 +1053,7 @@ function BoroughDisplay() {
 
                 </Grid>
                 <Grid item container style={{height: "35rem", marginTop: '1rem'}}>
-                    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+                    <MapContainer center={[43.2622, 76.8823]} zoom={13} scrollWheelZoom={true}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
