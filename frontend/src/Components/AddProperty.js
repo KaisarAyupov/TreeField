@@ -7,8 +7,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon } from 'react-l
 // Context
 import StateContext from '../Contexts/StateContext';
 // Assets
-import Alatau from "./Assets/adm3pol/Alatau.js";
-import Almaly from "./Assets/adm3pol/Almaly.js";
+import Alatau from "./Assets/adm3pol/Alatau";
+import Almaly from "./Assets/adm3pol/Almaly";
+import Auezov from "./Assets/adm3pol/Auezov";
+import Bostandyksky from "./Assets/adm3pol/Bostandyksky";
+import Medeusky from "./Assets/adm3pol/Medeusky";
+import Nauryzbai from "./Assets/adm3pol/Nauryzbai";
+import Turksibsky from "./Assets/adm3pol/Turksibsky";
+import Zhetysusky from "./Assets/adm3pol/Zhetysusky";
 // MUI
 import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -68,6 +74,30 @@ const innerAlmatyOptions = [
     {
         value: "Almaly",
         label: "Алмалинский",
+    },
+    {
+        value: "Auezov",
+        label: "Ауэзовский",
+    },
+    {
+        value: "Bostandyksky",
+        label: "Бостандыкский",
+    },
+    {
+        value: "Medeusky",
+        label: "Медеуский",
+    },
+    {
+        value: "Nauryzbai",
+        label: "Наурызбайский",
+    },
+    {
+        value: "Turksibsky",
+        label: "Турксибский",
+    },
+    {
+        value: "Zhetysusky",
+        label: "Жетысуский",
     },
 ];
 
@@ -383,14 +413,63 @@ function AddProperty() {
 				changeLatitude: 43.298647,
 				changeLongitude: 76.834908,
 			});
-		} else if (state.boroughValue === "Almaly") {
+		} 
+        else if (state.boroughValue === "Almaly") {
 			state.mapInstance.setView([43.252322, 76.908531], 12);
 			dispatch({
 				type: "changeMarkerPosition",
 				changeLatitude: 43.252322,
 				changeLongitude: 76.908531,
 			});
-		} 
+		}
+        else if (state.boroughValue === "Auezov") {
+			state.mapInstance.setView([43.22379, 76.850499], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.22379,
+				changeLongitude: 76.850499,
+			});
+		}
+        else if (state.boroughValue === "Bostandyksky") {
+			state.mapInstance.setView([43.156517, 76.923527], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.156517, 
+				changeLongitude: 76.923527,
+			});
+		}
+        else if (state.boroughValue === "Medeusky") {
+			state.mapInstance.setView([43.169942, 77.015182], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.169942, 
+				changeLongitude: 77.015182,
+			});
+		}
+        else if (state.boroughValue === "Nauryzbai") {
+			state.mapInstance.setView([43.174526, 76.830845], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.174526, 
+				changeLongitude: 76.830845, 
+			});
+		}
+        else if (state.boroughValue === "Turksibsky") {
+			state.mapInstance.setView([43.34097, 76.985646], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.34097, 
+				changeLongitude: 76.985646, 
+			});
+		}
+        else if (state.boroughValue === "Zhetysusky") {
+			state.mapInstance.setView([43.295986, 76.913999], 12);
+			dispatch({
+				type: "changeMarkerPosition",
+				changeLatitude: 43.295986,  
+				changeLongitude: 76.913999,
+			});
+		}
 	}, [state.boroughValue]);
 
 
@@ -399,6 +478,18 @@ function BoroughDisplay() {
         return <Polygon positions={Alatau} />;
     } else if (state.boroughValue === "Almaly") {
         return <Polygon positions={Almaly} />;
+    } else if (state.boroughValue === "Auezov") {
+        return <Polygon positions={Auezov} />;
+    } else if (state.boroughValue === "Bostandyksky") {
+        return <Polygon positions={Bostandyksky} />;
+    } else if (state.boroughValue === "Medeusky") {
+        return <Polygon positions={Medeusky} />;
+    } else if (state.boroughValue === "Nauryzbai") {
+        return <Polygon positions={Nauryzbai} />;
+    } else if (state.boroughValue === "Turksibsky") {
+        return <Polygon positions={Turksibsky} />;
+    } else if (state.boroughValue === "Zhetysusky") {
+        return <Polygon positions={Zhetysusky} />;
     } 
 }
     /// Draggable marker
