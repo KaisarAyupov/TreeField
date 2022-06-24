@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const ProductHeroLayoutRoot = styled('section')(({ theme }) => ({
   color: theme.palette.common.white,
@@ -56,9 +57,7 @@ function ProductHeroLayout(props) {
           }}
         />
         <Background sx={sxBackground} />
-        <Box
-          component="img"
-          src="/static/themes/onepirate/productHeroArrowDown.png"
+        <ArrowDownwardIcon          
           height="16"
           width="12"
           alt="arrow down"

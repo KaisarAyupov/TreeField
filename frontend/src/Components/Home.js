@@ -11,7 +11,7 @@ import CustomCard from './CustomCard';
 // Assets
 import city from './Assets/city.jpg';
 const backgroundImage =
-  'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400';
+  'https://images.unsplash.com/photo-1528190336454-13cd56b45b5a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
   
 export default function Home() {
   return (
@@ -28,13 +28,13 @@ export default function Home() {
         src={backgroundImage}
         alt="increase priority"
       />
-      <Typography color="inherit" align="center" variant="h2" marked="center">
-      i29zx8hy
+      <Typography color="inherit" align="center" variant="h3" marked="center">
+      NAME OF THE SITE!
       </Typography>
       <Typography
         color="inherit"
         align="center"
-        variant="h5"
+        variant="h6"
         sx={{ mb: 4, mt: { sx: 4, sm: 10 } }}
       >
         Lorem Ipsum is simply dummy text of the printing and typesetting industry..
