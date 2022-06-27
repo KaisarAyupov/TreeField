@@ -139,8 +139,8 @@ function AgencyDetail() {
             >
                 {state.userProfile.sellerListings.map((listing) => {
                     return (
-                        <Grid item xs={12} md={6} key={listing.id}>
-                            <CardActionArea component="a" href="#">
+                        <Grid item xs={12} md={4} key={listing.id}>
+                            <CardActionArea component="a" onClick={()=>navigate(`/listings/${listing.id}`)}>
                                 <Card sx={{ display: 'flex' }}>
                                     <CardContent sx={{ flex: 1 }}>
                                         <Typography component="h2" variant="h5">
