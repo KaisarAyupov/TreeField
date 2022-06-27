@@ -20,7 +20,7 @@ import {
 	TextField,
 	FormControlLabel,
 	Checkbox,
-	Snackbar,
+	Container,
   CardActions
 } from "@mui/material";
 
@@ -76,23 +76,20 @@ function Agencies() {
 	}, []);
   if (state.dataIsLoading === true) {
     return (
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        style={{ height: "100vh" }}
-      >
+      <Container sx={{ py: 8 }} maxWidth="md">
+        
         <CircularProgress />
-      </Grid>
+
+      </Container>
+      
     );
   }
 
   return (
     <Grid 
       container 
-      justifyContent="flex-start" 
-      spacing={2} 
-      style={{ padding: "10px"}}
+      rowSpacing={4} 
+      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
     >
       {state.agenciesList.map((agency) => {
         function PropertiesDisplay(){
@@ -109,25 +106,31 @@ function Agencies() {
               <Grid 
                 key={agency.id} 
                 item
-                style={{marginTop: '1rem', maxWidth: "20rem"}}
-              >
-                <Card>
+                xs={12} sm={6} md={2}
+              >                
+                <Card
+                  sx={{ height: '100%', display: 'flex', flexDirection: 'column', marginTop: '1rem' }}
+                >
                   <CardMedia
                     component="img"
-                    alt="profile picture"
-                    height="140"
+                    maxHeight="90"
+                    sx={{
+                      pt: '10.25%',
+                    }}
                     image={agency.profile_picture ? agency.profile_picture : defaultProfilePicture}
+                    alt="profile picture"
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {agency.agecy_name}
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                    {agency.agency_name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {agency.bio.substring(0, 100)}...
+                    <Typography>
+                    {agency.bio.substring(0, 50)}...
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {PropertiesDisplay()}                   
+                    <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>View</Button>
+                    <Button size="small"> {PropertiesDisplay()}</Button>
                   </CardActions>
                 </Card>
               </Grid>              
