@@ -9,33 +9,22 @@ import StateContext from "../Contexts/StateContext";
 // MUI
 import {
 	Grid,
-	AppBar,
 	Typography,
 	Button,
 	Card,
-	CardHeader,
 	CardMedia,
 	CardContent,
 	CircularProgress,
-	TextField,
-	FormControlLabel,
 	CardActionArea,
 	Container,
   CardActions
 } from "@mui/material";
 
-import { makeStyles } from "@mui/styles";
-import { defaultListboxReducer } from "@mui/base";
 
 // Assets
 import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
-const useStyles = makeStyles({
-	
-});
-
 function Agencies() {
-  const classes = useStyles();
 	const navigate = useNavigate();
 	const GlobalState = useContext(StateContext);
 
@@ -76,10 +65,8 @@ function Agencies() {
 	}, []);
   if (state.dataIsLoading === true) {
     return (
-      <Container sx={{ py: 8 }} maxWidth="md">
-        
+      <Container sx={{ py: 8 }} maxWidth="md">        
         <CircularProgress />
-
       </Container>
       
     );
@@ -136,8 +123,7 @@ function Agencies() {
             </Grid>
           );
       })}
-    </Grid>
-    
+    </Grid>    
   );
 }
 

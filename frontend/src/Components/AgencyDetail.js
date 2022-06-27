@@ -20,13 +20,13 @@ import {
 	CardMedia,
 	CardContent,
 	CircularProgress,
-	TextField,
+	Container,
 	FormControlLabel,
-	Checkbox,
-    IconButton,
+	CardActionArea,
+    CssBaseline,
     CardActions,
 } from "@mui/material";
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { makeStyles } from "@mui/styles";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 });
 
-
+const theme = createTheme();
 function AgencyDetail() {
     const classes = useStyles();
 	const navigate = useNavigate();
@@ -93,70 +93,44 @@ function AgencyDetail() {
     if (state.dataIsLoading === true) {
 		return (
 			<Grid
-				container
-				justifyContent="center"
-				alignItems="center"
-				style={{ height: "100vh" }}
+				
 			>
 				<CircularProgress />
 			</Grid>
 		);
 	}
     return (
-        <div>
-            <Grid
-                container
-                style={{
-                    width: "50%",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    border: "5px solid black",
-                    marginTop: "1rem",
-                    padding: "5px",
-                }}
-            >
-                <Grid item xs={6}>
-                    <img
-                        style={{ height: "10rem", width: "15rem" }}
-                        src={
-                            state.userProfile.profilePic !== null
-                                ? state.userProfile.profilePic
-                                : defaultProfilePicture
-                        }
-                    />
-                </Grid>
-                <Grid
-                    item
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    xs={6}
-                >
-                    <Grid item>
-                        <Typography
-                            variant="h5"
-                            style={{ textAlign: "center", marginTop: "1rem" }}
-                        >
-                            <span style={{ color: "green", fontWeight: "bolder" }}>
-                               {state.userProfile.agencyName}
-                            </span>
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography
-                            variant="h5"
-                            style={{ textAlign: "center", marginTop: "1rem" }}
-                        >
-                            <IconButton>
-                                <LocalPhoneIcon/> {state.userProfile.phoneNumber}
-                            </IconButton>                            
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item style={{ marginTop: "1rem", padding: "5px"}}>
-                    {state.userProfile.bio}
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Container maxWidth="lg">
+            <Grid container spacing={4}>
+                <Grid item xs={12} md={6}>
+                    <CardActionArea component="a" href="#">
+                        <Card sx={{ display: 'flex' }}>
+                            <CardContent sx={{ flex: 1 }}>
+                                <Typography component="h2" variant="h5">
+                                    {state.userProfile.agencyName}
+                                </Typography>
+                                <Typography variant="subtitle1" color="text.secondary">
+                                    {state.userProfile.phoneNumber}
+                                </Typography>
+                                <Typography variant="subtitle1" paragraph>
+                                    {state.userProfile.bio}
+                                </Typography>
+                            </CardContent>
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                                image={state.userProfile.profilePic !== null
+                                    ? state.userProfile.profilePic
+                                    : defaultProfilePicture}
+                                alt="test"
+                            />
+                        </Card>
+                    </CardActionArea>
                 </Grid>
             </Grid>
+            
             <Grid
                 container
                 justifyContent="flex-start"
@@ -165,40 +139,39 @@ function AgencyDetail() {
             >
                 {state.userProfile.sellerListings.map((listing) => {
                     return (
-                        <Grid
-                            key={listing.id}
-                            item
-                            style={{ marginTop: '1rem', maxWidth: "20rem" }}
-                        >
-                            <Card>
-                                <CardMedia
-                                    component="img"
-                                    alt="Listing picture"
-                                    height="140"
-                                    image={`http://localhost:8000${listing.picture1}` ? `http://localhost:8000${listing.picture1}` : defaultProfilePicture}
-                                    onClick={()=>navigate(`/listings/${listing.id}`)}
-                                    style={{cursor: "pointer"}}
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        {listing.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {listing.description.substring(0, 100)}...
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    {listing.property_status === 'Sale' 
+                        <Grid item xs={12} md={6} key={listing.id}>
+                            <CardActionArea component="a" href="#">
+                                <Card sx={{ display: 'flex' }}>
+                                    <CardContent sx={{ flex: 1 }}>
+                                        <Typography component="h2" variant="h5">
+                                            {listing.title}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="text.secondary">
+                                            {listing.description.substring(0, 100)}...
+                                        </Typography>
+                                        <Typography variant="subtitle1" paragraph>
+                                        {listing.property_status === 'Sale' 
                                         ?  `${listing.listing_type} : ${listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : `${listing.listing_type} :${listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/${listing.rental_frequency}` }
-                                </CardActions>
-                            </Card>
+                                        </Typography>
+                                    </CardContent>
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                                        image={`http://localhost:8000${listing.picture1}` ? `http://localhost:8000${listing.picture1}` : defaultProfilePicture}
+                                        onClick={()=>navigate(`/listings/${listing.id}`)}
+                                        alt="Listing picture"
+                                    />
+                                </Card>
+                            </CardActionArea>
                         </Grid>
                     );
-                })}
-                    
-                        
+                })}    
             </Grid>
-        </div>
+            </Container>
+            
+
+        </ThemeProvider>
+        
     )
 }
 
