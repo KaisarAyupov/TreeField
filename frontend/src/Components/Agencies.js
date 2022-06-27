@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useMemo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
-
+import { Link as RouterLink } from 'react-router-dom';
 // Contexts
 import StateContext from "../Contexts/StateContext";
 
@@ -19,7 +19,7 @@ import {
 	CircularProgress,
 	TextField,
 	FormControlLabel,
-	Checkbox,
+	CardActionArea,
 	Container,
   CardActions
 } from "@mui/material";
@@ -86,56 +86,56 @@ function Agencies() {
   }
 
   return (
-    <Grid 
-      container 
-      rowSpacing={4} 
-      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+    <Grid
+      container
+      rowSpacing={2}
+      spacing={{ xs: 2, md: 3 }}
+      columns={{ xs: 4, sm: 8, md: 12 }}
     >
       {state.agenciesList.map((agency) => {
-        function PropertiesDisplay(){
-          if(agency.seller_listings.length === 0){
+        function PropertiesDisplay() {
+          if (agency.seller_listings.length === 0) {
             return <Button disabled size="small">No Property</Button>
-          } else if (agency.seller_listings.length === 1){
+          } else if (agency.seller_listings.length === 1) {
             return <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>One Property Listed</Button>;
           } else {
             return <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>{agency.seller_listings.length} Properties</Button>;
           }
         }
-          if (agency.agency_name && agency.phone_number)
-            return (
-              <Grid 
-                key={agency.id} 
-                item
-                xs={12} sm={6} md={2}
-              >                
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column', marginTop: '1rem' }}
-                >
+        if (agency.agency_name && agency.phone_number)
+          return (
+            <Grid
+              key={agency.id}
+              item
+              sx={{marginTop: '1rem',}}
+              xs={12} sm={4} md={2}
+            >
+              <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CardActionArea component={RouterLink} to={`/agencies/${agency.seller}`}>
                   <CardMedia
                     component="img"
-                    maxHeight="90"
-                    sx={{
-                      pt: '10.25%',
-                    }}
+                    height="140"
                     image={agency.profile_picture ? agency.profile_picture : defaultProfilePicture}
-                    alt="profile picture"
+                    alt="profile picture"                    
                   />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
                     {agency.agency_name}
                     </Typography>
-                    <Typography>
-                    {agency.bio.substring(0, 50)}...
+                    <Typography variant="body2" color="text.secondary">
+                      {agency.bio.substring(0, 50)}...
                     </Typography>
                   </CardContent>
-                  <CardActions>
-                    <Button size="small" onClick={() => navigate(`/agencies/${agency.seller}`)}>View</Button>
-                    <Button size="small"> {PropertiesDisplay()}</Button>
-                  </CardActions>
-                </Card>
-              </Grid>              
-            );
-        })}
+                </CardActionArea>
+                <CardActions>
+                  <Button size="small" color="primary">
+                    {PropertiesDisplay()}
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+      })}
     </Grid>
     
   );
