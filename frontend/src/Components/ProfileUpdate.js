@@ -244,7 +244,7 @@ function ProfileUpdate(props) {
 			<Grid item container justifyContent="center">
 						<Typography variant="h4">MY PROFILE</Typography>
 					</Grid>
-			<form fullWidth onSubmit={FormSubmit}>
+			<form maxWidth="lg" onSubmit={FormSubmit}>
 				<Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
 					<Box sx={{ display: 'flex', alignItems: 'center' }}>
 						<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
@@ -273,7 +273,7 @@ function ProfileUpdate(props) {
 						</Box>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item >
 				<TextField
 							id="agencyName"
 							label="Agency Name*"
