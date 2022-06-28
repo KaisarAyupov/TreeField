@@ -6,19 +6,22 @@ import { useImmerReducer } from "use-immer";
 // Contexts
 import StateContext from "../Contexts/StateContext";
 
+// Assets
+import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
+
 // MUI
 import {
 	Grid,
-	AppBar,
+	FormControl,
 	Typography,
 	Button,
-	Card,
-	CardHeader,
-	CardMedia,
-	CardContent,
-	CircularProgress,
+	Box,
+	styled,
+	InputLabel,
+	Select,
+	Container,
 	TextField,
-	FormControlLabel,
+	MenuItem,
 	Checkbox,
 	Snackbar,
 } from "@mui/material";
@@ -52,10 +55,34 @@ const useStyles = makeStyles({
 	},
 });
 
+const ImgStyled = styled('img')(({ theme }) => ({
+	width: 120,
+	height: 120,
+	marginRight: theme.spacing(6.25),
+	borderRadius: theme.shape.borderRadius
+  }))
+const ButtonStyled = styled(Button)(({ theme }) => ({
+	[theme.breakpoints.down('sm')]: {
+	  width: '100%',
+	  textAlign: 'center'
+	}
+  }))
+  
+const ResetButtonStyled = styled(Button)(({ theme }) => ({
+	marginLeft: theme.spacing(4.5),
+	[theme.breakpoints.down('sm')]: {
+	  width: '100%',
+	  marginLeft: 0,
+	  textAlign: 'center',
+	  marginTop: theme.spacing(4)
+	}
+  }))
+
 function ProfileUpdate(props) {
 	const classes = useStyles();
 	const navigate = useNavigate();
 	const GlobalState = useContext(StateContext);
+	const [imgSrc, setImgSrc] = useState('./Assets/defaultProfilePicture.jpg')
 
 	const initialState = {
 		agencyNameValue: props.userProfile.agencyName,
@@ -212,15 +239,42 @@ function ProfileUpdate(props) {
 	}
 
 	return (
-		<>
-			<div className={classes.formContainer}>
-				<form onSubmit={FormSubmit}>
-					<Grid item container justifyContent="center">
+		<Container maxWidth="lg">
+			<Grid container spacing={7}>
+			<Grid item container justifyContent="center">
 						<Typography variant="h4">MY PROFILE</Typography>
 					</Grid>
-
-					<Grid item container style={{ marginTop: "1rem" }}>
-						<TextField
+			<form fullWidth onSubmit={FormSubmit}>
+				<Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+					<Box sx={{ display: 'flex', alignItems: 'center' }}>
+						<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
+						<Box>
+							<ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+								Upload New Photo
+								<input
+									hidden
+									type="file"
+									accept="image/png, image/gif, image/jpeg"
+									id='account-settings-upload-image'
+									onChange={(e) =>
+										dispatch({
+											type: "catchUploadedPicture",
+											pictureChosen: e.target.files,
+										})
+									}
+								/>
+							</ButtonStyled>
+							<ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc(defaultProfilePicture)}>
+								Reset
+							</ResetButtonStyled>
+							<Typography variant='body2' sx={{ marginTop: 5 }}>
+								Allowed PNG or JPEG. Max size of 800K.
+							</Typography>
+						</Box>
+					</Box>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+				<TextField
 							id="agencyName"
 							label="Agency Name*"
 							variant="outlined"
@@ -233,10 +287,9 @@ function ProfileUpdate(props) {
 								})
 							}
 						/>
-					</Grid>
-
-					<Grid item container style={{ marginTop: "1rem" }}>
-						<TextField
+				</Grid>
+				<Grid item xs={12} sm={6}>
+				<TextField
 							id="phoneNumber"
 							label="Phone Number*"
 							variant="outlined"
@@ -249,9 +302,8 @@ function ProfileUpdate(props) {
 								})
 							}
 						/>
-					</Grid>
-
-					<Grid item container style={{ marginTop: "1rem" }}>
+				</Grid>
+				<Grid item container style={{ marginTop: "1rem" }}>
 						<TextField
 							id="bio"
 							label="Bio"
@@ -268,62 +320,14 @@ function ProfileUpdate(props) {
 							}
 						/>
 					</Grid>
-
-					<Grid item container>
-						{ProfilePictureDisplay()}
-					</Grid>
-
-					<Grid
-						item
-						container
-						xs={6}
-						style={{
-							marginTop: "1rem",
-							marginLeft: "auto",
-							marginRight: "auto",
-						}}
-					>
-						<Button
-							variant="contained"
-							component="label"
-							fullWidth
-							className={classes.picturesBtn}
-						>
-							PROFILE PICTURE
-							<input
-								type="file"
-								accept="image/png, image/gif, image/jpeg"
-								hidden
-								onChange={(e) =>
-									dispatch({
-										type: "catchUploadedPicture",
-										pictureChosen: e.target.files,
-									})
-								}
-							/>
-						</Button>
-					</Grid>
-
-					<Grid
-						item
-						container
-						xs={8}
-						style={{
-							marginTop: "1rem",
-							marginLeft: "auto",
-							marginRight: "auto",
-						}}
-					>
-						<Button
-							variant="contained"
-							fullWidth
-							type="submit"
-							className={classes.loginBtn}
-							disabled={state.disabledBtn}
-						>
-							UPDATE
-						</Button>
-					</Grid>
+				<Grid item xs={12}>
+					<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
+						Save Changes
+					</Button>
+					<Button type='reset' variant='outlined' color='secondary'>
+						Reset
+					</Button>
+				</Grid>
 				</form>
 				<Snackbar
 					open={state.openSnack}
@@ -333,8 +337,11 @@ function ProfileUpdate(props) {
 						horizontal: "center",
 					}}
 				/>
-			</div>
-		</>
+
+			</Grid>
+
+			</Container>
+		
 	);
 }
 
