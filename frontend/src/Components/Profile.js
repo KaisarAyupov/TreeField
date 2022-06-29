@@ -10,7 +10,7 @@ import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
 // Components
 import ProfileUpdate from "./ProfileUpdate";
-
+import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone';
 // MUI
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -21,17 +21,23 @@ import {
 	Container,
 	Typography,
 	Button,
-	Card,
+	Avatar,
 	CardHeader,
 	CardMedia,
 	CardContent,
 	CircularProgress,
-	TextField,
+	styled,
 	FormControlLabel,
 	Checkbox,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
+const ImgStyled = styled('img')(({ theme }) => ({
+	width: 120,
+	height: 120,
+	marginRight: theme.spacing(6.25),
+	borderRadius: theme.shape.borderRadius
+  }))
 
 const useStyles = makeStyles({
 	formContainer: {
@@ -189,11 +195,12 @@ function Profile() {
 			state.userProfile.phoneNumber === ""
 		) {
 			return (
+				
 				<Typography
 					variant="h5"
 					style={{ textAlign: "center", marginTop: "1rem" }}
 				>
-					Welcome{" "}
+					Agent name:{" "}
 					<span style={{ color: "green", fontWeight: "bolder" }}>
 						{GlobalState.userUsername}
 					</span>{" "}
@@ -202,54 +209,38 @@ function Profile() {
 			);
 		} else {
 			return (
-				<Grid
-					container
-					style={{
-						width: "50%",
-						marginLeft: "auto",
-						marginRight: "auto",
-						border: "5px solid black",
-						marginTop: "1rem",
-						padding: "5px",
-					}}
-				>
-					<Grid item xs={6}>
-						<img
-							style={{ height: "10rem", width: "15rem" }}
-							src={
-								state.userProfile.profilePic !== null
-									? state.userProfile.profilePic
-									: defaultProfilePicture
-							}
-						/>
+				<Grid container spacing={3}>
+					<Grid item container sx={{ marginBottom: '1rem' }}>
+						<Typography variant="h4">PROFILE INFO</Typography>
 					</Grid>
-					<Grid
-						item
-						container
-						direction="column"
-						justifyContent="center"
-						xs={6}
-					>
-						<Grid item>
-							<Typography
-								variant="h5"
-								style={{ textAlign: "center", marginTop: "1rem" }}
-							>
-								Welcome{" "}
-								<span style={{ color: "green", fontWeight: "bolder" }}>
-									{GlobalState.userUsername}
-								</span>
-							</Typography>
-						</Grid>
-						<Grid item>
-							<Typography
-								variant="h5"
-								style={{ textAlign: "center", marginTop: "1rem" }}
-							>
-								You have {PropertiesDisplay()}
-							</Typography>
+					<Grid container spacing={3}>
+						<Grid item xs={12}>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								<ImgStyled src={
+									state.userProfile.profilePic !== null
+										? state.userProfile.profilePic
+										: defaultProfilePicture
+								} alt='Profile Pic' />
+								<Box>
+									<Grid item xs={12}>
+										<Typography component="h2" variant="h5">
+											Agent name:{" "}
+											<span style={{ color: "green", fontWeight: "bolder" }}>
+												{GlobalState.userUsername}
+											</span>
+										</Typography>
+										<Typography variant="subtitle1" color="text.secondary">
+											You have {PropertiesDisplay()}
+										</Typography>
+										<Typography variant='body2' sx={{ marginTop: 5 }}>
+											There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..
+										</Typography>
+									</Grid>
+								</Box>
+							</Box>
 						</Grid>
 					</Grid>
+
 				</Grid>
 			);
 		}
@@ -270,9 +261,22 @@ function Profile() {
 
 	return (
 		<Container fixed>
-			
+			<Box
+				sx={{
+					marginTop: 8,
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+				}}
+			>
+				<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+					<ManageAccountsTwoToneIcon />
+				</Avatar>
+				<Typography component="h1" variant="h5">
+				My profile
+				</Typography>
 
-
+			</Box>
 			<Box sx={{ width: '100%' }}>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

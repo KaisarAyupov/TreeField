@@ -211,118 +211,113 @@ function ProfileUpdate(props) {
 	}
 
 	return (
-		<Container fixed>
-
-			<Grid container spacing={3}>
-				<Grid item container  sx={{marginBottom: '1rem' }}>
-					<Typography variant="h4">MY PROFILE</Typography>
-				</Grid>
-				<form style={{ width: '100%' }} onSubmit={FormSubmit}>					
-					<Grid container spacing={3}>
-						<Grid item xs={12}>
-							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-								<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
-								<Box>
-									<ButtonStyled component='label' variant='outlined' htmlFor='account-settings-upload-image'>
-										Upload New Photo
-										<input
-											hidden
-											type="file"
-											accept="image/png, image/gif, image/jpeg"
-											id='account-settings-upload-image'
-											onChange={(e) =>
-												dispatch({
-													type: "catchUploadedPicture",
-													pictureChosen: e.target.files,
-												})
-											}
-										/>
-									</ButtonStyled>
-									<ResetButtonStyled type='reset' variant='outlined' color='secondary'>
-										Reset
-									</ResetButtonStyled>
-									<Typography variant='body2' sx={{ marginTop: 5 }}>
-										Allowed PNG or JPEG. Max size of 800K.
-									</Typography>
-								</Box>
-							</Box>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								id="agencyName"
-								label="Agency Name*"
-								variant="outlined"
-								fullWidth
-								value={state.agencyNameValue}
-								onChange={(e) =>
-									dispatch({
-										type: "catchAgencyNameChange",
-										agencyNameChosen: e.target.value,
-									})
-								}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								id="phoneNumber"
-								label="Phone Number*"
-								variant="outlined"
-								fullWidth
-								value={state.phoneNumberValue}
-								onChange={(e) =>
-									dispatch({
-										type: "catchPhoneNumberChange",
-										phoneNumberChosen: e.target.value,
-									})
-								}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								id="bio"
-								label="Bio"
-								variant="outlined"
-								multiline
-								rows={6}
-								fullWidth
-								value={state.bioValue}
-								onChange={(e) =>
-									dispatch({
-										type: "catchBioChange",
-										bioChosen: e.target.value,
-									})
-								}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
-								Save Changes
-							</Button>
-							<Button type='reset' variant='outlined' color='secondary'>
-								Reset
-							</Button>
-						</Grid>
-					</Grid>
-					
-				</form>
-				<Snackbar
-					open={state.openSnack}
-					message="You have successfully updated your profile!"
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center",
-					}}
-				>
-					<Alert severity="success" sx={{ width: '100%' }}>
-						You have successfully updated your profile!
-					</Alert>
-
-				</Snackbar>
-
+		<Grid container spacing={3}>
+			<Grid item container sx={{ marginBottom: '1rem' }}>
+				<Typography variant="h4">PROFILE UPDATE</Typography>
 			</Grid>
+			<form style={{ width: '100%' }} onSubmit={FormSubmit}>
+				<Grid container spacing={3}>
+					<Grid item xs={12}>
+						<Box sx={{ display: 'flex', alignItems: 'center' }}>
+							<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
+							<Box>
+								<ButtonStyled component='label' variant='outlined' htmlFor='account-settings-upload-image'>
+									Upload New Photo
+									<input
+										hidden
+										type="file"
+										accept="image/png, image/gif, image/jpeg"
+										id='account-settings-upload-image'
+										onChange={(e) =>
+											dispatch({
+												type: "catchUploadedPicture",
+												pictureChosen: e.target.files,
+											})
+										}
+									/>
+								</ButtonStyled>
+								<ResetButtonStyled type='reset' variant='outlined' color='secondary'>
+									Reset
+								</ResetButtonStyled>
+								<Typography variant='body2' sx={{ marginTop: 5 }}>
+									Allowed PNG or JPEG. Max size of 800K.
+								</Typography>
+							</Box>
+						</Box>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
+							id="agencyName"
+							label="Agency Name*"
+							variant="outlined"
+							fullWidth
+							value={state.agencyNameValue}
+							onChange={(e) =>
+								dispatch({
+									type: "catchAgencyNameChange",
+									agencyNameChosen: e.target.value,
+								})
+							}
+						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
+							id="phoneNumber"
+							label="Phone Number*"
+							variant="outlined"
+							fullWidth
+							value={state.phoneNumberValue}
+							onChange={(e) =>
+								dispatch({
+									type: "catchPhoneNumberChange",
+									phoneNumberChosen: e.target.value,
+								})
+							}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<TextField
+							id="bio"
+							label="Bio"
+							variant="outlined"
+							multiline
+							rows={6}
+							fullWidth
+							value={state.bioValue}
+							onChange={(e) =>
+								dispatch({
+									type: "catchBioChange",
+									bioChosen: e.target.value,
+								})
+							}
+						/>
+					</Grid>
+					<Grid item xs={12}>
+						<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
+							Save Changes
+						</Button>
+						<Button type='reset' variant='outlined' color='secondary'>
+							Reset
+						</Button>
+					</Grid>
+				</Grid>
 
-		</Container>
-		
+			</form>
+			<Snackbar
+				open={state.openSnack}
+				message="You have successfully updated your profile!"
+				anchorOrigin={{
+					vertical: "bottom",
+					horizontal: "center",
+				}}
+			>
+				<Alert severity="success" sx={{ width: '100%' }}>
+					You have successfully updated your profile!
+				</Alert>
+
+			</Snackbar>
+
+		</Grid>
 	);
 }
 
