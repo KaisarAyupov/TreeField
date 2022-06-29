@@ -239,42 +239,43 @@ function ProfileUpdate(props) {
 	}
 
 	return (
-		<Container maxWidth="lg">
+		<Container fixed>
+
 			<Grid container spacing={7}>
-			<Grid item container justifyContent="center">
-						<Typography variant="h4">MY PROFILE</Typography>
-					</Grid>
-			<form maxWidth="lg" onSubmit={FormSubmit}>
-				<Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
-					<Box sx={{ display: 'flex', alignItems: 'center' }}>
-						<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
-						<Box>
-							<ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-								Upload New Photo
-								<input
-									hidden
-									type="file"
-									accept="image/png, image/gif, image/jpeg"
-									id='account-settings-upload-image'
-									onChange={(e) =>
-										dispatch({
-											type: "catchUploadedPicture",
-											pictureChosen: e.target.files,
-										})
-									}
-								/>
-							</ButtonStyled>
-							<ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc(defaultProfilePicture)}>
-								Reset
-							</ResetButtonStyled>
-							<Typography variant='body2' sx={{ marginTop: 5 }}>
-								Allowed PNG or JPEG. Max size of 800K.
-							</Typography>
-						</Box>
-					</Box>
+				<Grid item container justifyContent="center">
+					<Typography variant="h4">MY PROFILE</Typography>
 				</Grid>
-				<Grid item >
-				<TextField
+				<form style={{ width: '100%' }} onSubmit={FormSubmit}>
+					<Grid item sx={{ marginTop: 4.8, marginBottom: 3 }}>
+						<Box sx={{display: 'flex', alignItems: 'center' }}>
+							<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
+							<Box>
+								<ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+									Upload New Photo
+									<input
+										hidden
+										type="file"
+										accept="image/png, image/gif, image/jpeg"
+										id='account-settings-upload-image'
+										onChange={(e) =>
+											dispatch({
+												type: "catchUploadedPicture",
+												pictureChosen: e.target.files,
+											})
+										}
+									/>
+								</ButtonStyled>
+								<ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc(defaultProfilePicture)}>
+									Reset
+								</ResetButtonStyled>
+								<Typography variant='body2' sx={{ marginTop: 5 }}>
+									Allowed PNG or JPEG. Max size of 800K.
+								</Typography>
+							</Box>
+						</Box>
+					</Grid>
+					<Grid item >
+						<TextField
 							id="agencyName"
 							label="Agency Name*"
 							variant="outlined"
@@ -287,9 +288,9 @@ function ProfileUpdate(props) {
 								})
 							}
 						/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-				<TextField
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
 							id="phoneNumber"
 							label="Phone Number*"
 							variant="outlined"
@@ -302,8 +303,8 @@ function ProfileUpdate(props) {
 								})
 							}
 						/>
-				</Grid>
-				<Grid item container style={{ marginTop: "1rem" }}>
+					</Grid>
+					<Grid item container style={{ marginTop: "1rem" }}>
 						<TextField
 							id="bio"
 							label="Bio"
@@ -320,14 +321,14 @@ function ProfileUpdate(props) {
 							}
 						/>
 					</Grid>
-				<Grid item xs={12}>
-					<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
-						Save Changes
-					</Button>
-					<Button type='reset' variant='outlined' color='secondary'>
-						Reset
-					</Button>
-				</Grid>
+					<Grid item xs={12}>
+						<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
+							Save Changes
+						</Button>
+						<Button type='reset' variant='outlined' color='secondary'>
+							Reset
+						</Button>
+					</Grid>
 				</form>
 				<Snackbar
 					open={state.openSnack}
@@ -340,7 +341,7 @@ function ProfileUpdate(props) {
 
 			</Grid>
 
-			</Container>
+		</Container>
 		
 	);
 }
