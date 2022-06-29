@@ -213,13 +213,40 @@ function ProfileUpdate(props) {
 	return (
 		<Container fixed>
 
-			<Grid container spacing={7}>
-				<Grid item container justifyContent="center">
+			<Grid container spacing={3}>
+				<Grid item container  sx={{marginBottom: '1rem' }}>
 					<Typography variant="h4">MY PROFILE</Typography>
 				</Grid>
-				<form style={{ width: '100%' }} onSubmit={FormSubmit}>
-					
-					<Grid container spacing={3}>						
+				<form style={{ width: '100%' }} onSubmit={FormSubmit}>					
+					<Grid container spacing={3}>
+						<Grid item xs={12}>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
+								<Box>
+									<ButtonStyled component='label' variant='outlined' htmlFor='account-settings-upload-image'>
+										Upload New Photo
+										<input
+											hidden
+											type="file"
+											accept="image/png, image/gif, image/jpeg"
+											id='account-settings-upload-image'
+											onChange={(e) =>
+												dispatch({
+													type: "catchUploadedPicture",
+													pictureChosen: e.target.files,
+												})
+											}
+										/>
+									</ButtonStyled>
+									<ResetButtonStyled type='reset' variant='outlined' color='secondary'>
+										Reset
+									</ResetButtonStyled>
+									<Typography variant='body2' sx={{ marginTop: 5 }}>
+										Allowed PNG or JPEG. Max size of 800K.
+									</Typography>
+								</Box>
+							</Box>
+						</Grid>
 						<Grid item xs={12} sm={6}>
 							<TextField
 								id="agencyName"
@@ -268,32 +295,12 @@ function ProfileUpdate(props) {
 							/>
 						</Grid>
 						<Grid item xs={12}>
-							<Box sx={{display: 'flex', alignItems: 'center' }}>
-								<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
-								<Box>
-									<ButtonStyled component='label' variant='outlined' htmlFor='account-settings-upload-image'>
-										Upload New Photo
-										<input
-											hidden
-											type="file"
-											accept="image/png, image/gif, image/jpeg"
-											id='account-settings-upload-image'
-											onChange={(e) =>
-												dispatch({
-													type: "catchUploadedPicture",
-													pictureChosen: e.target.files,
-												})
-											}
-										/>
-									</ButtonStyled>
-									<ResetButtonStyled color='info' variant='contained'  type="submit" disabled={state.disabledBtn}>
-										Save Changes
-									</ResetButtonStyled>
-									<Typography variant='body2' sx={{ marginTop: 5 }}>
-										Allowed PNG or JPEG. Max size of 800K.
-									</Typography>
-								</Box>
-							</Box>
+							<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
+								Save Changes
+							</Button>
+							<Button type='reset' variant='outlined' color='secondary'>
+								Reset
+							</Button>
 						</Grid>
 					</Grid>
 					
