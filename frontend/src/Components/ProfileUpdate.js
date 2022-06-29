@@ -12,7 +12,7 @@ import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 // MUI
 import {
 	Grid,
-	FormControl,
+	Alert,
 	Typography,
 	Button,
 	Box,
@@ -26,34 +26,7 @@ import {
 	Snackbar,
 } from "@mui/material";
 
-import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles({
-	formContainer: {
-		width: "50%",
-		marginLeft: "auto",
-		marginRight: "auto",
-		marginTop: "3rem",
-		border: "5px solid black",
-		padding: "3rem",
-	},
-	loginBtn: {
-		backgroundColor: "green",
-		color: "white",
-		fontSize: "1.1rem",
-		marginLeft: "1rem",
-		"&:hover": {
-			backgroundColor: "blue",
-		},
-	},
-	picturesBtn: {
-		backgroundColor: "blue",
-		color: "white",
-		fontSize: "0.8rem",
-		border: "1px solid black",
-		marginLeft: "1rem",
-	},
-});
 
 const ImgStyled = styled('img')(({ theme }) => ({
 	width: 120,
@@ -79,7 +52,6 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
   }))
 
 function ProfileUpdate(props) {
-	const classes = useStyles();
 	const navigate = useNavigate();
 	const GlobalState = useContext(StateContext);
 	const [imgSrc, setImgSrc] = useState('./Assets/defaultProfilePicture.jpg')
@@ -246,89 +218,85 @@ function ProfileUpdate(props) {
 					<Typography variant="h4">MY PROFILE</Typography>
 				</Grid>
 				<form style={{ width: '100%' }} onSubmit={FormSubmit}>
-					<Grid item sx={{ marginTop: 4.8, marginBottom: 3 }}>
-						<Box sx={{display: 'flex', alignItems: 'center' }}>
-							<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
-							<Box>
-								<ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-									Upload New Photo
-									<input
-										hidden
-										type="file"
-										accept="image/png, image/gif, image/jpeg"
-										id='account-settings-upload-image'
-										onChange={(e) =>
-											dispatch({
-												type: "catchUploadedPicture",
-												pictureChosen: e.target.files,
-											})
-										}
-									/>
-								</ButtonStyled>
-								<ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc(defaultProfilePicture)}>
-									Reset
-								</ResetButtonStyled>
-								<Typography variant='body2' sx={{ marginTop: 5 }}>
-									Allowed PNG or JPEG. Max size of 800K.
-								</Typography>
+					
+					<Grid container spacing={3}>						
+						<Grid item xs={12} sm={6}>
+							<TextField
+								id="agencyName"
+								label="Agency Name*"
+								variant="outlined"
+								fullWidth
+								value={state.agencyNameValue}
+								onChange={(e) =>
+									dispatch({
+										type: "catchAgencyNameChange",
+										agencyNameChosen: e.target.value,
+									})
+								}
+							/>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<TextField
+								id="phoneNumber"
+								label="Phone Number*"
+								variant="outlined"
+								fullWidth
+								value={state.phoneNumberValue}
+								onChange={(e) =>
+									dispatch({
+										type: "catchPhoneNumberChange",
+										phoneNumberChosen: e.target.value,
+									})
+								}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								id="bio"
+								label="Bio"
+								variant="outlined"
+								multiline
+								rows={6}
+								fullWidth
+								value={state.bioValue}
+								onChange={(e) =>
+									dispatch({
+										type: "catchBioChange",
+										bioChosen: e.target.value,
+									})
+								}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Box sx={{display: 'flex', alignItems: 'center' }}>
+								<ImgStyled src={props.userProfile.profilePic} alt='Profile Pic' />
+								<Box>
+									<ButtonStyled component='label' variant='outlined' htmlFor='account-settings-upload-image'>
+										Upload New Photo
+										<input
+											hidden
+											type="file"
+											accept="image/png, image/gif, image/jpeg"
+											id='account-settings-upload-image'
+											onChange={(e) =>
+												dispatch({
+													type: "catchUploadedPicture",
+													pictureChosen: e.target.files,
+												})
+											}
+										/>
+									</ButtonStyled>
+									<ResetButtonStyled color='info' variant='contained'  type="submit" disabled={state.disabledBtn}>
+										Save Changes
+									</ResetButtonStyled>
+									<Typography variant='body2' sx={{ marginTop: 5 }}>
+										Allowed PNG or JPEG. Max size of 800K.
+									</Typography>
+								</Box>
 							</Box>
-						</Box>
+						</Grid>
 					</Grid>
-					<Grid item >
-						<TextField
-							id="agencyName"
-							label="Agency Name*"
-							variant="outlined"
-							fullWidth
-							value={state.agencyNameValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchAgencyNameChange",
-									agencyNameChosen: e.target.value,
-								})
-							}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							id="phoneNumber"
-							label="Phone Number*"
-							variant="outlined"
-							fullWidth
-							value={state.phoneNumberValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchPhoneNumberChange",
-									phoneNumberChosen: e.target.value,
-								})
-							}
-						/>
-					</Grid>
-					<Grid item container style={{ marginTop: "1rem" }}>
-						<TextField
-							id="bio"
-							label="Bio"
-							variant="outlined"
-							multiline
-							rows={6}
-							fullWidth
-							value={state.bioValue}
-							onChange={(e) =>
-								dispatch({
-									type: "catchBioChange",
-									bioChosen: e.target.value,
-								})
-							}
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Button variant='contained' sx={{ marginRight: 3.5 }} type="submit" disabled={state.disabledBtn}>
-							Save Changes
-						</Button>
-						<Button type='reset' variant='outlined' color='secondary'>
-							Reset
-						</Button>
-					</Grid>
+					
 				</form>
 				<Snackbar
 					open={state.openSnack}
@@ -337,7 +305,12 @@ function ProfileUpdate(props) {
 						vertical: "bottom",
 						horizontal: "center",
 					}}
-				/>
+				>
+					<Alert severity="success" sx={{ width: '100%' }}>
+						You have successfully updated your profile!
+					</Alert>
+
+				</Snackbar>
 
 			</Grid>
 
