@@ -38,7 +38,7 @@ const Header = () => {
   const navigate = useNavigate();
   const GlobalState = useContext(StateContext);
   const GlobalDispatch = useContext(DispatchContext);
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("0");
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -210,7 +210,7 @@ const Header = () => {
               aria-label="icon label tabs example"
               value={value}
               onChange={(e, value) => setValue(value)}
-            >
+            > <Tab value="0" icon={<MapIcon />} label="Home" onClick={() => navigate('/')} />
               <Tab value="1" icon={<MapIcon />} label="Maps" onClick={() => navigate('/listings')} />
               <Tab value="2" icon={<LocalShippingIcon />} label="Company" onClick={() => navigate('/agencies')} />
               <Tab value="3" icon={<ContactPageIcon />} label="Contact" onClick={() => navigate('/contacts')} />
