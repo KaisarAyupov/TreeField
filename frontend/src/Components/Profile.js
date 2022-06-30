@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useImmerReducer } from "use-immer";
@@ -10,6 +10,7 @@ import defaultProfilePicture from "./Assets/defaultProfilePicture.jpg";
 
 // Components
 import ProfileUpdate from "./ProfileUpdate";
+// Icons
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone';
@@ -25,16 +26,10 @@ import {
 	Typography,
 	Button,
 	Avatar,
-	CardHeader,
-	CardMedia,
-	CardContent,
 	CircularProgress,
 	styled,
-	FormControlLabel,
-	Checkbox,
 } from "@mui/material";
 
-import { makeStyles } from "@mui/styles";
 const ImgStyled = styled('img')(({ theme }) => ({
 	width: 120,
 	height: 120,
@@ -42,35 +37,9 @@ const ImgStyled = styled('img')(({ theme }) => ({
 	borderRadius: theme.shape.borderRadius
   }))
 
-const useStyles = makeStyles({
-	formContainer: {
-		width: "50%",
-		marginLeft: "auto",
-		marginRight: "auto",
-		marginTop: "3rem",
-		border: "5px solid black",
-		padding: "3rem",
-	},
-	loginBtn: {
-		backgroundColor: "green",
-		color: "white",
-		fontSize: "1.1rem",
-		marginLeft: "1rem",
-		"&:hover": {
-			backgroundColor: "blue",
-		},
-	},
-	picturesBtn: {
-		backgroundColor: "blue",
-		color: "white",
-		fontSize: "0.8rem",
-		border: "1px solid black",
-		marginLeft: "1rem",
-	},
-});
+
 function TabPanel(props) {
-	const { children, value, index, ...other } = props;
-  
+	const { children, value, index, ...other } = props;  
 	return (
 	  <div
 		role="tabpanel"
@@ -105,7 +74,6 @@ function Profile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-	const classes = useStyles();
 	const navigate = useNavigate();
 	const GlobalState = useContext(StateContext);
 
