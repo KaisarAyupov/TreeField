@@ -12,12 +12,9 @@ import RoomIcon from '@mui/icons-material/Room';
 
 // Map icons
 import houseIconpng from './Assets/Mapicons/house.png';
-import apartmentIconpng from './Assets/Mapicons/apartment.png';
+import apartmentIconpng from './Assets/Mapicons/trash_bin64.png';
 import officeIconpng from './Assets/Mapicons/office.png';
 
-// Assets
-import img1 from './Assets/img1.jpg';
-import myListings from './Assets/Data/Dummydata';
 
 const useStyles = makeStyles({
   cardStyle: {
@@ -83,16 +80,7 @@ function TheMapComponent() {
     const map = useMap();
     dispatch({ type: "getMap", mapData: map });
     return null;
-}
-
-  function GoEast() {
-    setLatitude(43.2399);
-    setLongitude(76.8853);
-  }
-  function Gocenter() {
-    setLatitude(43.2611);
-    setLongitude(76.8822);
-  };
+}  
   const [AllListings, setAllListings] = useState([])
   const [dataIsLoading, setDataIsLoading] = useState(true)
 
