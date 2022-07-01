@@ -12,7 +12,7 @@ import RoomIcon from '@mui/icons-material/Room';
 
 // Map icons
 import houseIconpng from './Assets/Mapicons/house.png';
-import apartmentIconpng from './Assets/Mapicons/trash_bin64.png';
+import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
 import officeIconpng from './Assets/Mapicons/office.png';
 
 
@@ -51,7 +51,7 @@ function Listings() {
   })
   const apartmentIcon = new Icon({
     iconUrl: apartmentIconpng,
-    iconSize: [40, 40],
+    iconSize: [32, 32],
   })
   const officeIcon = new Icon({
     iconUrl: officeIconpng,
@@ -174,7 +174,7 @@ function TheMapComponent() {
       <Grid item xs={8}>
         <AppBar position='sticky'>
           <div style={{ height: "100vh" }}>
-            <MapContainer center={[43.2611, 76.8822]} zoom={13} scrollWheelZoom={false}>
+            <MapContainer center={[43.2611, 76.8822]} zoom={13} scrollWheelZoom={true}>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -218,23 +218,7 @@ function TheMapComponent() {
                     </Popup>}
                   </Marker>
                 )
-              })}
-              {/*  <Marker
-              icon={houseIcon}
-              position={[lattude, longitude]}>
-                {<Popup>
-                  <Typography variant='h5'>
-                    A title
-                  </Typography>
-                  <img src={img1} style={{height: '14rem', width: "18rem"}} />
-                  <Typography variant='body1'>
-                    Thi is som text
-                  </Typography>
-                  <Button variant='contained' fullWidth>
-                    A link
-                  </Button>
-                </Popup>}
-              </Marker> */}
+              })}              
             </MapContainer>
           </div>
         </AppBar>
