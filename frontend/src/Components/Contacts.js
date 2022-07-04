@@ -1,4 +1,11 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react'
+import Axios from "axios";
+import {useImmerReducer} from 'use-immer';
+import { useNavigate } from 'react-router-dom';
+// react-leaflet
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { Icon } from 'leaflet';
+// MUI
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,13 +25,19 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Grid, Button, Card, CardHeader, CardMedia, CardContent,CircularProgress, CardActions} from '@mui/material';
+// Map icons
+import RoomIcon from '@mui/icons-material/Room';
+import houseIconpng from './Assets/Mapicons/house.png';
+import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
+import officeIconpng from './Assets/Mapicons/office.png';
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(0),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -40,22 +53,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   }),
 );
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -66,9 +63,82 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft() {
+function Contacts() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const houseIcon = new Icon({
+    iconUrl: houseIconpng,
+    iconSize: [40, 40],
+  })
+  const apartmentIcon = new Icon({
+    iconUrl: apartmentIconpng,
+    iconSize: [32, 32],
+  })
+  const officeIcon = new Icon({
+    iconUrl: officeIconpng,
+    iconSize: [40, 40],
+  })
+
+  const [lattude, setLatitude] = useState(43.2611)
+  const [longitude, setLongitude] = useState(76.8822)
+
+  const initialState = {
+    mapInstance: null,
+  };
+
+function ReduserFunction(draft, action) {
+    switch (action.type) {
+        case 'getMap':
+            draft.mapInstance = action.mapData;
+            break;
+
+    }
+
+}
+const [state, dispatch] = useImmerReducer(ReduserFunction, initialState)
+
+function TheMapComponent() {
+    const map = useMap();
+    dispatch({ type: "getMap", mapData: map });
+    return null;
+}  
+  const [AllListings, setAllListings] = useState([])
+  const [dataIsLoading, setDataIsLoading] = useState(true)
+
+  useEffect(() => {
+    const source =Axios.CancelToken.source();
+    async function GetAllListings(){
+      try {
+        const response = await Axios.get('http://127.0.0.1:8000/api/listings/', {cancelToken: source.token});
+      // console.log(response.data)
+      setAllListings(response.data)
+      setDataIsLoading(false)
+      } catch(error){
+        console.log(error)
+      }
+    }
+    GetAllListings();
+    return ()=>{
+      source.cancel();
+    }
+  }, [])
+
+  if (dataIsLoading === false) {
+    console.log(AllListings[0].location)
+  }
+  if (dataIsLoading === true) {
+    return (
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        style={{ height: '100vh' }}
+      >
+        <CircularProgress />
+      </Grid>
+    );    
+  }  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -81,17 +151,16 @@ export default function PersistentDrawerLeft() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
+      <Box sx={{ top: 15, ml: 3 }} position="absolute">
+        <IconButton
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{mr: 2, ...(open && { display: 'none' }) }}
+        >
+          <MenuIcon sx={{ color: 'white', fontSize: 30 }}/>
+        </IconButton>
+      </Box>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -111,63 +180,109 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-            
-          ))}
-        </List>        
+        <Grid item xs={4} style={{ marginTop: "0.5rem" }}>
+          {AllListings.map((listing) => {
+            return (
+              <Card key={listing.id}>
+                <CardHeader
+                  action={
+                    <IconButton
+                      aria-label="settings"
+                      onClick={() =>
+                        state.mapInstance.flyTo(
+                          [listing.lat, listing.lng],
+                          16
+                        )
+                      }
+                    >
+                      <RoomIcon />
+                    </IconButton>
+                  }
+                  title={listing.title}
+                />
+                <CardMedia
+                  component="img" height="194"
+                  image={listing.picture1}
+                  alt={listing.title}
+                  onClick={() => navigate(`/listings/${listing.id}`)}
+                />
+                <CardContent>
+                  <Typography variant="body2">
+                    {listing.description.substring(0, 150)}...
+                  </Typography>
+                </CardContent>
+                {listing.property_status === "Sale" ? (
+                  <Typography>
+                    {listing.listing_type}:
+                    {listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </Typography>
+                ) : (
+                  <Typography>
+                    {listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / {listing.rental_frequency}
+                  </Typography>
+                )}
+
+                <CardActions disableSpacing>
+                  <IconButton aria-label="add to favorites">
+                    {listing.seller_agency_name}
+                  </IconButton>
+                </CardActions>
+              </Card>
+            )
+          })}
+        </Grid>       
       </Drawer>
       <Main open={open}>
-        <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Grid item xs={12} sm={5} style={{ height: "90vh" }} >
+        <MapContainer center={[43.2611, 76.8822]} zoom={13} scrollWheelZoom={true}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <TheMapComponent />
+              {AllListings.map((listing) => {
+                function IconDisplay() {
+                  if (listing.listing_type === 'House') {
+                    return houseIcon;
+                  }
+                  else if (listing.listing_type === 'Apartment') {
+                    return apartmentIcon;
+                  }
+                  else if (listing.listing_type === 'Office') {
+                    return officeIcon;
+                  }
+                }
+                return (
+                  <Marker
+                    key={listing.id}
+                    icon={IconDisplay()}
+                    position={[
+                      listing.lat,
+                      listing.lng,
+                    ]}>
+                    {<Popup>
+                      <Typography variant='h5'>
+                        {listing.title}
+                      </Typography>
+                      <img 
+                        src={listing.picture1} 
+                        style={{ height: '14rem', width: "18rem", cursor: "pointer" }} 
+                        onClick={()=>navigate(`/listings/${listing.id}`)}
+                      />
+                      <Typography variant='body1'>
+                        {listing.description.substring(0, 150)}
+                      </Typography>
+                      <Button variant='contained' fullWidth onClick={()=>navigate(`/listings/${listing.id}`)}>
+                        Deteils
+                      </Button>
+                    </Popup>}
+                  </Marker>
+                )
+              })}              
+            </MapContainer>
+      </Grid>
       </Main>
     </Box>
   );
 }
+export default Contacts
