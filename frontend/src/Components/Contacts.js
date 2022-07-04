@@ -87,6 +87,7 @@ function Contacts() {
     mapInstance: null,
   };
 
+  
 function ReduserFunction(draft, action) {
     switch (action.type) {
         case 'getMap':
@@ -182,8 +183,8 @@ function TheMapComponent() {
         <Divider />
         <Grid item xs={4} style={{ marginTop: "0.5rem" }}>
           {AllListings.map((listing) => {
-            return (
-              <Card key={listing.id}>
+            return (              
+              <Card sx={{ maxWidth: 345 }} key={listing.id}>
                 <CardHeader
                   action={
                     <IconButton
@@ -201,31 +202,23 @@ function TheMapComponent() {
                   title={listing.title}
                 />
                 <CardMedia
-                  component="img" height="194"
-                  image={listing.picture1}
+                  component="img"
                   alt={listing.title}
+                  height="140"
+                  image={listing.picture1}
                   onClick={() => navigate(`/listings/${listing.id}`)}
                 />
                 <CardContent>
-                  <Typography variant="body2">
+                  <Typography gutterBottom variant="h6" component="div">
+                    {listing.seller_agency_name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
                     {listing.description.substring(0, 150)}...
                   </Typography>
                 </CardContent>
-                {listing.property_status === "Sale" ? (
-                  <Typography>
-                    {listing.listing_type}:
-                    {listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </Typography>
-                ) : (
-                  <Typography>
-                    {listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / {listing.rental_frequency}
-                  </Typography>
-                )}
-
-                <CardActions disableSpacing>
-                  <IconButton aria-label="add to favorites">
-                    {listing.seller_agency_name}
-                  </IconButton>
+                <CardActions>
+                  <Button size="small">{listing.listing_type}</Button>
+                  <Button size="small">Learn More</Button>
                 </CardActions>
               </Card>
             )
