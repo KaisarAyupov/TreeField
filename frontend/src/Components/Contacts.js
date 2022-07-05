@@ -3,7 +3,7 @@ import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 import { useNavigate } from 'react-router-dom';
 // react-leaflet
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup, FeatureGroup, Circle, Rectangle} from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
 import { styled, useTheme } from '@mui/material/styles';
@@ -22,6 +22,12 @@ import RoomIcon from '@mui/icons-material/Room';
 import houseIconpng from './Assets/Mapicons/house.png';
 import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
 import officeIconpng from './Assets/Mapicons/office.png';
+
+const center = [51.505, -0.09]
+const rectangle = [
+  [51.49, -0.08],
+  [51.5, -0.06],
+]
 
 const drawerWidth = 340;
 
@@ -222,47 +228,60 @@ function TheMapComponent() {
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <TheMapComponent />
-              {AllListings.map((listing) => {
-                function IconDisplay() {
-                  if (listing.listing_type === 'House') {
-                    return houseIcon;
+              />              
+            <TheMapComponent />
+            <LayersControl position="topright">
+              <LayersControl.Overlay checked name="Layer group with Marker">
+              <LayerGroup>
+                {AllListings.map((listing) => {
+                  function IconDisplay() {
+                    if (listing.listing_type === 'House') {
+                      return houseIcon;
+                    }
+                    else if (listing.listing_type === 'Apartment') {
+                      return apartmentIcon;
+                    }
+                    else if (listing.listing_type === 'Office') {
+                      return officeIcon;
+                    }
                   }
-                  else if (listing.listing_type === 'Apartment') {
-                    return apartmentIcon;
-                  }
-                  else if (listing.listing_type === 'Office') {
-                    return officeIcon;
-                  }
-                }
-                return (
-                  <Marker
-                    key={listing.id}
-                    icon={IconDisplay()}
-                    position={[
-                      listing.lat,
-                      listing.lng,
-                    ]}>
-                    {<Popup>
-                      <Typography variant='h5'>
-                        {listing.title}
-                      </Typography>
-                      <img 
-                        src={listing.picture1} 
-                        style={{ height: '14rem', width: "18rem", cursor: "pointer" }} 
-                        onClick={()=>navigate(`/listings/${listing.id}`)}
-                      />
-                      <Typography variant='body1'>
-                        {listing.description.substring(0, 150)}
-                      </Typography>
-                      <Button variant='contained' fullWidth onClick={()=>navigate(`/listings/${listing.id}`)}>
-                        Deteils
-                      </Button>
-                    </Popup>}
-                  </Marker>
-                )
-              })}              
+                  return (
+                    <Marker
+                      key={listing.id}
+                      icon={IconDisplay()}
+                      position={[
+                        listing.lat,
+                        listing.lng,
+                      ]}>
+                      {<Popup>
+                        <Typography variant='h5'>
+                          {listing.title}
+                        </Typography>
+                        <img
+                          src={listing.picture1}
+                          style={{ height: '14rem', width: "18rem", cursor: "pointer" }}
+                          onClick={() => navigate(`/listings/${listing.id}`)}
+                        />
+                        <Typography variant='body1'>
+                          {listing.description.substring(0, 150)}
+                        </Typography>
+                        <Button variant='contained' fullWidth onClick={() => navigate(`/listings/${listing.id}`)}>
+                          Deteils
+                        </Button>
+                      </Popup>}
+                    </Marker>
+                  )
+                })}
+                </LayerGroup>
+              </LayersControl.Overlay>
+              <LayersControl.Overlay name="Feature group">
+                <FeatureGroup pathOptions={{ color: 'purple' }}>
+                  <Popup>Popup in FeatureGroup</Popup>
+                  <Circle center={[43.2611, 76.8822]} radius={800} />
+                  <Rectangle bounds={rectangle} />
+                </FeatureGroup>
+              </LayersControl.Overlay>
+            </LayersControl>
             </MapContainer>
       </Grid>
       </Main>
