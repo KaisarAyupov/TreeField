@@ -23,7 +23,8 @@ import houseIconpng from './Assets/Mapicons/house.png';
 import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
 import officeIconpng from './Assets/Mapicons/office.png';
 
-const center = [51.505, -0.09]
+const {BaseLayer} = LayersControl;
+
 const rectangle = [
   [51.49, -0.08],
   [51.5, -0.06],
@@ -76,9 +77,6 @@ function Contacts() {
     iconUrl: officeIconpng,
     iconSize: [40, 40],
   })
-
-  const [lattude, setLatitude] = useState(43.2611)
-  const [longitude, setLongitude] = useState(76.8822)
 
   const initialState = {
     mapInstance: null,
@@ -224,54 +222,62 @@ function TheMapComponent() {
       </Drawer>
       <Main open={open}>
         <Grid item xs={12} sm={5} style={{ height: "90vh" }} >
-        <MapContainer center={[43.2611, 76.8822]} zoom={13} scrollWheelZoom={true}>
+          <MapContainer center={[43.2611, 76.8822]} zoom={13} scrollWheelZoom={true}>
+            <LayersControl position="topright">
+              <BaseLayer checked name='Open Street Map'>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />              
-            <TheMapComponent />
-            <LayersControl position="topright">
+              />
+              </BaseLayer>
+              <BaseLayer name='Esri WorldImagery '>
+              <TileLayer
+                attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              />
+              </BaseLayer>              
+              <TheMapComponent />
               <LayersControl.Overlay checked name="Layer group with Marker">
-              <LayerGroup>
-                {AllListings.map((listing) => {
-                  function IconDisplay() {
-                    if (listing.listing_type === 'House') {
-                      return houseIcon;
+                <LayerGroup>
+                  {AllListings.map((listing) => {
+                    function IconDisplay() {
+                      if (listing.listing_type === 'House') {
+                        return houseIcon;
+                      }
+                      else if (listing.listing_type === 'Apartment') {
+                        return apartmentIcon;
+                      }
+                      else if (listing.listing_type === 'Office') {
+                        return officeIcon;
+                      }
                     }
-                    else if (listing.listing_type === 'Apartment') {
-                      return apartmentIcon;
-                    }
-                    else if (listing.listing_type === 'Office') {
-                      return officeIcon;
-                    }
-                  }
-                  return (
-                    <Marker
-                      key={listing.id}
-                      icon={IconDisplay()}
-                      position={[
-                        listing.lat,
-                        listing.lng,
-                      ]}>
-                      {<Popup>
-                        <Typography variant='h5'>
-                          {listing.title}
-                        </Typography>
-                        <img
-                          src={listing.picture1}
-                          style={{ height: '14rem', width: "18rem", cursor: "pointer" }}
-                          onClick={() => navigate(`/listings/${listing.id}`)}
-                        />
-                        <Typography variant='body1'>
-                          {listing.description.substring(0, 150)}
-                        </Typography>
-                        <Button variant='contained' fullWidth onClick={() => navigate(`/listings/${listing.id}`)}>
-                          Deteils
-                        </Button>
-                      </Popup>}
-                    </Marker>
-                  )
-                })}
+                    return (
+                      <Marker
+                        key={listing.id}
+                        icon={IconDisplay()}
+                        position={[
+                          listing.lat,
+                          listing.lng,
+                        ]}>
+                        {<Popup>
+                          <Typography variant='h5'>
+                            {listing.title}
+                          </Typography>
+                          <img
+                            src={listing.picture1}
+                            style={{ height: '14rem', width: "18rem", cursor: "pointer" }}
+                            onClick={() => navigate(`/listings/${listing.id}`)}
+                          />
+                          <Typography variant='body1'>
+                            {listing.description.substring(0, 150)}
+                          </Typography>
+                          <Button variant='contained' fullWidth onClick={() => navigate(`/listings/${listing.id}`)}>
+                            Deteils
+                          </Button>
+                        </Popup>}
+                      </Marker>
+                    )
+                  })}
                 </LayerGroup>
               </LayersControl.Overlay>
               <LayersControl.Overlay name="Feature group">
@@ -282,8 +288,8 @@ function TheMapComponent() {
                 </FeatureGroup>
               </LayersControl.Overlay>
             </LayersControl>
-            </MapContainer>
-      </Grid>
+          </MapContainer>
+        </Grid>
       </Main>
     </Box>
   );
