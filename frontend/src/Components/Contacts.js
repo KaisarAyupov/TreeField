@@ -3,7 +3,7 @@ import Axios from "axios";
 import {useImmerReducer} from 'use-immer';
 import { useNavigate } from 'react-router-dom';
 // react-leaflet
-import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup, FeatureGroup, Circle, Rectangle} from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup, FeatureGroup, GeoJSON, Polygon} from 'react-leaflet'
 import { Icon } from 'leaflet';
 // MUI
 import { styled, useTheme } from '@mui/material/styles';
@@ -24,6 +24,15 @@ import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
 import officeIconpng from './Assets/Mapicons/office.png';
 // Assets
 import defaultListingPicture from "./Assets/No_Image_Available.jpg";
+import adm3GeoJson from './Assets/Data/adm3pol.json';
+import Alatau from "./Assets/adm3pol/Alatau";
+import Almaly from "./Assets/adm3pol/Almaly";
+import Auezov from "./Assets/adm3pol/Auezov";
+import Bostandyksky from "./Assets/adm3pol/Bostandyksky";
+import Medeusky from "./Assets/adm3pol/Medeusky";
+import Nauryzbai from "./Assets/adm3pol/Nauryzbai";
+import Turksibsky from "./Assets/adm3pol/Turksibsky";
+import Zhetysusky from "./Assets/adm3pol/Zhetysusky";
 
 const {BaseLayer} = LayersControl;
 
@@ -284,9 +293,8 @@ function TheMapComponent() {
               </LayersControl.Overlay>
               <LayersControl.Overlay name="Feature group">
                 <FeatureGroup pathOptions={{ color: 'purple' }}>
-                  <Popup>Popup in FeatureGroup</Popup>
-                  <Circle center={[43.2611, 76.8822]} radius={800} />
-                  <Rectangle bounds={rectangle} />
+                  <Popup>Popup in FeatureGroup</Popup>                  
+                  <GeoJSON data={adm3GeoJson} />
                 </FeatureGroup>
               </LayersControl.Overlay>
             </LayersControl>
