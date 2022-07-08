@@ -105,6 +105,8 @@ function ReduserFunction(draft, action) {
 }
 const [state, dispatch] = useImmerReducer(ReduserFunction, initialState)
 
+
+
 function TheMapComponent() {
     const map = useMap();
     dispatch({ type: "getMap", mapData: map });
@@ -112,6 +114,7 @@ function TheMapComponent() {
 }  
   const [AllListings, setAllListings] = useState([])
   const [dataIsLoading, setDataIsLoading] = useState(true)
+  const [selectedFeature, setSelectedFeature] = useState({});
 
   useEffect(() => {
     const source =Axios.CancelToken.source();
@@ -293,8 +296,16 @@ function TheMapComponent() {
               </LayersControl.Overlay>
               <LayersControl.Overlay name="Feature group">
                 <FeatureGroup pathOptions={{ color: 'purple' }}>
-                  <Popup>Popup in FeatureGroup</Popup>                  
-                  <GeoJSON data={adm3GeoJson} />
+                  {adm3GeoJson.features.map((feature, index) => {
+                    return (
+                      <FeatureGroup key={index}>
+                        <Popup>
+                          <p>{feature.properties.NAME + " район"}</p>
+                        </Popup>
+                        <GeoJSON data={feature} />                        
+                      </FeatureGroup>
+                    );
+                  })}
                 </FeatureGroup>
               </LayersControl.Overlay>
             </LayersControl>
