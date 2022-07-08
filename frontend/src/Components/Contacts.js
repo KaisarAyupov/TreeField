@@ -22,6 +22,8 @@ import RoomIcon from '@mui/icons-material/Room';
 import houseIconpng from './Assets/Mapicons/house.png';
 import apartmentIconpng from './Assets/Mapicons/trash_bin32.png';
 import officeIconpng from './Assets/Mapicons/office.png';
+// Assets
+import defaultListingPicture from "./Assets/No_Image_Available.jpg";
 
 const {BaseLayer} = LayersControl;
 
@@ -200,7 +202,7 @@ function TheMapComponent() {
                   component="img"
                   alt={listing.title}
                   height="140"
-                  image={listing.picture1}
+                  image={listing.picture1 ? listing.picture1 : defaultListingPicture}
                   onClick={() => navigate(`/listings/${listing.id}`)}
                 />
                 <CardContent>
@@ -264,7 +266,7 @@ function TheMapComponent() {
                             {listing.title}
                           </Typography>
                           <img
-                            src={listing.picture1}
+                            src={listing.picture1 ? listing.picture1 : defaultListingPicture}
                             style={{ height: '14rem', width: "18rem", cursor: "pointer" }}
                             onClick={() => navigate(`/listings/${listing.id}`)}
                           />
