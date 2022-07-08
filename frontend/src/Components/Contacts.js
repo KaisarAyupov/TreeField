@@ -114,7 +114,6 @@ function TheMapComponent() {
 }  
   const [AllListings, setAllListings] = useState([])
   const [dataIsLoading, setDataIsLoading] = useState(true)
-  const [selectedFeature, setSelectedFeature] = useState({});
 
   useEffect(() => {
     const source =Axios.CancelToken.source();
@@ -300,9 +299,9 @@ function TheMapComponent() {
                     return (
                       <FeatureGroup key={index}>
                         <Popup>
-                          <p>{feature.properties.NAME + " район"}</p>
+                        <p>{feature.properties.NAME + " район"}</p>
                         </Popup>
-                        <GeoJSON data={feature} />                        
+                        <GeoJSON data={feature} />                                                
                       </FeatureGroup>
                     );
                   })}
