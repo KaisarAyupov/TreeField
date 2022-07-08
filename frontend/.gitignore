@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-**/Assets
+#**/Assets
 # production
 /build
 
