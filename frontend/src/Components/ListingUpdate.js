@@ -5,7 +5,7 @@ import {useImmerReducer} from 'use-immer';
 // Context
 import StateContext from '../Contexts/StateContext';
 // Assets
-import Waltham from "./Assets/Boroughs/Waltham";
+
 // MUI
 import { Grid, AppBar, Typography, Button, Card, CardHeader, CardMedia, CardContent, CircularProgress, TextField, FormControlLabel, Checkbox, Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';

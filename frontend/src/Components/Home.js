@@ -9,7 +9,6 @@ import ProductHeroLayout from './ProductHeroLayout';
 import CustomCard from './CustomCard';
 
 // Assets
-import city from './Assets/city.jpg';
 
 const backgroundImage =
   'https://images.unsplash.com/photo-1528190336454-13cd56b45b5a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
